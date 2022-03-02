@@ -3,17 +3,52 @@ import {
   Box,
   Drawer,
   List,
-  ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
   Toolbar,
 } from "@mui/material";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import HomeIcon from "@mui/icons-material/Home";
+import AodIcon from '@mui/icons-material/Aod';
+import DinnerDiningIcon from '@mui/icons-material/DinnerDining';
+import HotelIcon from '@mui/icons-material/Hotel';
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 const drawerWidth = 240;
 
+type IconListItem = {
+  icon: () => React.ReactNode;
+  primary: string;
+  route: string;
+};
+
+const SidebarIcons: IconListItem[] = [
+  {
+    icon: () => <HomeIcon />,
+    primary: "홈",
+    route: "/",
+  },
+  {
+    icon: () => <AodIcon />,
+    primary: "피드",
+    route: "/feed",
+  },
+  {
+    icon: () => <DinnerDiningIcon />,
+    primary: "맛집",
+    route: "/restaurant",
+  },
+  {
+    icon: () => <HotelIcon />,
+    primary: "숙박",
+    route: "/accommodation",
+  },
+]
+
 const Sidebar: FC = () => {
+  const { route } = useRouter()
+
   return (
     <Drawer
       variant="permanent"
@@ -26,14 +61,22 @@ const Sidebar: FC = () => {
       <Toolbar />
       <Box sx={{ overflow: "auto" }}>
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          {SidebarIcons.map(item => {
+            const isSelected = item.route === route
+            return (
+              <Link href={item.route} key={item.primary}>
+                <a>
+                  <ListItemButton onClick={() => {}} selected={isSelected}>
+                    <ListItemIcon sx={{ minWidth: '50px', color: '#353535' }}>{item.icon()}</ListItemIcon>
+                    <ListItemText 
+                      primary={item.primary} 
+                      primaryTypographyProps={{ fontFamily: "Katuri", color: '#353535' }} 
+                    />
+                  </ListItemButton>
+                </a>
+              </Link>
+            )
+          })}
         </List>
       </Box>
     </Drawer>

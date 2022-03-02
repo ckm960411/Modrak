@@ -1,7 +1,7 @@
-import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import AppLayout from 'components/layout/AppLayout'
 import { createTheme, ThemeProvider } from '@mui/material';
+import GlobalStyles from 'styles/GlobalStyles';
 
 const themeOptions = createTheme({
   palette: {
@@ -13,11 +13,14 @@ const themeOptions = createTheme({
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider theme={themeOptions}>
-      <AppLayout>
-        <Component {...pageProps} />
-      </AppLayout>
-    </ThemeProvider>
+    <>
+      <GlobalStyles />
+      <ThemeProvider theme={themeOptions}>
+        <AppLayout>
+          <Component {...pageProps} />
+        </AppLayout>
+      </ThemeProvider>
+    </>
   )
 }
 
