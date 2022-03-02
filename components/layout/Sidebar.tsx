@@ -61,22 +61,20 @@ const Sidebar: FC = () => {
       <Toolbar />
       <Box sx={{ overflow: "auto" }}>
         <List>
-          {SidebarIcons.map(item => {
-            const isSelected = item.route === route
-            return (
-              <Link href={item.route} key={item.primary}>
-                <a>
-                  <ListItemButton onClick={() => {}} selected={isSelected}>
-                    <ListItemIcon sx={{ minWidth: '50px', color: '#353535' }}>{item.icon()}</ListItemIcon>
-                    <ListItemText 
-                      primary={item.primary} 
-                      primaryTypographyProps={{ fontFamily: "Katuri", color: '#353535' }} 
-                    />
-                  </ListItemButton>
-                </a>
-              </Link>
+          {SidebarIcons.map(item => (
+            <Link href={item.route} key={item.primary}>
+              <a>
+                <ListItemButton selected={item.route === route}>
+                  <ListItemIcon sx={{ minWidth: '50px', color: '#353535' }}>{item.icon()}</ListItemIcon>
+                  <ListItemText 
+                    primary={item.primary} 
+                    primaryTypographyProps={{ fontFamily: "Katuri", color: '#353535' }} 
+                  />
+                </ListItemButton>
+              </a>
+            </Link>
             )
-          })}
+          )}
         </List>
       </Box>
     </Drawer>
