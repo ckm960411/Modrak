@@ -1,82 +1,98 @@
 import { FC } from "react";
-import {
-  Box,
-  Drawer,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Toolbar,
-} from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
-import AodIcon from '@mui/icons-material/Aod';
-import DinnerDiningIcon from '@mui/icons-material/DinnerDining';
-import HotelIcon from '@mui/icons-material/Hotel';
 import Link from "next/link";
 import { useRouter } from "next/router";
+import {
+  List,
+  Drawer,
+  Typography,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  ListItemButton,
+} from "@mui/material";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import HomeIcon from "@mui/icons-material/Home";
+import AodIcon from "@mui/icons-material/Aod";
+import DinnerDiningIcon from "@mui/icons-material/DinnerDining";
+import HotelIcon from "@mui/icons-material/Hotel";
+import { useTheme } from "@mui/material/styles";
+import { drawerWidth, DrawerHeader } from "components/layout/AppLayout";
 
-const drawerWidth = 240;
-
-type IconListItem = {
-  icon: () => React.ReactNode;
-  primary: string;
-  route: string;
-};
-
-const SidebarIcons: IconListItem[] = [
+const SidebarIcons = [
   {
-    icon: () => <HomeIcon />,
+    icon: <HomeIcon />,
     primary: "홈",
     route: "/",
   },
   {
-    icon: () => <AodIcon />,
+    icon: <AodIcon />,
     primary: "피드",
     route: "/feed",
   },
   {
-    icon: () => <DinnerDiningIcon />,
+    icon: <DinnerDiningIcon />,
     primary: "맛집",
     route: "/restaurant",
   },
   {
-    icon: () => <HotelIcon />,
+    icon: <HotelIcon />,
     primary: "숙박",
     route: "/accommodation",
   },
-]
+];
 
-const Sidebar: FC = () => {
-  const { route } = useRouter()
+type SidebarProps = {
+  open: boolean;
+  handleDrawerClose: () => void;
+};
+
+const Sidebar: FC<SidebarProps> = ({ open, handleDrawerClose }) => {
+  const { route } = useRouter();
+  const theme = useTheme();
 
   return (
     <Drawer
-      variant="permanent"
       sx={{
         width: drawerWidth,
         flexShrink: 0,
-        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: "border-box" },
+        "& .MuiDrawer-paper": {
+          width: drawerWidth,
+          boxSizing: "border-box",
+        },
       }}
+      variant="persistent"
+      anchor="left"
+      open={open}
     >
-      <Toolbar />
-      <Box sx={{ overflow: "auto" }}>
-        <List>
-          {SidebarIcons.map(item => (
-            <Link href={item.route} key={item.primary}>
-              <a>
-                <ListItemButton selected={item.route === route}>
-                  <ListItemIcon sx={{ minWidth: '50px', color: '#353535' }}>{item.icon()}</ListItemIcon>
-                  <ListItemText 
-                    primary={item.primary} 
-                    primaryTypographyProps={{ fontFamily: "Katuri", color: '#353535' }} 
-                  />
-                </ListItemButton>
-              </a>
-            </Link>
-            )
+      <DrawerHeader sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Typography
+          variant="h6"
+          component="div"
+          sx={{ color: "#fff", fontFamily: "Katuri", fontSize: 24, ml: 2 }}
+        >
+          Modrak
+        </Typography>
+        <IconButton onClick={handleDrawerClose} sx={{ color: "#fff" }}>
+          {theme.direction === "ltr" ? (
+            <ChevronLeftIcon />
+          ) : (
+            <ChevronRightIcon />
           )}
-        </List>
-      </Box>
+        </IconButton>
+      </DrawerHeader>
+      <List>
+        {SidebarIcons.map((item, i) => (
+          <Link href={item.route} key={i}>
+            <a>
+              <ListItemButton selected={item.route === route}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.primary} />
+              </ListItemButton>
+            </a>
+          </Link>
+        ))}
+      </List>
     </Drawer>
   );
 };
