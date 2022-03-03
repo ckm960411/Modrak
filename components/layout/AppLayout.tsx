@@ -1,6 +1,6 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
-import { Box, Container } from "@mui/material";
+import { Box, Container, useMediaQuery, useTheme } from "@mui/material";
 import Navbar from "components/layout/Navbar";
 import Sidebar from "./Sidebar";
 
@@ -36,14 +36,22 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
 
 const AppLayout: FC = ({ children }) => {
   const [open, setOpen] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const theme = useTheme()
+  const downMd = useMediaQuery(theme.breakpoints.down("md"))
 
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
 
+  useEffect(() => {
+    if (downMd) setOpen(false)
+    else setOpen(true)
+  }, [downMd])
+
   return (
     <Box sx={{ display: "flex" }}>
-      <Navbar open={open} handleDrawerOpen={handleDrawerOpen} />
-      <Sidebar open={open} handleDrawerClose={handleDrawerClose} />
+      <Navbar open={open} handleDrawerOpen={handleDrawerOpen} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      <Sidebar open={open} handleDrawerClose={handleDrawerClose} isLoggedIn={isLoggedIn} />
       <Main open={open} sx={{ backgroundColor: '#f2f2f2', height: '100vh' }}>
         <DrawerHeader />
         <Container maxWidth="lg">

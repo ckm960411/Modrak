@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
 import {
   Badge,
   Button,
@@ -39,10 +39,11 @@ const AppBar = styled(MuiAppBar, {
 type NavbarProps = {
   open: boolean;
   handleDrawerOpen: () => void;
+  isLoggedIn: boolean
+  setIsLoggedIn: Dispatch<SetStateAction<boolean>>
 };
 
-const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true)
+const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen, isLoggedIn, setIsLoggedIn }) => {
 
   return (
     <AppBar position="fixed" open={open} sx={{ backgroundColor: "#fff" }}>
@@ -87,12 +88,12 @@ const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen }) => {
                   </IconButton>
                 </Tooltip>
               </Stack>
-              <Button variant="contained" size="small">로그아웃</Button>
+              <Button variant="contained" size="small" onClick={() => setIsLoggedIn(false)}>로그아웃</Button>
             </>
           ): (
             <>
               <Button variant="outlined" size="small">회원가입</Button>
-              <Button variant="contained" size="small">로그인</Button>
+              <Button variant="contained" size="small" onClick={() => setIsLoggedIn(true)}>로그인</Button>
             </>
           )}
         </Stack>

@@ -1,54 +1,19 @@
 import { FC } from "react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import {
-  List,
-  Drawer,
-  Typography,
-  IconButton,
-  ListItemIcon,
-  ListItemText,
-  ListItemButton,
-} from "@mui/material";
+import { Drawer, Typography, IconButton } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import HomeIcon from "@mui/icons-material/Home";
-import AodIcon from "@mui/icons-material/Aod";
-import DinnerDiningIcon from "@mui/icons-material/DinnerDining";
-import HotelIcon from "@mui/icons-material/Hotel";
 import { useTheme } from "@mui/material/styles";
 import { drawerWidth, DrawerHeader } from "components/layout/AppLayout";
-
-const SidebarIcons = [
-  {
-    icon: <HomeIcon />,
-    primary: "홈",
-    route: "/",
-  },
-  {
-    icon: <AodIcon />,
-    primary: "피드",
-    route: "/feed",
-  },
-  {
-    icon: <DinnerDiningIcon />,
-    primary: "맛집",
-    route: "/restaurant",
-  },
-  {
-    icon: <HotelIcon />,
-    primary: "숙박",
-    route: "/accommodation",
-  },
-];
+import SidebarProfile from "components/layout/SidebarProfile";
+import SidebarList from "components/layout/SidebarList";
 
 type SidebarProps = {
   open: boolean;
   handleDrawerClose: () => void;
+  isLoggedIn: boolean
 };
 
-const Sidebar: FC<SidebarProps> = ({ open, handleDrawerClose }) => {
-  const { route } = useRouter();
+const Sidebar: FC<SidebarProps> = ({ open, handleDrawerClose, isLoggedIn }) => {
   const theme = useTheme();
 
   return (
@@ -74,25 +39,11 @@ const Sidebar: FC<SidebarProps> = ({ open, handleDrawerClose }) => {
           Modrak
         </Typography>
         <IconButton onClick={handleDrawerClose} sx={{ color: "#fff" }}>
-          {theme.direction === "ltr" ? (
-            <ChevronLeftIcon />
-          ) : (
-            <ChevronRightIcon />
-          )}
+          {theme.direction === "ltr" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
         </IconButton>
       </DrawerHeader>
-      <List>
-        {SidebarIcons.map((item, i) => (
-          <Link href={item.route} key={i}>
-            <a>
-              <ListItemButton selected={item.route === route}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.primary} />
-              </ListItemButton>
-            </a>
-          </Link>
-        ))}
-      </List>
+      {isLoggedIn && <SidebarProfile />}
+      <SidebarList />
     </Drawer>
   );
 };

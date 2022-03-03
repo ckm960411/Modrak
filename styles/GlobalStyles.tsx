@@ -48,7 +48,7 @@ const GlobalStyles = () => {
         '.css-nzzti6-MuiButtonBase-root-MuiListItemButton-root': {
           padding: '4px 10px !important',
           margin: '10px 6px !important',
-          borderRadius: '8px !important',
+          borderRadius: '4px !important',
           '&:hover': {
             backgroundColor: 'rgba(255, 255, 255, .6) !important',
             '& svg': {
