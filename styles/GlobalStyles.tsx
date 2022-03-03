@@ -27,22 +27,22 @@ const GlobalStyles = () => {
           boxSizing: "border-box",
         },
 
-        '.css-1wugh11-MuiButtonBase-root-MuiListItemButton-root': {
-          padding: '4px 10px !important',
-          margin: '10px 6px !important',
-          '&:hover': {
-            backgroundColor: 'rgba(84, 209, 63, .12) !important',
-          },
-        },
-        '.css-1wugh11-MuiButtonBase-root-MuiListItemButton-root.Mui-selected': {
-          backgroundColor: 'rgba(84, 209, 63, .24) !important',
-          '& svg': {
-            color: '#4c7727'
-          },
-          '& span': {
-            color: '#4c7727'
-          }
-        }
+        // '.css-1wugh11-MuiButtonBase-root-MuiListItemButton-root': {
+        //   padding: '4px 10px !important',
+        //   margin: '10px 6px !important',
+        //   '&:hover': {
+        //     backgroundColor: 'rgba(84, 209, 63, .12) !important',
+        //   },
+        // },
+        // '.css-1wugh11-MuiButtonBase-root-MuiListItemButton-root.Mui-selected': {
+        //   backgroundColor: 'rgba(84, 209, 63, .24) !important',
+        //   '& svg': {
+        //     color: '#4c7727'
+        //   },
+        //   '& span': {
+        //     color: '#4c7727'
+        //   }
+        // }
       }}
     />
   );
