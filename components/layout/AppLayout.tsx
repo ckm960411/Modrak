@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { styled } from "@mui/material/styles";
-import { Box } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import Navbar from "components/layout/Navbar";
 import Sidebar from "./Sidebar";
 
@@ -44,9 +44,11 @@ const AppLayout: FC = ({ children }) => {
     <Box sx={{ display: "flex" }}>
       <Navbar open={open} handleDrawerOpen={handleDrawerOpen} />
       <Sidebar open={open} handleDrawerClose={handleDrawerClose} />
-      <Main open={open}>
+      <Main open={open} sx={{ backgroundColor: '#f2f2f2', height: '100vh' }}>
         <DrawerHeader />
-        {children}
+        <Container maxWidth="lg">
+          {children}
+        </Container>
       </Main>
     </Box>
   );
