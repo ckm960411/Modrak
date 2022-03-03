@@ -6,7 +6,7 @@ import GlobalStyles from 'styles/GlobalStyles';
 const themeOptions = createTheme({
   palette: {
     primary: {
-      main: "#54d13f",
+      main: "#009e5d",
     },
   },
 });

@@ -26,21 +26,46 @@ const GlobalStyles = () => {
         "*": {
           boxSizing: "border-box",
         },
+        // 사이드바 Drawer 스타일링
+        '.css-12i7wg6-MuiPaper-root-MuiDrawer-paper': {
+          backgroundColor: '#009e5d !important',
+          boxShadow: '7px -6px 16px -8px rgba(176,176,176,1) !important',
+          border: 'none !important',
+        },
+        // ListItemIcon 스타일링
+        '.MuiListItemIcon-root.css-cveggr-MuiListItemIcon-root': {
+          color: '#fff',
+          // minWidth: '50px',
+          marginLeft: '10px',
+        },
+        // ListItemText 스타일링
+        '.MuiListItemText-primary.css-10hburv-MuiTypography-root': {
+          color: '#fff',
+          fontFamily: 'Katuri',
+          fontSize: 18,
+        },
 
-        '.css-1wugh11-MuiButtonBase-root-MuiListItemButton-root': {
+        '.css-nzzti6-MuiButtonBase-root-MuiListItemButton-root': {
           padding: '4px 10px !important',
           margin: '10px 6px !important',
+          borderRadius: '8px !important',
           '&:hover': {
-            backgroundColor: 'rgba(84, 209, 63, .12) !important',
+            backgroundColor: 'rgba(255, 255, 255, .6) !important',
+            '& svg': {
+              color: '#009e5d'
+            },
+            '& span': {
+              color: '#009e5d'
+            }
           },
         },
-        '.css-1wugh11-MuiButtonBase-root-MuiListItemButton-root.Mui-selected': {
-          backgroundColor: 'rgba(84, 209, 63, .24) !important',
+        '.css-nzzti6-MuiButtonBase-root-MuiListItemButton-root.Mui-selected': {
+          backgroundColor: '#fff !important',
           '& svg': {
-            color: '#4c7727'
+            color: '#009e5d'
           },
           '& span': {
-            color: '#4c7727'
+            color: '#009e5d'
           }
         }
       }}
