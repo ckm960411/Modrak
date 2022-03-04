@@ -5,11 +5,7 @@ const SignupForm: FC = () => {
   return (
     <>
       <FormControl fullWidth>
-        <TextField 
-          autoFocus 
-          type="name" 
-          placeholder="이름을 입력하세요" 
-        />
+        <TextField autoFocus type="name" placeholder="이름을 입력하세요" />
       </FormControl>
       <FormControl fullWidth>
         <div style={{ display: "flex" }}>
@@ -44,10 +40,7 @@ const SignupForm: FC = () => {
         </div>
       </FormControl>
       <FormControl fullWidth>
-        <TextField 
-          type="password" 
-          placeholder="비밀번호를 입력하세요" 
-        />
+        <TextField type="password" placeholder="비밀번호를 입력하세요" />
       </FormControl>
       <FormControl fullWidth>
         <TextField

@@ -58,6 +58,11 @@ const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen, isLoggedIn, setIsLogg
   }
   const handleModalClose = () => setModalOpened(false)
 
+  const toggleCertification = () => {
+    if (certificationType === '로그인') setCertificationType('회원가입')
+    else setCertificationType('로그인')
+  } 
+
   return (
     <AppBar position="fixed" open={open} sx={{ backgroundColor: "#fff" }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -118,6 +123,7 @@ const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen, isLoggedIn, setIsLogg
                   open={modalOpened} 
                   handleClose={handleModalClose} 
                   certificationType={certificationType} 
+                  toggleCertification={toggleCertification}
                 />
               )}
             </>
