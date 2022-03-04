@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from "react";
+import React, { Dispatch, FC, SetStateAction, useState } from "react";
 import {
   Badge,
   Button,
@@ -14,6 +14,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { styled } from "@mui/material/styles";
 import { drawerWidth } from "components/layout/AppLayout";
+import CertificationModal from "components/login/CertificationModal";
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -39,16 +40,28 @@ const AppBar = styled(MuiAppBar, {
 type NavbarProps = {
   open: boolean;
   handleDrawerOpen: () => void;
-  isLoggedIn: boolean
-  setIsLoggedIn: Dispatch<SetStateAction<boolean>>
+  isLoggedIn: boolean;
+  setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
 };
 
+export type CertificationType = "로그인" | "회원가입"
+
 const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen, isLoggedIn, setIsLoggedIn }) => {
+  const [modalOpened, setModalOpened] = useState<boolean>(false)
+  const [certificationType, setCertificationType] = useState<CertificationType>("로그인")
+
+  const handleModalOpen = (e: React.MouseEvent<HTMLElement>) => {
+    const { innerText } = e.target as HTMLElement
+    if (innerText === "로그인") setCertificationType('로그인')
+    else setCertificationType('회원가입')
+    setModalOpened(true)
+  }
+  const handleModalClose = () => setModalOpened(false)
 
   return (
     <AppBar position="fixed" open={open} sx={{ backgroundColor: "#fff" }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        <div style={{ display: "flex" }}>
+        <Stack direction="row">
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -67,7 +80,7 @@ const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen, isLoggedIn, setIsLogg
               모드락
             </Typography>
           )}
-        </div>
+        </Stack>
         <div>{/** 로그인 박스가 우측에 가도록 삽입 */}</div>
         <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
           {isLoggedIn ? (
@@ -88,12 +101,25 @@ const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen, isLoggedIn, setIsLogg
                   </IconButton>
                 </Tooltip>
               </Stack>
-              <Button variant="contained" size="small" onClick={() => setIsLoggedIn(false)}>로그아웃</Button>
+              <Button variant="contained" size="small" onClick={() => setIsLoggedIn(false)}>
+                로그아웃
+              </Button>
             </>
-          ): (
+          ) : (
             <>
-              <Button variant="outlined" size="small">회원가입</Button>
-              <Button variant="contained" size="small" onClick={() => setIsLoggedIn(true)}>로그인</Button>
+              <Button variant="outlined" size="small" onClick={handleModalOpen}>
+                회원가입
+              </Button>
+              <Button variant="contained" size="small" onClick={handleModalOpen}>
+                로그인
+              </Button>
+              {modalOpened && (
+                <CertificationModal 
+                  open={modalOpened} 
+                  handleClose={handleModalClose} 
+                  certificationType={certificationType} 
+                />
+              )}
             </>
           )}
         </Stack>

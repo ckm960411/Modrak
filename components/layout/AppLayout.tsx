@@ -52,7 +52,7 @@ const AppLayout: FC = ({ children }) => {
     <Box sx={{ display: "flex" }}>
       <Navbar open={open} handleDrawerOpen={handleDrawerOpen} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
       <Sidebar open={open} handleDrawerClose={handleDrawerClose} isLoggedIn={isLoggedIn} />
-      <Main open={open} sx={{ backgroundColor: '#f2f2f2', height: '100vh' }}>
+      <Main open={open}>
         <DrawerHeader />
         <Container maxWidth="lg">
           {children}

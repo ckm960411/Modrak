@@ -26,6 +26,19 @@ const GlobalStyles = () => {
         "*": {
           boxSizing: "border-box",
         },
+        // main 영역 스타일링
+        main: {
+          backgroundColor: '#f7f7f7',
+          height: '100vh',
+        },
+        // 모달 띄웠을 때 배경 색상
+        '.css-yiavyu-MuiBackdrop-root-MuiDialog-backdrop': {
+          backgroundColor: 'rgba(0, 0, 0, .07) !important'
+        },
+        // 로그인&회원가입 폼 인풋 스타일링
+        'input.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input': {
+          padding: '8px 16px',
+        },
         // 사이드바 Drawer 스타일링
         '.css-12i7wg6-MuiPaper-root-MuiDrawer-paper': {
           backgroundColor: '#009e5d !important',
@@ -44,7 +57,7 @@ const GlobalStyles = () => {
           fontFamily: 'Katuri',
           fontSize: 18,
         },
-
+        // ListItemButton hover 시 스타일링
         '.css-nzzti6-MuiButtonBase-root-MuiListItemButton-root': {
           padding: '4px 10px !important',
           margin: '10px 6px !important',
@@ -59,6 +72,7 @@ const GlobalStyles = () => {
             }
           },
         },
+        // ListItemButton 선택시 스타일링
         '.css-nzzti6-MuiButtonBase-root-MuiListItemButton-root.Mui-selected': {
           backgroundColor: '#fff !important',
           '& svg': {

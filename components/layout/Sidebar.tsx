@@ -1,8 +1,6 @@
 import { FC } from "react";
 import { Drawer, Typography, IconButton } from "@mui/material";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { useTheme } from "@mui/material/styles";
+import MenuIcon from "@mui/icons-material/Menu";
 import { drawerWidth, DrawerHeader } from "components/layout/AppLayout";
 import SidebarProfile from "components/layout/SidebarProfile";
 import SidebarList from "components/layout/SidebarList";
@@ -14,8 +12,6 @@ type SidebarProps = {
 };
 
 const Sidebar: FC<SidebarProps> = ({ open, handleDrawerClose, isLoggedIn }) => {
-  const theme = useTheme();
-
   return (
     <Drawer
       sx={{
@@ -39,7 +35,7 @@ const Sidebar: FC<SidebarProps> = ({ open, handleDrawerClose, isLoggedIn }) => {
           Modrak
         </Typography>
         <IconButton onClick={handleDrawerClose} sx={{ color: "#fff" }}>
-          {theme.direction === "ltr" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          <MenuIcon />
         </IconButton>
       </DrawerHeader>
       {isLoggedIn && <SidebarProfile />}
