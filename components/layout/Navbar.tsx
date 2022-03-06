@@ -67,24 +67,26 @@ const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen, isLoggedIn, setIsLogg
     <AppBar position="fixed" open={open} sx={{ backgroundColor: "#fff" }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <Stack direction="row">
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: "none" }), color: "#009e5d" }}
-          >
-            <MenuIcon />
-          </IconButton>
-          {open || (
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ color: "#009e5d", fontFamily: "Katuri", fontSize: 24 }}
+          <>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{ mr: 2, ...(open && { display: "none" }), color: "#009e5d" }}
             >
-              모드락
-            </Typography>
-          )}
+              <MenuIcon />
+            </IconButton>
+            {open || (
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{ color: "#009e5d", fontFamily: "Katuri", fontSize: 24 }}
+              >
+                모드락
+              </Typography>
+            )}
+          </>
         </Stack>
         <div>{/** 로그인 박스가 우측에 가도록 삽입 */}</div>
         <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
@@ -123,7 +125,6 @@ const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen, isLoggedIn, setIsLogg
                   open={modalOpened} 
                   handleClose={handleModalClose} 
                   certificationType={certificationType} 
-                  toggleCertification={toggleCertification}
                 />
               )}
             </>
