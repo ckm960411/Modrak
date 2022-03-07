@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { useAppSelector } from "store/hooks";
 import { Drawer, Typography, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { drawerWidth, DrawerHeader } from "components/layout/AppLayout";
@@ -8,10 +9,10 @@ import SidebarList from "components/layout/SidebarList";
 type SidebarProps = {
   open: boolean;
   handleDrawerClose: () => void;
-  isLoggedIn: boolean
 };
 
-const Sidebar: FC<SidebarProps> = ({ open, handleDrawerClose, isLoggedIn }) => {
+const Sidebar: FC<SidebarProps> = ({ open, handleDrawerClose }) => {
+  const myInfo = useAppSelector(state => state.users.myInfo)
   return (
     <Drawer
       sx={{
@@ -38,7 +39,7 @@ const Sidebar: FC<SidebarProps> = ({ open, handleDrawerClose, isLoggedIn }) => {
           <MenuIcon />
         </IconButton>
       </DrawerHeader>
-      {isLoggedIn && <SidebarProfile />}
+      {myInfo && <SidebarProfile />}
       <SidebarList />
     </Drawer>
   );

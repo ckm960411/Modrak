@@ -1,7 +1,9 @@
 import type { AppProps } from 'next/app'
-import AppLayout from 'components/layout/AppLayout'
 import { createTheme, ThemeProvider } from '@mui/material';
 import GlobalStyles from 'styles/GlobalStyles';
+import { Provider } from 'react-redux';
+import { store } from "store/configureStore";
+import AppLayout from 'components/layout/AppLayout'
 
 const themeOptions = createTheme({
   palette: {
@@ -14,11 +16,13 @@ const themeOptions = createTheme({
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      <GlobalStyles />
       <ThemeProvider theme={themeOptions}>
-        <AppLayout>
-          <Component {...pageProps} />
-        </AppLayout>
+        <Provider store={store}>
+          <GlobalStyles />
+          <AppLayout>
+            <Component {...pageProps} />
+          </AppLayout>
+        </Provider>
       </ThemeProvider>
     </>
   )

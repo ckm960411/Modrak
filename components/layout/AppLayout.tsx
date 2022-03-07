@@ -1,8 +1,13 @@
 import { FC, useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
+import { authService, dbService } from "fireBaseApp/fBase";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
+import { useAppDispatch } from "store/hooks";
+import { loadMyInfoData } from "store/usersSlice";
 import { Box, Container, useMediaQuery, useTheme } from "@mui/material";
 import Navbar from "components/layout/Navbar";
-import Sidebar from "./Sidebar";
+import Sidebar from "components/layout/Sidebar";
 
 export const drawerWidth = 240;
 
@@ -35,10 +40,28 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
 }));
 
 const AppLayout: FC = ({ children }) => {
+  const dispatch = useAppDispatch()
   const [open, setOpen] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const theme = useTheme()
   const downMd = useMediaQuery(theme.breakpoints.down("md"))
+
+  const onLoadUserData = async (uid: string) => {
+    const usersRef = collection(dbService, "users")
+    const q = query(usersRef, where("uid", "==", uid))
+    const userData = await getDocs(q)
+      .then(res => {
+        dispatch(loadMyInfoData(res.docs[0].data()))
+      })
+      .catch(err => console.log(err))
+    return userData
+  }
+
+  useEffect(() => {
+    onAuthStateChanged(authService, user => {
+      if (user) return onLoadUserData(user.uid)
+      else console.log('no user data')
+    })
+  }, [])
 
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
@@ -50,8 +73,8 @@ const AppLayout: FC = ({ children }) => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <Navbar open={open} handleDrawerOpen={handleDrawerOpen} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-      <Sidebar open={open} handleDrawerClose={handleDrawerClose} isLoggedIn={isLoggedIn} />
+      <Navbar open={open} handleDrawerOpen={handleDrawerOpen} />
+      <Sidebar open={open} handleDrawerClose={handleDrawerClose} />
       <Main open={open}>
         <DrawerHeader />
         <Container maxWidth="lg">

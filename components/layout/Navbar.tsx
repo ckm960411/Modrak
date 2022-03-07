@@ -1,13 +1,6 @@
-import React, { Dispatch, FC, SetStateAction, useState } from "react";
-import {
-  Badge,
-  Button,
-  IconButton,
-  Stack,
-  Toolbar,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import React, { FC, useState } from "react";
+import { useAppSelector } from "store/hooks";
+import { Badge, Button, IconButton, Stack, Toolbar, Tooltip, Typography } from "@mui/material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import MailIcon from "@mui/icons-material/Mail";
@@ -40,15 +33,15 @@ const AppBar = styled(MuiAppBar, {
 type NavbarProps = {
   open: boolean;
   handleDrawerOpen: () => void;
-  isLoggedIn: boolean;
-  setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
 };
 
 export type CertificationType = "로그인" | "회원가입"
 
-const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen, isLoggedIn, setIsLoggedIn }) => {
+const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen }) => {
   const [modalOpened, setModalOpened] = useState<boolean>(false)
   const [certificationType, setCertificationType] = useState<CertificationType>("로그인")
+
+  const myInfo = useAppSelector(state => state.users.myInfo)
 
   const handleModalOpen = (e: React.MouseEvent<HTMLElement>) => {
     const { innerText } = e.target as HTMLElement
@@ -90,7 +83,7 @@ const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen, isLoggedIn, setIsLogg
         </Stack>
         <div>{/** 로그인 박스가 우측에 가도록 삽입 */}</div>
         <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
-          {isLoggedIn ? (
+          {myInfo ? (
             <>
               <Stack direction="row" spacing={1}>
                 <Tooltip title="알림" arrow>
@@ -108,7 +101,7 @@ const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen, isLoggedIn, setIsLogg
                   </IconButton>
                 </Tooltip>
               </Stack>
-              <Button variant="contained" size="small" onClick={() => setIsLoggedIn(false)}>
+              <Button variant="contained" size="small" onClick={() => {}}>
                 로그아웃
               </Button>
             </>
