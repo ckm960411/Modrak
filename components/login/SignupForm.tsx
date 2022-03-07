@@ -1,41 +1,42 @@
 import { FC, useRef, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { createUserWithEmailAndPassword } from "@firebase/auth";
+import { authService, dbService } from "fireBaseApp/fBase"
 import { Button, DialogActions, DialogContent, Snackbar, Stack } from "@mui/material";
-import HookFormInput from "components/login/HookFormInput";
 import styled from "@emotion/styled";
 import { red } from "@mui/material/colors";
+import HookFormInput from "components/login/HookFormInput";
 import SideAlert from "components/parts/SideAlert";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import onCheckDuplicate from "functions/onCheckDuplicate";
+import { useRouter } from "next/router";
 
 const ErrorParagraph = styled.span`
   color: ${red[500]};
 `;
 
-type SignUpFormValue = {
-  name: string;
-  nickname: string;
-  email: string;
-  password: string;
-  password_confirm: string;
-}
-
 const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
   const [checkedNickname, setCheckedNickname] = useState('')
   const [checkedEmail, setCheckedEmail] = useState('')
   const [alertOpened, setAlertOpened] = useState(false)
+  const router = useRouter()
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<SignUpFormValue>()
 
   const passwordRef = useRef<string | null>(null);
   passwordRef.current = watch("password")!;
-
   const nicknameRef = useRef<HTMLInputElement>(null)
   const emailRef = useRef<HTMLInputElement>(null)
   
-  const onCheckNicknameDuplicated = () => {
+  const onCheckNicknameDuplicated = async () => {
+    const duplicatedNickname = await onCheckDuplicate("nickname", nicknameRef.current!.value)
+    if (duplicatedNickname) return alert('중복된 닉네임입니다!')
     setAlertOpened(true)
     setCheckedNickname(nicknameRef.current!.value)
   }
-  const onCheckEmailDuplicated = () => {
+  const onCheckEmailDuplicated = async () => {
+    const duplicatedEmail = await onCheckDuplicate("email", emailRef.current!.value.toLowerCase())
+    if (duplicatedEmail) return alert('중복된 이메일입니다!')
     setAlertOpened(true)
     setCheckedEmail(emailRef.current!.value)
   }
@@ -46,11 +47,31 @@ const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
   };
 
   const onSubmit: SubmitHandler<SignUpFormValue> = (data) => {
+    const { email, name, nickname, password } = data
     if (!Boolean(checkedNickname) || checkedNickname !== nicknameRef.current!.value) 
       return alert('닉네임 중복 체크를 완료해주세요!')
     if (!Boolean(checkedEmail) || checkedEmail !== emailRef.current!.value) 
       return alert('이메일 중복 체크를 완료해주세요!')
-    console.log(data)
+    createUserWithEmailAndPassword(authService, email, password)
+      .then( async() => {
+        alert('회원가입이 완료됐습니다!')
+        console.log(authService.currentUser)
+        const newUserObj = {
+          uid: authService.currentUser!.uid,
+          email: authService.currentUser!.email,
+          name: name,
+          nickname: nickname,
+          profileImg: null,
+          followers: [],
+          followings: [],
+        }
+        await addDoc(collection(dbService, "users"), newUserObj)
+      })
+      .catch(err => console.log(err.resultMessage))
+      .finally(() => {
+        handleClose()
+        router.push('/')
+      })
   };
 
   return (
