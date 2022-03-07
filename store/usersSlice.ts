@@ -19,12 +19,15 @@ export const usersSlice = createSlice({
   reducers: {
     loadMyInfoData: (state, action) => {
       state.myInfo = action.payload
+    },
+    removeMyInfoData: (state) => {
+      state.myInfo = null
     }
   },
   extraReducers: {},
 })
 
-export const { loadMyInfoData } = usersSlice.actions
+export const { loadMyInfoData, removeMyInfoData } = usersSlice.actions
 
 export const selectUser = (state: RootState) => state.users.myInfo
 

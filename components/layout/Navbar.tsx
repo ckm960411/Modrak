@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { useAppSelector } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import { Badge, Button, IconButton, Stack, Toolbar, Tooltip, Typography } from "@mui/material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -8,6 +8,9 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { styled } from "@mui/material/styles";
 import { drawerWidth } from "components/layout/AppLayout";
 import CertificationModal from "components/login/CertificationModal";
+import { authService } from "fireBaseApp/fBase";
+import { useRouter } from "next/router";
+import { removeMyInfoData } from "store/usersSlice";
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -38,6 +41,8 @@ type NavbarProps = {
 export type CertificationType = "로그인" | "회원가입"
 
 const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen }) => {
+  const router = useRouter()
+  const dispatch = useAppDispatch()
   const [modalOpened, setModalOpened] = useState<boolean>(false)
   const [certificationType, setCertificationType] = useState<CertificationType>("로그인")
 
@@ -51,10 +56,11 @@ const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen }) => {
   }
   const handleModalClose = () => setModalOpened(false)
 
-  const toggleCertification = () => {
-    if (certificationType === '로그인') setCertificationType('회원가입')
-    else setCertificationType('로그인')
-  } 
+  const onLogoutClick = () => {
+    authService.signOut()
+    router.push('/')
+    dispatch(removeMyInfoData())
+  }
 
   return (
     <AppBar position="fixed" open={open} sx={{ backgroundColor: "#fff" }}>
@@ -101,7 +107,7 @@ const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen }) => {
                   </IconButton>
                 </Tooltip>
               </Stack>
-              <Button variant="contained" size="small" onClick={() => {}}>
+              <Button variant="contained" size="small" onClick={onLogoutClick}>
                 로그아웃
               </Button>
             </>
