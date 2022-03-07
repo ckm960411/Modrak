@@ -1,24 +1,31 @@
 import { FC } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useRouter } from "next/router";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { authService } from "fireBaseApp/fBase";
 import { Button, DialogActions, DialogContent, Stack } from "@mui/material";
-import HookFormInput from "components/login/HookFormInput";
 import styled from "@emotion/styled";
 import { red } from "@mui/material/colors";
+import HookFormInput from "components/login/HookFormInput";
 
 const ErrorParagraph = styled.span`
   color: ${red[500]};
 `;
 
-type LoginFormValue = {
-  email: string;
-  password: string;
-}
-
 const LoginForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
+  const router = useRouter()
+
   const { register, formState: { errors }, handleSubmit } = useForm<LoginFormValue>();
 
   const onSubmit: SubmitHandler<LoginFormValue> = (data) => {
-    console.log(data)
+    const { email, password } = data
+    signInWithEmailAndPassword(authService, email, password)
+      .then(() => alert("로그인 성공!"))
+      .catch(err => console.log(err))
+      .finally(() => {
+        handleClose()
+        router.push('/')
+      })
   };
 
   return (

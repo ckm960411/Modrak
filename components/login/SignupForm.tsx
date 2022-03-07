@@ -1,15 +1,15 @@
 import { FC, useRef, useState } from "react";
+import { useRouter } from "next/router";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { createUserWithEmailAndPassword } from "@firebase/auth";
+import { addDoc, collection } from "firebase/firestore";
 import { authService, dbService } from "fireBaseApp/fBase"
 import { Button, DialogActions, DialogContent, Snackbar, Stack } from "@mui/material";
 import styled from "@emotion/styled";
 import { red } from "@mui/material/colors";
+import onCheckDuplicate from "functions/onCheckDuplicate";
 import HookFormInput from "components/login/HookFormInput";
 import SideAlert from "components/parts/SideAlert";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
-import onCheckDuplicate from "functions/onCheckDuplicate";
-import { useRouter } from "next/router";
 
 const ErrorParagraph = styled.span`
   color: ${red[500]};
