@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { Badge, Button, IconButton, Stack, Toolbar, Tooltip, Typography } from "@mui/material";
+import { Badge, Button, IconButton, Stack, Toolbar, Tooltip, Typography, useMediaQuery, useTheme } from "@mui/material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import MailIcon from "@mui/icons-material/Mail";
@@ -45,6 +45,8 @@ const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen }) => {
   const dispatch = useAppDispatch()
   const [modalOpened, setModalOpened] = useState<boolean>(false)
   const [certificationType, setCertificationType] = useState<CertificationType>("로그인")
+  const theme = useTheme()
+  const downMd = useMediaQuery(theme.breakpoints.down("md"))
 
   const myInfo = useAppSelector(state => state.users.myInfo)
 
@@ -82,7 +84,8 @@ const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen }) => {
               <Typography
                 variant="h6"
                 component="div"
-                sx={{ color: "#009e5d", fontFamily: "Katuri", fontSize: 24 }}
+                sx={{ color: "#009e5d", fontFamily: "Katuri", fontSize: 24, cursor: 'pointer' }}
+                onClick={() => router.push('/')}
               >
                 모드락
               </Typography>
@@ -90,47 +93,49 @@ const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen }) => {
           </>
         </Stack>
         <div>{/** 로그인 박스가 우측에 가도록 삽입 */}</div>
-        <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
-          {myInfo ? (
-            <>
-              <Stack direction="row" spacing={1}>
-                <Tooltip title="알림" arrow>
-                  <IconButton>
-                    <Badge color="primary" variant="dot" sx={{ cursor: "pointer" }}>
-                      <MailIcon sx={{ color: "#858585" }} />
-                    </Badge>
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="장바구니" arrow>
-                  <IconButton>
-                    <Badge color="primary" variant="dot" sx={{ cursor: "pointer" }}>
-                      <ShoppingCartIcon sx={{ color: "#858585" }} />
-                    </Badge>
-                  </IconButton>
-                </Tooltip>
-              </Stack>
-              <Button variant="contained" size="small" onClick={onLogoutClick}>
-                로그아웃
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button variant="outlined" size="small" onClick={handleModalOpen}>
-                회원가입
-              </Button>
-              <Button variant="contained" size="small" onClick={handleModalOpen}>
-                로그인
-              </Button>
-              {modalOpened && (
-                <CertificationModal 
-                  open={modalOpened} 
-                  handleClose={handleModalClose} 
-                  certificationType={certificationType} 
-                />
-              )}
-            </>
-          )}
-        </Stack>
+        {(downMd && open) || (
+          <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
+            {myInfo ? (
+              <>
+                <Stack direction="row" spacing={1}>
+                  <Tooltip title="알림" arrow>
+                    <IconButton>
+                      <Badge color="primary" variant="dot" sx={{ cursor: "pointer" }}>
+                        <MailIcon sx={{ color: "#858585" }} />
+                      </Badge>
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="장바구니" arrow>
+                    <IconButton>
+                      <Badge color="primary" variant="dot" sx={{ cursor: "pointer" }}>
+                        <ShoppingCartIcon sx={{ color: "#858585" }} />
+                      </Badge>
+                    </IconButton>
+                  </Tooltip>
+                </Stack>
+                <Button variant="contained" size="small" onClick={onLogoutClick}>
+                  로그아웃
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="outlined" size="small" onClick={handleModalOpen}>
+                  회원가입
+                </Button>
+                <Button variant="contained" size="small" onClick={handleModalOpen}>
+                  로그인
+                </Button>
+                {modalOpened && (
+                  <CertificationModal 
+                    open={modalOpened} 
+                    handleClose={handleModalClose} 
+                    certificationType={certificationType} 
+                  />
+                )}
+              </>
+            )}
+          </Stack>
+        )}
       </Toolbar>
     </AppBar>
   );

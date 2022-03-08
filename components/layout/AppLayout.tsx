@@ -24,7 +24,7 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open?: boolean;
 }>(({ theme, open }) => ({
   flexGrow: 1,
-  padding: theme.spacing(3),
+  paddingTop: 24,
   transition: theme.transitions.create("margin", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -44,7 +44,7 @@ const AppLayout: FC = ({ children }) => {
   const [open, setOpen] = useState(true);
   const theme = useTheme()
   const downMd = useMediaQuery(theme.breakpoints.down("md"))
-
+  
   const onLoadUserData = async (uid: string) => {
     const usersRef = collection(dbService, "users")
     const q = query(usersRef, where("uid", "==", uid))

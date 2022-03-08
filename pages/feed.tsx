@@ -1,13 +1,32 @@
+import { Grid, Stack, useMediaQuery, useTheme } from "@mui/material";
+import FeedContainer from "components/feeds/FeedContainer";
+import FeedForm from "components/feeds/FeedForm";
+import FilterSidebar from "components/feeds/FilterSidebar";
 import { NextPage } from "next";
 import Head from "next/head";
 
 const Feed: NextPage = () => {
+  const theme = useTheme()
+  const downLg = useMediaQuery(theme.breakpoints.down("lg"))
+
   return (
     <>
       <Head>
         <title>Feed | Modrak</title>
       </Head>
-      피드
+      <div style={downLg ? { minWidth: '400px', maxWidth: '863px', margin: 'auto' }: undefined}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} lg={8} order={{ xs: 2, lg: 1 }}>
+            <Stack spacing={2}>
+              <FeedForm />
+              <FeedContainer />
+            </Stack>
+          </Grid>
+          <Grid item xs={12} lg={4} order={{ xs: 1, lg: 2 }}>
+            <FilterSidebar />
+          </Grid>
+        </Grid>
+      </div>
     </>
   )
 }
