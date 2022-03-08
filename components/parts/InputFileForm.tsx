@@ -16,14 +16,17 @@ const InputFileForm: FC<InputFileFormProps> = ({ label, images, setImages }) => 
     const files = e.target.files!
     if (!files[0]) return
     if ((images.length + files.length) > 10) {
-      return alert('You can only attach up to 10 pictures.')
+      return alert('최대 10개 사진만 첨부할 수 있습니다.')
     }
-    for (let i = 0; i < files.length; i++) {
-      const reader = new FileReader()
-      reader.onload = () => {
-        setImages(prev => [...prev, reader.result as string])
+    const readAndPreview = (file: any) => {
+      if (/\.(jpe?g|png|gif)$/i.test(file.name)) {
+        const reader = new FileReader()
+        reader.onload = () => setImages(prev => [...prev, reader.result as string])
+        reader.readAsDataURL(file)
       }
-      reader.readAsDataURL(files[i])
+    }
+    if (files) {
+      [].forEach.call(files, readAndPreview)
     }
   }
 
@@ -42,7 +45,7 @@ const InputFileForm: FC<InputFileFormProps> = ({ label, images, setImages }) => 
         sx={{ mt: 1 }}
         startIcon={<PhotoCamera />}
       >
-        upload images
+        사진 첨부하기
       </Button>
     </label>
   );

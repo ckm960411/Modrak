@@ -14,19 +14,17 @@ const Feed: NextPage = () => {
       <Head>
         <title>Feed | Modrak</title>
       </Head>
-      <div style={downLg ? { minWidth: '400px', maxWidth: '863px', margin: 'auto' }: undefined}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} lg={8} order={{ xs: 2, lg: 1 }}>
-            <Stack spacing={2}>
-              <FeedForm />
-              <FeedContainer />
-            </Stack>
-          </Grid>
-          <Grid item xs={12} lg={4} order={{ xs: 1, lg: 2 }}>
-            <FilterSidebar />
-          </Grid>
+      <Grid container spacing={2}>
+        <Grid item xs={12} lg={8} order={{ xs: 2, lg: 1 }} sx={{ width: '300px', maxWidth: '863px !important', m: '0 auto' }}>
+          <Stack spacing={2}>
+            <FeedForm />
+            <FeedContainer />
+          </Stack>
         </Grid>
-      </div>
+        <Grid item xs={12} lg={4} order={{ xs: 1, lg: 2 }} sx={{ width: '300px', maxWidth: '863px !important', m: '0 auto' }}>
+          <FilterSidebar />
+        </Grid>
+      </Grid>
     </>
   )
 }
