@@ -57,8 +57,10 @@ const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen }) => {
   const handleModalClose = () => setModalOpened(false)
 
   const onLogoutClick = () => {
+    const ok = confirm('정말 로그아웃 하시겠습니까?')
+    if (!ok) return
     authService.signOut()
-    router.push('/')
+    alert('로그아웃이 완료됐습니다!')
     dispatch(removeMyInfoData())
   }
 

@@ -28,13 +28,13 @@ const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
   const nicknameRef = useRef<HTMLInputElement>(null)
   const emailRef = useRef<HTMLInputElement>(null)
   
-  const onCheckNicknameDuplicated = async () => {
+  const onCheckNicknameDuplicated = async () => { // 닉네임 중복 체크
     const duplicatedNickname = await onCheckDuplicate("nickname", nicknameRef.current!.value)
     if (duplicatedNickname) return alert('중복된 닉네임입니다!')
     setAlertOpened(true)
     setCheckedNickname(nicknameRef.current!.value)
   }
-  const onCheckEmailDuplicated = async () => {
+  const onCheckEmailDuplicated = async () => { // 이메일 중복 체크
     const duplicatedEmail = await onCheckDuplicate("email", emailRef.current!.value.toLowerCase())
     if (duplicatedEmail) return alert('중복된 이메일입니다!')
     setAlertOpened(true)
@@ -55,7 +55,6 @@ const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
     createUserWithEmailAndPassword(authService, email, password)
       .then( async() => {
         alert('회원가입이 완료됐습니다!')
-        console.log(authService.currentUser)
         const newUserObj = {
           uid: authService.currentUser!.uid,
           email: authService.currentUser!.email,
@@ -106,11 +105,9 @@ const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
               <ErrorParagraph>Your input exceed maximum length.</ErrorParagraph>
             )}
             {checkedNickname && (
-              <Snackbar open={alertOpened} autoHideDuration={2000} onClose={onCloseAlert}>
-                <SideAlert severity="success" sx={{ width: '100%' }}>
-                  사용할 수 있는 닉네임입니다!
-                </SideAlert>
-              </Snackbar>
+              <SideAlert open={alertOpened} onClose={onCloseAlert}>
+                사용할 수 있는 닉네임입니다!
+              </SideAlert>
             )}
           </HookFormInput>
           <HookFormInput // 이메일
@@ -128,11 +125,9 @@ const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
               <ErrorParagraph>This is an invalid email format.</ErrorParagraph>
             )}
             {checkedEmail && (
-              <Snackbar open={alertOpened} autoHideDuration={2000} onClose={onCloseAlert}>
-                <SideAlert severity="success" sx={{ width: '100%' }}>
-                  사용할 수 있는 닉네임입니다!
-                </SideAlert>
-              </Snackbar>
+              <SideAlert open={alertOpened} onClose={onCloseAlert}>
+                사용할 수 있는 이메일입니다!
+              </SideAlert>
             )}
           </HookFormInput>
           <HookFormInput // 비밀번호

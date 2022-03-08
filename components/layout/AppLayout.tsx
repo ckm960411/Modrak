@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import { authService, dbService } from "fireBaseApp/fBase";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { onAuthStateChanged } from "firebase/auth";
+import { browserSessionPersistence, onAuthStateChanged, setPersistence } from "firebase/auth";
 import { useAppDispatch } from "store/hooks";
 import { loadMyInfoData } from "store/usersSlice";
 import { Box, Container, useMediaQuery, useTheme } from "@mui/material";
@@ -57,9 +57,10 @@ const AppLayout: FC = ({ children }) => {
   }
 
   useEffect(() => {
+    setPersistence(authService, browserSessionPersistence)
     onAuthStateChanged(authService, user => {
       if (user) return onLoadUserData(user.uid)
-      else console.log('no user data')
+      else return
     })
   }, [])
 

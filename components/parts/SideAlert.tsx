@@ -1,17 +1,30 @@
-import { forwardRef } from 'react';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import { forwardRef, SyntheticEvent } from "react";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+import { Snackbar } from "@mui/material";
 
-const SideAlert = forwardRef<HTMLDivElement, AlertProps>((props, ref) => {
+interface SideAlertProps extends AlertProps {
+  open: boolean
+  onClose: (event?: Event | SyntheticEvent<Element, Event> | undefined, reason?: string | undefined) => void
+}
+
+const SideAlert = forwardRef<HTMLDivElement, SideAlertProps>(({
+  open, onClose, children, ...props
+}, ref) => {
   return (
-    <MuiAlert 
-      elevation={6} 
-      ref={ref} 
-      variant="filled" 
-      {...props} 
-    />
-  )
+    <Snackbar open={open} autoHideDuration={2000} onClose={onClose}>
+      <MuiAlert 
+        elevation={6} 
+        ref={ref} 
+        variant="filled"
+        severity="success"
+        {...props} 
+      >
+        {children}
+      </MuiAlert>
+    </Snackbar>
+  );
 });
 
-SideAlert.displayName = "SideAlert"
+SideAlert.displayName = "SideAlert";
 
-export default SideAlert
+export default SideAlert;

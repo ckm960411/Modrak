@@ -20,12 +20,11 @@ const LoginForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
   const onSubmit: SubmitHandler<LoginFormValue> = (data) => {
     const { email, password } = data
     signInWithEmailAndPassword(authService, email, password)
-      .then(() => alert("로그인 성공!"))
-      .catch(err => console.log(err))
-      .finally(() => {
+      .then(() => {
+        alert("로그인 성공!")
         handleClose()
-        router.push('/')
       })
+      .catch(() => alert('로그인에 실패했습니다! 다시 시도해주세요!'))
   };
 
   return (
