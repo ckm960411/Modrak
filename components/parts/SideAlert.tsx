@@ -17,6 +17,7 @@ const SideAlert = forwardRef<HTMLDivElement, SideAlertProps>(({
         ref={ref} 
         variant="filled"
         severity="success"
+        sx={{ width: '100%' }}
         {...props} 
       >
         {children}
