@@ -40,7 +40,7 @@ const FeedForm: FC = () => {
       .then(res => {
         alert('게시글 작성이 완료됐습니다!')
         updateDoc(userDocRef, {
-          feeds: [...userData!.feeds, res.id]
+          feeds: [...userData!.feeds, res.id] // res.id 는 추가된 피드의 문서 id
         })
       })
       .catch(err => console.log(err.resultMessage))
