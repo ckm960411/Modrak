@@ -1,8 +1,11 @@
 import { forwardRef } from "react";
 import { BaseTextFieldProps, TextField } from "@mui/material";
 
+interface TextInputProps extends BaseTextFieldProps {
+  [key: string]: any
+}
 
-const TextInput = forwardRef<HTMLInputElement, BaseTextFieldProps>((props, ref) => {
+const TextInput = forwardRef<HTMLInputElement, TextInputProps>((props, ref) => {
   return (
     <TextField
       multiline
