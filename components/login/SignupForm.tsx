@@ -2,9 +2,9 @@ import { FC, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { createUserWithEmailAndPassword } from "@firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { collection, doc, setDoc } from "firebase/firestore";
 import { authService, dbService } from "fireBaseApp/fBase"
-import { Button, DialogActions, DialogContent, Snackbar, Stack } from "@mui/material";
+import { Button, DialogActions, DialogContent, Stack } from "@mui/material";
 import styled from "@emotion/styled";
 import { red } from "@mui/material/colors";
 import onCheckDuplicate from "functions/onCheckDuplicate";
@@ -52,6 +52,7 @@ const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
       return alert('닉네임 중복 체크를 완료해주세요!')
     if (!Boolean(checkedEmail) || checkedEmail !== emailRef.current!.value) 
       return alert('이메일 중복 체크를 완료해주세요!')
+    // 신규 사용자 계정 생성
     createUserWithEmailAndPassword(authService, email, password)
       .then( async() => {
         alert('회원가입이 완료됐습니다!')
@@ -63,8 +64,11 @@ const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
           profileImg: null,
           followers: [],
           followings: [],
+          feeds: [],
         }
-        await addDoc(collection(dbService, "users"), newUserObj)
+        // 사용자 정보를 "users" 컬렉션에 uid 로 생성
+        const usersCollection = collection(dbService, "users")
+        await setDoc(doc(usersCollection, `${newUserObj.uid}`), newUserObj)
       })
       .catch(err => console.log(err.resultMessage))
       .finally(() => {
