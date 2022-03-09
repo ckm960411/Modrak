@@ -5,9 +5,11 @@ declare interface UserType {
   name: string
   nickname: string
   profileImg: string | null
-  feeds: string[]
+  feeds: string[] = []
   followers: string[]
   followings: string[]
+  likeFeeds: string[]
+  bookmarkFeeds: string[]
 }
 
 // 회원가입 시 입력할 값들 타입

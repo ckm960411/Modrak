@@ -31,6 +31,9 @@ const FeedForm: FC = () => {
       feedImages: imagesURLs,
       createdAt: serverTimestamp(),
       modifiedAt: serverTimestamp(),
+      likes: [],
+      bookmarks: [],
+      comments: [],
     }
     // 글을 게시하는 사용자(본인)의 정보를 찾음
     const userDocRef = doc(dbService, "users", feedData.userUid)

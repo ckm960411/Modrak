@@ -5,6 +5,9 @@ declare type FeedType = {
   userUid: string
   feedText: string
   feedImages: string[]
+  likes: string[]
+  bookmarks: string[]
+  comments: []
   createdAt: Timestamp
   modifiedAt: Timestamp
 }
