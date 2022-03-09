@@ -1,13 +1,12 @@
 import { FC } from "react";
-import { Card, CardContent } from "@mui/material";
+import Feed from "components/feeds/Feed";
+import { Stack } from "@mui/material";
 
 const FeedContainer: FC = () => {
   return (
-    <Card raised>
-      <CardContent>
-        FeedContainer
-      </CardContent>
-    </Card>
+    <Stack direction="column" spacing={2}>
+      <Feed />
+    </Stack>
   )
 }
 

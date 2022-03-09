@@ -7,7 +7,7 @@ import InputFileForm from "components/parts/InputFileForm";
 import MainButton from "components/parts/MainButton";
 import PreviewImagesTab from "components/feeds/PreviewImagesTab";
 import { useAppSelector } from "store/hooks";
-import uploadImagesDB from "functions/uploadImagesDB";
+import uploadImagesDB from "lib/uploadImagesDB";
 
 const FeedForm: FC = () => {
   const [feedImages, setFeedImages] = useState<string[]>([])
