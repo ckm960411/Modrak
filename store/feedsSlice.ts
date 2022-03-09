@@ -2,13 +2,13 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { RootState } from 'store/configureStore'
 
 interface UserState {
-  myInfo: any | null
+  value: any | null
   loading: boolean
   error: any | null
 }
 
 const initialState: UserState = {
-  myInfo: null,
+  value: null,
   loading: false,
   error: null
 }
@@ -17,23 +17,17 @@ export const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
-    loadMyInfoData: (state, action) => {
-      state.myInfo = action.payload
-    },
-    removeMyInfoData: (state) => {
-      state.myInfo = null
-    },
-    setUserLoadingTrue: (state) => {
+    setFeedLoadingTrue: (state) => {
       state.loading = true
     },
-    setUserLoadingfalse: (state) => {
+    setFeedLoadingfalse: (state) => {
       state.loading = false
     },
   },
   extraReducers: {},
 })
 
-export const { loadMyInfoData, removeMyInfoData, setUserLoadingTrue, setUserLoadingfalse } = usersSlice.actions
+export const { setFeedLoadingTrue, setFeedLoadingfalse } = usersSlice.actions
 
 export const selectUser = (state: RootState) => state.users.myInfo
 
