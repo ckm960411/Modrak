@@ -1,30 +1,35 @@
 import { FC } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useRouter } from "next/router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { authService } from "fireBaseApp/fBase";
 import { Button, DialogActions, DialogContent, Stack } from "@mui/material";
 import styled from "@emotion/styled";
 import { red } from "@mui/material/colors";
 import HookFormInput from "components/login/HookFormInput";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { setUserLoadingfalse, setUserLoadingTrue } from "store/usersSlice";
+import SubmitFormButton from "components/parts/SubmitFormButton";
 
 const ErrorParagraph = styled.span`
   color: ${red[500]};
 `;
 
 const LoginForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
-  const router = useRouter()
+  const dispatch = useAppDispatch()
+  const userLoading = useAppSelector(state => state.users.loading)
 
   const { register, formState: { errors }, handleSubmit } = useForm<LoginFormValue>();
 
   const onSubmit: SubmitHandler<LoginFormValue> = (data) => {
     const { email, password } = data
+    dispatch(setUserLoadingTrue())
     signInWithEmailAndPassword(authService, email, password)
       .then(() => {
         alert("로그인 성공!")
         handleClose()
       })
       .catch(() => alert('로그인에 실패했습니다! 다시 시도해주세요!'))
+      .finally(() => dispatch(setUserLoadingfalse()))
   };
 
   return (
@@ -56,9 +61,9 @@ const LoginForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
       </DialogContent>
       <DialogActions sx={{ p: "0 24px 20px" }}>
         <Button onClick={handleClose}>취소</Button>
-        <Button variant="contained" onClick={handleSubmit(onSubmit)}>
+        <SubmitFormButton loading={userLoading} onClick={handleSubmit(onSubmit)}>
           로그인
-        </Button>
+        </SubmitFormButton>
       </DialogActions>
     </form>
   );

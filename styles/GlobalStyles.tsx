@@ -26,11 +26,11 @@ const GlobalStyles = () => {
         "*": {
           boxSizing: "border-box",
         },
-        // main 영역 스타일링
-        main: {
-          backgroundColor: '#f7f7f7',
-          height: '100vh',
-        },
+        // // main 영역 스타일링
+        // main: {
+        //   backgroundColor: '#f7f7f7',
+        //   height: '100vh',
+        // },
         // 모달 띄웠을 때 배경 색상
         '.css-yiavyu-MuiBackdrop-root-MuiDialog-backdrop': {
           backgroundColor: 'rgba(0, 0, 0, .07) !important'

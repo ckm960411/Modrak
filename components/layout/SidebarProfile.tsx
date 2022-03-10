@@ -13,7 +13,7 @@ const SidebarProfile: FC = () => {
       <CardActions sx={{ justifyContent: 'space-between' }}>
         <Avatar sx={{ width: 40, height: 40, backgroundColor: '#dbdbdb' }}>
           {myInfo.profileImg ? (
-            <Image alt={myInfo.nickname} src={myInfo.profileImg} />
+            <Image alt={myInfo.nickname} src={myInfo.profileImg} layout="fill" />
           ): (
             <Image alt={myInfo.nickname} src={defaultImg} />
           )}

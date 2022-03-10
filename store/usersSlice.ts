@@ -4,7 +4,7 @@ import type { RootState } from 'store/configureStore'
 interface UserState {
   myInfo: any | null
   loading: boolean
-  error: { errorMessage: string } | null
+  error: any | null
 }
 
 const initialState: UserState = {
@@ -22,12 +22,18 @@ export const usersSlice = createSlice({
     },
     removeMyInfoData: (state) => {
       state.myInfo = null
-    }
+    },
+    setUserLoadingTrue: (state) => {
+      state.loading = true
+    },
+    setUserLoadingfalse: (state) => {
+      state.loading = false
+    },
   },
   extraReducers: {},
 })
 
-export const { loadMyInfoData, removeMyInfoData } = usersSlice.actions
+export const { loadMyInfoData, removeMyInfoData, setUserLoadingTrue, setUserLoadingfalse } = usersSlice.actions
 
 export const selectUser = (state: RootState) => state.users.myInfo
 
