@@ -5,12 +5,14 @@ import { FeedWithUserInfoType } from 'types/feedTypes'
 interface UserState {
   value: FeedWithUserInfoType[]
   loading: boolean
+  editFeedLoading: boolean
   error: any | null
 }
 
 const initialState: UserState = {
   value: [],
   loading: false,
+  editFeedLoading: false,
   error: null
 }
 
@@ -23,6 +25,12 @@ export const feedsSlice = createSlice({
     },
     setFeedLoadingfalse: (state) => {
       state.loading = false
+    },
+    setEditFeedLoadingTrue: (state) => {
+      state.editFeedLoading = true
+    },
+    setEditFeedLoadingFalse: (state) => {
+      state.editFeedLoading = false
     },
     setFeeds: (state, action) => {
       state.value = [...state.value, action.payload]
@@ -50,6 +58,8 @@ export const feedsSlice = createSlice({
 export const { 
   setFeedLoadingTrue, 
   setFeedLoadingfalse, 
+  setEditFeedLoadingTrue,
+  setEditFeedLoadingFalse,
   setFeeds, 
   addFeeds, 
   clearFeeds,

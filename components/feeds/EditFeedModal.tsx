@@ -9,7 +9,8 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import uploadImagesDB from "lib/uploadImagesDB";
 import { doc, updateDoc } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
-import { updateFeed } from "store/feedsSlice";
+import { setEditFeedLoadingFalse, setEditFeedLoadingTrue, updateFeed } from "store/feedsSlice";
+import SubmitFormButton from "components/parts/SubmitFormButton";
 
 type EditFeedModalProps = {
   feedData: FeedWithUserInfoType
@@ -23,6 +24,7 @@ const EditFeedModal: FC<EditFeedModalProps> = ({ feedData, editing, setEditing }
   const [editFeedError, setEditFeedError] = useState<string>('')
   const dispatch = useAppDispatch()
   const myInfo = useAppSelector(state => state.users.myInfo)
+  const editFeedLoading = useAppSelector(state => state.feeds.editFeedLoading)
 
   const { id, feedText, feedImages, userUid } = feedData
 
@@ -45,6 +47,7 @@ const EditFeedModal: FC<EditFeedModalProps> = ({ feedData, editing, setEditing }
       return alert("로그인한 이후에 피드를 수정해주세요.")
     if (myInfo.uid !== userUid) 
       return alert("당신의 피드가 아닌 글은 수정할 수 없습니다!")
+    dispatch(setEditFeedLoadingTrue())
     const shouldUpload = newImages.filter(img => img.startsWith('data:image'))
     const shouldNotUpload = newImages.filter(img => !img.startsWith('data:image'))
     const newImagesURLs = await uploadImagesDB(shouldUpload, myInfo.uid).catch(err => console.log(err))
@@ -57,6 +60,7 @@ const EditFeedModal: FC<EditFeedModalProps> = ({ feedData, editing, setEditing }
     const feedDocRef = doc(dbService, "feeds", id)
     await updateDoc(feedDocRef, data)
     dispatch(updateFeed({...data, id}))
+    dispatch(setEditFeedLoadingFalse())
     setEditing(false)
   }
 
@@ -73,7 +77,13 @@ const EditFeedModal: FC<EditFeedModalProps> = ({ feedData, editing, setEditing }
         />
         <div>
           <InputFileForm label="edit-input-file" images={newImages} setImages={setNewImages} />
-          <MainButton onClick={onSubmit}>Edit Feed</MainButton>
+          <SubmitFormButton 
+            onClick={onSubmit}
+            sx={{ float: 'right', mt: 1 }}
+            loading={editFeedLoading}
+          >
+            Edit Feed
+          </SubmitFormButton>
           <MainButton
             variant="outlined"
             sx={{ float: 'right', mt: 1, mr: 1 }}
