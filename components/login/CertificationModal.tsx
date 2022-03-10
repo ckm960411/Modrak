@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Dialog, DialogTitle } from "@mui/material";
-import { CertificationType } from "components/layout/Navbar";
+import { CertificationType } from "components/layout/NavbarBtns";
 import SignupForm from "components/login/SignupForm";
 import LoginForm from "components/login/LoginForm";
 

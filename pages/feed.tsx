@@ -1,13 +1,24 @@
-import { Grid, Stack, useMediaQuery, useTheme } from "@mui/material";
-import FeedContainer from "components/feeds/FeedContainer";
-import FeedForm from "components/feeds/FeedForm";
-import FilterSidebar from "components/feeds/FilterSidebar";
+import { useEffect, useState } from "react";
 import { NextPage } from "next";
 import Head from "next/head";
+import { Grid, Stack, useMediaQuery, useTheme, SpeedDial, SpeedDialIcon, SpeedDialAction, Dialog} from "@mui/material";
+import FeedContainer from "components/feeds/FeedContainer";
+import FeedForm from "components/feeds/FeedForm";
+import FeedFilterSidebar from "components/feeds/sidebar/FeedFilterSidebar";
+import FeedSearchForm from "components/feeds/sidebar/FeedSearchForm";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward"
+import SortIcon from '@mui/icons-material/Sort';
 
 const Feed: NextPage = () => {
   const theme = useTheme()
-  const downLg = useMediaQuery(theme.breakpoints.down("lg"))
+  const downMd = useMediaQuery(theme.breakpoints.down("md"))
+  const [filterOpened, setFilterOpened] = useState(false)
+  
+  const onCloseFilter = () => setFilterOpened(false)
+
+  useEffect(() => {
+    if (!downMd) setFilterOpened(false)
+  }, [downMd])
 
   return (
     <>
@@ -26,9 +37,26 @@ const Feed: NextPage = () => {
         <Grid item xs={12} md={5} order={{ xs: 1, md: 2 }} 
           sx={{ width: '400px', maxWidth: '863px !important', m: '0 auto' }}
         >
-          <FilterSidebar />
+          <Stack spacing={2}>
+            <>
+              <FeedSearchForm />
+              {downMd || <FeedFilterSidebar filterOpened={filterOpened} />}
+            </>
+          </Stack>
         </Grid>
       </Grid>
+
+      <SpeedDial
+        ariaLabel="SpeedDial basic example"
+        sx={{ position: 'fixed', bottom: '4%', right: '4%' }}
+        icon={<SpeedDialIcon />}
+      >
+        {downMd && <SpeedDialAction icon={<SortIcon />} tooltipTitle="정렬 필터" onClick={() => setFilterOpened(true)} />}
+        <SpeedDialAction icon={<ArrowUpwardIcon />} tooltipTitle="위로 가기" />
+      </SpeedDial>
+      <Dialog open={filterOpened} onClose={onCloseFilter} maxWidth="xs" fullWidth>
+        <FeedFilterSidebar filterOpened={filterOpened} />
+      </Dialog>
     </>
   )
 }

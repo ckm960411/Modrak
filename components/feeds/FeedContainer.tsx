@@ -15,7 +15,6 @@ const FeedContainer: FC = () => {
   useEffect(() => {
     getFeeds(clearFeedsState, setFeedsState)
   }, [])
-  console.log(feeds)
 
   return (
     <Stack direction="column" spacing={2}>
