@@ -11,9 +11,7 @@ import EditMenu from "components/parts/EditMenu"
 import FollowButton from "components/feeds/FollowButton";
 import CustomCarousel from "components/parts/CustomCarousel";
 import Image from "next/image";
-import { FeedType } from "types/feedTypes";
-import searchUserInfo from "lib/searchUserInfo";
-import { DocumentData } from "firebase/firestore";
+import { FeedWithUserInfoType } from "types/feedTypes";
 import { format } from "date-fns";
 import formatDistanceToNowKo from "lib/formatDistanceToNowKo";
 
@@ -40,34 +38,32 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   return <IconButton {...other} />;
 })(() => ({ marginLeft: "auto" }));
 
-const Feed: FC<{feedData: FeedType}> = ({ feedData }) => {
+const Feed: FC<{feedData: FeedWithUserInfoType}> = ({ feedData }) => {
   const myInfo = useAppSelector(state => state.users.myInfo)
-  const [userInfo, setUserInfo] = useState<DocumentData | null>(null)
+  // const [userInfo, setUserInfo] = useState<DocumentData | null>(null)
   const [date, setDate] = useState<string>('')
   const [timeAgo, setTimeAgo] = useState<string>("0");
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const [editing, setEditing] = useState<boolean>(false)
   const [expanded, setExpanded] = useState(false);
   
-  const { userUid, feedText, feedImages, createdAt, modifiedAt } = feedData
+  const { userUid, feedText, feedImages, createdAt, modifiedAt, nickname, profileImg } = feedData
 
-  useEffect(() => {
-    const searchUser = async () => {
-      const response = await searchUserInfo(userUid)
-      setUserInfo(response!)
-    }
-    searchUser()
-  }, [userUid])
+  // useEffect(() => {
+  //   const searchUser = async () => {
+  //     const response = await searchUserInfo(userUid)
+  //     setUserInfo(response!)
+  //   }
+  //   searchUser()
+  // }, [userUid])
 
   useEffect(() => {
     if (createdAt === modifiedAt) {
-      const parsedTime = createdAt ? Date.parse(`${createdAt.toDate()}`) : Date.now()
-      setTimeAgo(formatDistanceToNowKo(parsedTime));
-      setDate(format(parsedTime, 'yyyy년 MM월 d일 H시 m분'))
+      setTimeAgo(formatDistanceToNowKo(createdAt));
+      setDate(format(createdAt, 'yyyy년 MM월 d일 H시 m분'))
     } else {
-      const parsedTime = Date.parse(`${modifiedAt.toDate()}`)
-      setTimeAgo(formatDistanceToNowKo(parsedTime));
-      setDate(format(parsedTime, 'yyyy년 MM월 d일 H시 m분'))
+      setTimeAgo(formatDistanceToNowKo(modifiedAt));
+      setDate(format(modifiedAt, 'yyyy년 MM월 d일 H시 m분'))
     }
   }, [createdAt, modifiedAt, setTimeAgo]);
 
@@ -85,24 +81,17 @@ const Feed: FC<{feedData: FeedType}> = ({ feedData }) => {
   return (
     <Card raised>
       <CardHeader
-        avatar={(
-          <Avatar 
-            alt={userInfo ? userInfo.nickname : 'nickname'} 
-            src={userInfo && userInfo.profileImg !== null ? userInfo.profileImg : defaultImg.src} 
-          />
-        )}
+        avatar={<Avatar alt={nickname} src={profileImg ? profileImg : defaultImg.src} />}
         title={(
           <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-            <NicknameTypo>
-              {userInfo ? userInfo.nickname : <Skeleton variant="rectangular" width={100} height={24} />}
-            </NicknameTypo>
+            <NicknameTypo>{nickname}</NicknameTypo>
             <FollowButton />
           </Stack>
         )}
         subheader={`${date} (${timeAgo} 전)`}
         action={
           <EditMenu 
-            userUid={"SLa0iD88QAd5TZB1wN39RUiOtai1"}
+            userUid={userUid}
             anchorEl={anchorEl}
             handleClick={handleClick}
             handleClose={handleClose}

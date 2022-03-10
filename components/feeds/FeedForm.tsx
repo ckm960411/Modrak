@@ -1,13 +1,13 @@
 import React, { FC, useState } from "react";
 import { dbService } from "fireBaseApp/fBase";
-import { addDoc, collection, doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { Card, CardContent } from "@mui/material";
 import TextInput from "components/parts/TextInput";
 import InputFileForm from "components/parts/InputFileForm";
 import PreviewImagesTab from "components/feeds/PreviewImagesTab";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import uploadImagesDB from "lib/uploadImagesDB";
-import { setFeedLoadingfalse, setFeedLoadingTrue } from "store/feedsSlice";
+import { addFeeds, setFeedLoadingfalse, setFeedLoadingTrue } from "store/feedsSlice";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 
 const FeedForm: FC = () => {
@@ -32,8 +32,8 @@ const FeedForm: FC = () => {
       userUid: myInfo.uid,
       feedText: feedText,
       feedImages: imagesURLs,
-      createdAt: serverTimestamp(),
-      modifiedAt: serverTimestamp(),
+      createdAt: Date.now(),
+      modifiedAt: Date.now(),
       likes: [],
       bookmarks: [],
       comments: [],
@@ -50,6 +50,11 @@ const FeedForm: FC = () => {
       })
       .catch(err => console.log(err.resultMessage))
       .finally(() => alert('게시글 작성이 완료됐습니다!'))
+    dispatch(addFeeds({
+      ...feedData,
+      nickname: myInfo.nickname,
+      profileImg: myInfo.profileImg,
+    }))
     dispatch(setFeedLoadingfalse())
     setFeedText("")
     setFeedImages([])

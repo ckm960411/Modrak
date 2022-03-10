@@ -1,30 +1,50 @@
-import { FC, useEffect, useState } from "react";
-import Feed from "components/feeds/Feed";
-import { Stack } from "@mui/material";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { FC, useEffect } from "react";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
-import { FeedType } from "types/feedTypes";
+import { Stack } from "@mui/material";
+import Feed from "components/feeds/Feed";
+import searchUserInfo from "lib/searchUserInfo";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { clearFeeds, setFeeds } from "store/feedsSlice";
 
 const FeedContainer: FC = () => {
-  const [feeds, setFeeds] = useState<FeedType[]>([]) // 일단 임시로 any
+  const dispatch = useAppDispatch()
+  const feeds = useAppSelector(state => state.feeds.value)
 
-  useEffect(() => {
-    // realtime 으로 피드 불러오기
+  const getFeeds = async () => {
+    dispatch(clearFeeds())
     const feedDocRef = collection(dbService, "feeds")
     const queryInstance = query(feedDocRef, orderBy("createdAt", "desc"))
-    onSnapshot(queryInstance, (snapshot) => {
-      const feedsArray = snapshot.docs.map(doc => ({
-        id: doc.id, // doc.id 는 한개 문서의 id 를 말함
-        ...doc.data(), // doc.data()에는 feedText, userUid 등의 필드 정보가 담김
-      }))
-      setFeeds(feedsArray as FeedType[])
+    const documentSnapshots = await getDocs(queryInstance)
+    const result = documentSnapshots.docs.map(async (doc) => {
+      const userData = await searchUserInfo(doc.data().userUid)
+      const docData = doc.data()
+      return {
+        id: doc.id,
+        userUid: docData.userUid,
+        feedText: docData.feedText,
+        feedImages: docData.feedImages,
+        likes: docData.likes,
+        bookmarks: docData.bookmarks,
+        comments: docData.comments,
+        createdAt: docData.createdAt,
+        modifiedAt:docData.modifiedAt,
+        nickname: userData!.nickname,
+        profileImg: userData!.profileImg,
+      }
     })
+    result.map(promise => promise.then(res => dispatch(setFeeds(res))))
+  }
+
+  useEffect(() => {
+    getFeeds()
   }, [])
+  console.log(feeds)
 
   return (
     <Stack direction="column" spacing={2}>
       {feeds.map(feed => (
-        <Feed key={feed.id} feedData={feed}  />
+        <Feed key={`${feed.id}/${feed.createdAt}`} feedData={feed}  />
       ))}
     </Stack>
   )
