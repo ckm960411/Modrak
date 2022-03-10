@@ -15,7 +15,7 @@ const Feed: NextPage = () => {
         <title>Feed | Modrak</title>
       </Head>
       <Grid container spacing={2}>
-        <Grid item xs={12} lg={8} order={{ xs: 2, lg: 1 }} 
+        <Grid item xs={12} md={7} order={{ xs: 2, md: 1 }} 
           sx={{ width: '400px', maxWidth: '863px !important', m: '0 auto' }}
         >
           <Stack spacing={2}>
@@ -23,7 +23,7 @@ const Feed: NextPage = () => {
             <FeedContainer />
           </Stack>
         </Grid>
-        <Grid item xs={12} lg={4} order={{ xs: 1, lg: 2 }} 
+        <Grid item xs={12} md={5} order={{ xs: 1, md: 2 }} 
           sx={{ width: '400px', maxWidth: '863px !important', m: '0 auto' }}
         >
           <FilterSidebar />
