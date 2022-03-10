@@ -40,7 +40,6 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 const Feed: FC<{feedData: FeedWithUserInfoType}> = ({ feedData }) => {
   const myInfo = useAppSelector(state => state.users.myInfo)
-  // const [userInfo, setUserInfo] = useState<DocumentData | null>(null)
   const [date, setDate] = useState<string>('')
   const [timeAgo, setTimeAgo] = useState<string>("0");
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
@@ -48,14 +47,6 @@ const Feed: FC<{feedData: FeedWithUserInfoType}> = ({ feedData }) => {
   const [expanded, setExpanded] = useState(false);
   
   const { userUid, feedText, feedImages, createdAt, modifiedAt, nickname, profileImg } = feedData
-
-  // useEffect(() => {
-  //   const searchUser = async () => {
-  //     const response = await searchUserInfo(userUid)
-  //     setUserInfo(response!)
-  //   }
-  //   searchUser()
-  // }, [userUid])
 
   useEffect(() => {
     if (createdAt === modifiedAt) {
