@@ -39,6 +39,9 @@ export const feedsSlice = createSlice({
       finded.feedText = action.payload.feedText,
       finded.feedImages = action.payload.feedImages,
       finded.modifiedAt = action.payload.modifiedAt
+    },
+    deleteFeed: (state, action) => {
+      state.value = state.value.filter(feed => feed.id !== action.payload)
     }
   },
   extraReducers: {},
@@ -50,7 +53,8 @@ export const {
   setFeeds, 
   addFeeds, 
   clearFeeds,
-  updateFeed
+  updateFeed,
+  deleteFeed
 } = feedsSlice.actions
 
 export const selectUser = (state: RootState) => state.users.myInfo

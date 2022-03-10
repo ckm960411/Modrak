@@ -7,6 +7,10 @@ import styled from "@emotion/styled";
 import { format } from "date-fns";
 import formatDistanceToNowKo from "lib/formatDistanceToNowKo";
 import { FeedWithUserInfoType } from "types/feedTypes";
+import { deleteDoc, doc } from "firebase/firestore";
+import { dbService } from "fireBaseApp/fBase";
+import { useAppDispatch } from "store/hooks";
+import { deleteFeed } from "store/feedsSlice";
 
 const NicknameTypo = styled(Typography)`
   font-family: 'Katuri';
@@ -23,7 +27,9 @@ const FeedHeader: FC<FeedHeaderProps> = ({ feedData, editing, setEditing }) => {
   const [date, setDate] = useState<string>('')
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
-  const { userUid, createdAt, modifiedAt, nickname, profileImg } = feedData
+  const dispatch = useAppDispatch()
+
+  const { id, userUid, createdAt, modifiedAt, nickname, profileImg } = feedData
   
   useEffect(() => {
     if (createdAt === modifiedAt) {
@@ -42,7 +48,14 @@ const FeedHeader: FC<FeedHeaderProps> = ({ feedData, editing, setEditing }) => {
     setEditing(true)
     handleClose()
   }
-  const onDeleteFeed = () => handleClose()
+  const onDeleteFeed = async () => {
+    const ok = window.confirm('이 피드를 정말 삭제하시겠습니까?')
+    if (!ok) return
+    handleClose()
+    await deleteDoc(doc(dbService, "feeds", id)).catch(err => console.log(err))
+    dispatch(deleteFeed(id))
+    alert('피드가 정상적으로 삭제되었습니다!')
+  }
 
   return (
     <CardHeader
