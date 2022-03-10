@@ -43,7 +43,7 @@ const AppLayout: FC = ({ children }) => {
   const dispatch = useAppDispatch()
   const [open, setOpen] = useState(true);
   const theme = useTheme()
-  const downLg = useMediaQuery(theme.breakpoints.down("lg"))
+  const downMd = useMediaQuery(theme.breakpoints.down("md"))
   
   const onLoadUserData = async (uid: string) => {
     const usersRef = collection(dbService, "users")
@@ -68,9 +68,9 @@ const AppLayout: FC = ({ children }) => {
   const handleDrawerClose = () => setOpen(false);
 
   useEffect(() => {
-    if (downLg) setOpen(false)
+    if (downMd) setOpen(false)
     else setOpen(true)
-  }, [downLg])
+  }, [downMd])
 
   return (
     <Box sx={{ display: "flex" }}>

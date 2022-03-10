@@ -11,14 +11,14 @@ import SortIcon from '@mui/icons-material/Sort';
 
 const Feed: NextPage = () => {
   const theme = useTheme()
-  const downMd = useMediaQuery(theme.breakpoints.down("md"))
+  const downLg = useMediaQuery(theme.breakpoints.down("lg"))
   const [filterOpened, setFilterOpened] = useState(false)
   
   const onCloseFilter = () => setFilterOpened(false)
 
   useEffect(() => {
-    if (!downMd) setFilterOpened(false)
-  }, [downMd])
+    if (!downLg) setFilterOpened(false)
+  }, [downLg])
 
   return (
     <>
@@ -26,7 +26,7 @@ const Feed: NextPage = () => {
         <title>Feed | Modrak</title>
       </Head>
       <Grid container spacing={2}>
-        <Grid item xs={12} md={7} order={{ xs: 2, md: 1 }} 
+        <Grid item xs={12} lg={7} order={{ xs: 2, lg: 1 }} 
           sx={{ width: '400px', maxWidth: '863px !important', m: '0 auto' }}
         >
           <Stack spacing={2}>
@@ -34,13 +34,13 @@ const Feed: NextPage = () => {
             <FeedContainer />
           </Stack>
         </Grid>
-        <Grid item xs={12} md={5} order={{ xs: 1, md: 2 }} 
+        <Grid item xs={12} lg={5} order={{ xs: 1, lg: 2 }} 
           sx={{ width: '400px', maxWidth: '863px !important', m: '0 auto' }}
         >
           <Stack spacing={2}>
             <>
               <FeedSearchForm />
-              {downMd || <FeedFilterSidebar filterOpened={filterOpened} />}
+              {downLg || <FeedFilterSidebar filterOpened={filterOpened} />}
             </>
           </Stack>
         </Grid>
@@ -51,7 +51,7 @@ const Feed: NextPage = () => {
         sx={{ position: 'fixed', bottom: '4%', right: '4%' }}
         icon={<SpeedDialIcon />}
       >
-        {downMd && <SpeedDialAction icon={<SortIcon />} tooltipTitle="정렬 필터" onClick={() => setFilterOpened(true)} />}
+        {downLg && <SpeedDialAction icon={<SortIcon />} tooltipTitle="정렬 필터" onClick={() => setFilterOpened(true)} />}
         <SpeedDialAction icon={<ArrowUpwardIcon />} tooltipTitle="위로 가기" />
       </SpeedDial>
       <Dialog open={filterOpened} onClose={onCloseFilter} maxWidth="xs" fullWidth>
