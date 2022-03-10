@@ -2,7 +2,7 @@ import { FC, useEffect } from "react";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
 import { Stack } from "@mui/material";
-import Feed from "components/feeds/Feed";
+import Feed from "components/feeds/feed/Feed";
 import searchUserInfo from "lib/searchUserInfo";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { clearFeeds, setFeeds } from "store/feedsSlice";

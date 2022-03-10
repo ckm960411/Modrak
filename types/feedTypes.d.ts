@@ -9,7 +9,7 @@ declare type FeedType = {
   feedImages: string[]
   likes: string[]
   bookmarks: string[]
-  comments: []
+  comments: string[]
   createdAt: number
   modifiedAt: number
 }
@@ -23,7 +23,7 @@ declare type FeedWithUserInfoType = {
   feedImages: string[]
   likes: string[]
   bookmarks: string[]
-  comments: []
+  comments: string[]
   createdAt: number
   modifiedAt: number
 }
