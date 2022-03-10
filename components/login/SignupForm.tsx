@@ -24,7 +24,7 @@ const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
   const [checkedEmail, setCheckedEmail] = useState('')
   const [alertOpened, setAlertOpened] = useState(false)
   const dispatch = useAppDispatch()
-  const loading = useAppSelector(state => state.users.loading)
+  const userLoading = useAppSelector(state => state.users.loading)
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<SignUpFormValue>()
 
@@ -175,7 +175,7 @@ const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
       </DialogContent>
       <DialogActions sx={{ p: "0 24px 20px" }}>
         <Button onClick={handleClose}>취소</Button>
-        <SubmitFormButton onClick={handleSubmit(onSubmit)}>
+        <SubmitFormButton loading={userLoading} onClick={handleSubmit(onSubmit)}>
           회원가입
         </SubmitFormButton>
       </DialogActions>

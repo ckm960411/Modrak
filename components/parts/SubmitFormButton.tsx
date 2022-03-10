@@ -2,21 +2,19 @@ import { FC } from "react";
 import { CircularProgress } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import SendIcon from "@mui/icons-material/Send";
-import { useAppSelector } from "store/hooks";
 
 type SubmitFormButtonProps = {
+  loading: boolean
   [key: string]: any
 }
 
-const SubmitFormButton: FC<SubmitFormButtonProps> = ({ children, ...props }) => {
-  const users = useAppSelector(state => state.users);
-  const feeds = useAppSelector(state => state.feeds);
+const SubmitFormButton: FC<SubmitFormButtonProps> = ({ loading, children, ...props }) => {
 
   return (
     <LoadingButton
       type="submit"
       variant="contained"
-      loading={users.loading || feeds.loading}
+      loading={loading}
       loadingIndicator={
         <span style={{ color: "#fff" }}>
           <CircularProgress

@@ -15,6 +15,7 @@ const FeedForm: FC = () => {
   const [feedText, setFeedText] = useState<string>('')
   const dispatch = useAppDispatch()
   const myInfo = useAppSelector(state => state.users.myInfo)
+  const feedLoading = useAppSelector(state => state.feeds.loading)
 
   const onChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFeedText(e.target.value)
@@ -73,6 +74,7 @@ const FeedForm: FC = () => {
           <SubmitFormButton
             onClick={onSubmitFeed}
             sx={{ float: 'right', mt: 1 }}
+            loading={feedLoading}
           >
             작성하기
           </SubmitFormButton>

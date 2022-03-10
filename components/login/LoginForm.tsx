@@ -6,7 +6,7 @@ import { Button, DialogActions, DialogContent, Stack } from "@mui/material";
 import styled from "@emotion/styled";
 import { red } from "@mui/material/colors";
 import HookFormInput from "components/login/HookFormInput";
-import { useAppDispatch } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import { setUserLoadingfalse, setUserLoadingTrue } from "store/usersSlice";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 
@@ -16,6 +16,7 @@ const ErrorParagraph = styled.span`
 
 const LoginForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
   const dispatch = useAppDispatch()
+  const userLoading = useAppSelector(state => state.users.loading)
 
   const { register, formState: { errors }, handleSubmit } = useForm<LoginFormValue>();
 
@@ -60,7 +61,7 @@ const LoginForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
       </DialogContent>
       <DialogActions sx={{ p: "0 24px 20px" }}>
         <Button onClick={handleClose}>취소</Button>
-        <SubmitFormButton onClick={handleSubmit(onSubmit)}>
+        <SubmitFormButton loading={userLoading} onClick={handleSubmit(onSubmit)}>
           로그인
         </SubmitFormButton>
       </DialogActions>
