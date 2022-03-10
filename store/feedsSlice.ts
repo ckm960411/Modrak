@@ -32,12 +32,26 @@ export const feedsSlice = createSlice({
     },
     clearFeeds: (state) => {
       state.value = []
+    },
+    updateFeed: (state, action) => {
+      const finded = state.value.find(feed => feed.id === action.payload.id)
+      if (!finded) return
+      finded.feedText = action.payload.feedText,
+      finded.feedImages = action.payload.feedImages,
+      finded.modifiedAt = action.payload.modifiedAt
     }
   },
   extraReducers: {},
 })
 
-export const { setFeedLoadingTrue, setFeedLoadingfalse, setFeeds, addFeeds, clearFeeds } = feedsSlice.actions
+export const { 
+  setFeedLoadingTrue, 
+  setFeedLoadingfalse, 
+  setFeeds, 
+  addFeeds, 
+  clearFeeds,
+  updateFeed
+} = feedsSlice.actions
 
 export const selectUser = (state: RootState) => state.users.myInfo
 

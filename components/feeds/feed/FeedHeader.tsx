@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import EditMenu from "components/parts/EditMenu"
 import defaultImg from "public/imgs/profileImg.png"
 import { Avatar, CardHeader, Stack, Typography } from "@mui/material";
@@ -12,8 +12,13 @@ const NicknameTypo = styled(Typography)`
   font-family: 'Katuri';
   color: #353535;
 `
+type FeedHeaderProps = {
+  feedData: FeedWithUserInfoType
+  editing: boolean
+  setEditing: Dispatch<SetStateAction<boolean>>
+}
 
-const FeedHeader: FC<{feedData: FeedWithUserInfoType}> = ({ feedData }) => {
+const FeedHeader: FC<FeedHeaderProps> = ({ feedData, editing, setEditing }) => {
   const [timeAgo, setTimeAgo] = useState<string>("0");
   const [date, setDate] = useState<string>('')
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
@@ -22,10 +27,10 @@ const FeedHeader: FC<{feedData: FeedWithUserInfoType}> = ({ feedData }) => {
   
   useEffect(() => {
     if (createdAt === modifiedAt) {
-      setTimeAgo(formatDistanceToNowKo(createdAt));
+      setTimeAgo(`${formatDistanceToNowKo(createdAt)} 전`);
       setDate(format(createdAt, 'yyyy년 MM월 d일 H시 m분'))
     } else {
-      setTimeAgo(formatDistanceToNowKo(modifiedAt));
+      setTimeAgo(`${formatDistanceToNowKo(modifiedAt)} 전 수정됨`);
       setDate(format(modifiedAt, 'yyyy년 MM월 d일 H시 m분'))
     }
   }, [createdAt, modifiedAt, setTimeAgo]);
@@ -33,7 +38,10 @@ const FeedHeader: FC<{feedData: FeedWithUserInfoType}> = ({ feedData }) => {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () =>  setAnchorEl(null);
 
-  const onEditFeed = () => handleClose()
+  const onEditFeed = () => {
+    setEditing(true)
+    handleClose()
+  }
   const onDeleteFeed = () => handleClose()
 
   return (
@@ -45,7 +53,7 @@ const FeedHeader: FC<{feedData: FeedWithUserInfoType}> = ({ feedData }) => {
           <FollowButton />
         </Stack>
       }
-      subheader={`${date} (${timeAgo} 전)`}
+      subheader={`${date} (${timeAgo})`}
       action={
         <EditMenu
           userUid={userUid}
