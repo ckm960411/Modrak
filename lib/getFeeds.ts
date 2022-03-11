@@ -1,8 +1,9 @@
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
 import searchUserInfo from "lib/searchUserInfo";
+import { FeedDataType, FeedWithIdType, FeedWithUserInfoType } from "types/feedTypes";
 
-const getFeeds = async (
+const useGetFeeds = async (
   clearFeedsState: () => { payload: undefined; type: string; },
   setFeedsState: (payload: any) => { payload: any; type: string; }
 ) => {
@@ -10,24 +11,22 @@ const getFeeds = async (
   const feedDocRef = collection(dbService, "feeds")
   const queryInstance = query(feedDocRef, orderBy("createdAt", "desc"))
   const documentSnapshots = await getDocs(queryInstance)
-  const result = documentSnapshots.docs.map(async (doc) => {
-    const userData = await searchUserInfo(doc.data().userUid)
-    const docData = doc.data()
-    return {
-      id: doc.id,
-      userUid: docData.userUid,
-      feedText: docData.feedText,
-      feedImages: docData.feedImages,
-      likes: docData.likes,
-      bookmarks: docData.bookmarks,
-      comments: docData.comments,
-      createdAt: docData.createdAt,
-      modifiedAt:docData.modifiedAt,
+  const feedWithId: FeedWithIdType[] = documentSnapshots.docs.map(doc => ({
+    id: doc.id,
+    ...(doc.data() as FeedDataType)
+  }))
+
+  const feedWithUserInfo = feedWithId.map(async (feed) => {
+    const userData = await searchUserInfo(feed.userUid)
+    const feedWithUserData: FeedWithUserInfoType = {
+      ...feed,
       nickname: userData!.nickname,
       profileImg: userData!.profileImg,
     }
+    return feedWithUserData
   })
-  result.map(promise => promise.then(res => setFeedsState(res)))
+
+  feedWithUserInfo.map(feed => feed.then(res => setFeedsState(res)))
 }
 
-export default getFeeds
+export default useGetFeeds

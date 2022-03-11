@@ -1,10 +1,7 @@
 import { Timestamp } from "firebase/firestore";
 
-declare type FeedType = {
-  id: string
+declare interface FeedDataType {
   userUid: string
-  // nickname: string
-  // profileImg: string | null
   feedText: string
   feedImages: string[]
   likes: string[]
@@ -13,17 +10,10 @@ declare type FeedType = {
   createdAt: number
   modifiedAt: number
 }
-
-declare type FeedWithUserInfoType = {
+declare interface FeedWithIdType extends FeedDataType {
   id: string
-  userUid: string
+}
+declare interface FeedWithUserInfoType extends FeedWithIdType {
   nickname: string
   profileImg: string | null
-  feedText: string
-  feedImages: string[]
-  likes: string[]
-  bookmarks: string[]
-  comments: string[]
-  createdAt: number
-  modifiedAt: number
 }
