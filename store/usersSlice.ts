@@ -30,7 +30,6 @@ export const usersSlice = createSlice({
       state.loading = false
     },
     addFeedInfo: (state, action) => {
-      console.log(action.payload)
       state.myInfo.feeds.unshift(action.payload)
     },
     deleteFeedInfo: (state, action) => {

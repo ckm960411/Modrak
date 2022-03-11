@@ -5,12 +5,12 @@ import { Avatar, CardHeader, Stack, Typography } from "@mui/material";
 import FollowButton from "components/feeds/FollowButton";
 import styled from "@emotion/styled";
 import { format } from "date-fns";
-import formatDistanceToNowKo from "lib/formatDistanceToNowKo";
+import formatDistanceToNowKo from "utils/formatDistanceToNowKo";
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
 import { useAppDispatch } from "store/hooks";
 import { deleteFeed } from "store/feedsSlice";
-import searchUserInfo from "lib/searchUserInfo";
+import searchUserInfo from "utils/searchUserInfo";
 import { deleteFeedInfo } from "store/usersSlice";
 
 const NicknameTypo = styled(Typography)`

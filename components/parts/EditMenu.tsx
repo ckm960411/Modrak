@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { StyledMenu } from "lib/styled-menu";
+import { StyledMenu } from "utils/styled-menu";
 import { Grid, IconButton, MenuItem } from "@mui/material";
 import { MoreVert as MoreVertIcon, Edit as EditIcon, ReportProblem as ReportProblemIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { useAppSelector } from "store/hooks";
