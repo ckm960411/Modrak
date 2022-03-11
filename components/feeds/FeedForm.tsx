@@ -6,7 +6,7 @@ import TextInput from "components/parts/TextInput";
 import InputFileForm from "components/parts/InputFileForm";
 import PreviewImagesTab from "components/feeds/PreviewImagesTab";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import uploadImagesDB from "lib/uploadImagesDB";
+import uploadImagesDB from "utils/uploadImagesDB";
 import { addFeeds, setFeedLoadingfalse, setFeedLoadingTrue } from "store/feedsSlice";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 import { addFeedInfo } from "store/usersSlice";
