@@ -1,5 +1,3 @@
-import { Timestamp } from "firebase/firestore";
-
 declare interface FeedDataType {
   userUid: string
   feedText: string

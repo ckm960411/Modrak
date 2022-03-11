@@ -1,6 +1,5 @@
 import { FC, useState } from "react";
 import { Card } from "@mui/material";
-import { FeedWithUserInfoType } from "types/feedTypes";
 import FeedHeader from "components/feeds/feed/FeedHeader";
 import FeedImages from "components/feeds/feed/FeedImages";
 import FeedContent from "components/feeds/feed/FeedContent";

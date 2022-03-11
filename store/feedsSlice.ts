@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { RootState } from 'store/configureStore'
-import { FeedWithUserInfoType } from 'types/feedTypes'
 
 interface UserState {
   value: FeedWithUserInfoType[]

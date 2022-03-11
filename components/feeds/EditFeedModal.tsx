@@ -1,6 +1,5 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { Alert, CardContent, Dialog } from "@mui/material";
-import { FeedWithUserInfoType } from "types/feedTypes";
 import TextInput from "components/parts/TextInput";
 import InputFileForm from "components/parts/InputFileForm";
 import MainButton from "components/parts/MainButton";

@@ -1,7 +1,6 @@
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
 import searchUserInfo from "lib/searchUserInfo";
-import { FeedDataType, FeedWithIdType, FeedWithUserInfoType } from "types/feedTypes";
 
 const useGetFeeds = async (
   clearFeedsState: () => { payload: undefined; type: string; },

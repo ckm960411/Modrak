@@ -6,7 +6,6 @@ import FollowButton from "components/feeds/FollowButton";
 import styled from "@emotion/styled";
 import { format } from "date-fns";
 import formatDistanceToNowKo from "lib/formatDistanceToNowKo";
-import { FeedWithUserInfoType } from "types/feedTypes";
 import { deleteDoc, doc } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
 import { useAppDispatch } from "store/hooks";
