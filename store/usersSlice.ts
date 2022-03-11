@@ -29,11 +29,25 @@ export const usersSlice = createSlice({
     setUserLoadingfalse: (state) => {
       state.loading = false
     },
+    addFeedInfo: (state, action) => {
+      console.log(action.payload)
+      state.myInfo.feeds.unshift(action.payload)
+    },
+    deleteFeedInfo: (state, action) => {
+      state.myInfo.feeds = (state.myInfo.feeds as string[]).filter(feed => feed !== action.payload)
+    },
   },
   extraReducers: {},
 })
 
-export const { loadMyInfoData, removeMyInfoData, setUserLoadingTrue, setUserLoadingfalse } = usersSlice.actions
+export const { 
+  loadMyInfoData, 
+  removeMyInfoData, 
+  setUserLoadingTrue, 
+  setUserLoadingfalse,
+  addFeedInfo,
+  deleteFeedInfo
+} = usersSlice.actions
 
 export const selectUser = (state: RootState) => state.users.myInfo
 

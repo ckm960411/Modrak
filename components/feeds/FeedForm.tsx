@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import uploadImagesDB from "lib/uploadImagesDB";
 import { addFeeds, setFeedLoadingfalse, setFeedLoadingTrue } from "store/feedsSlice";
 import SubmitFormButton from "components/parts/SubmitFormButton";
+import { addFeedInfo } from "store/usersSlice";
 
 const FeedForm: FC = () => {
   const [feedImages, setFeedImages] = useState<string[]>([])
@@ -31,6 +32,7 @@ const FeedForm: FC = () => {
     const imagesURLs = await uploadImagesDB(feedImages, myInfo.uid).catch(err => console.log(err.resultMessage))
     const feedData = {
       userUid: myInfo.uid,
+      userRef: `users/${myInfo.uid}`,
       feedText: feedText,
       feedImages: imagesURLs,
       createdAt: Date.now(),
@@ -40,22 +42,25 @@ const FeedForm: FC = () => {
       comments: [],
     }
     // 글을 게시하는 사용자(본인)의 정보를 찾음
-    const userDocRef = doc(dbService, "users", feedData.userUid)
+    const userDocRef = doc(dbService, feedData.userRef)
     const userData = await getDoc(userDocRef).then(res => res.data()).catch(err => console.log(err.resultMessage))
     // feeds 컬렉션에 피드를 추가하고, 사용자의 feeds 배열에 문서id 를 추가
     await addDoc(collection(dbService, "feeds"), feedData)
       .then(res => {
         updateDoc(userDocRef, {
-          feeds: [...userData!.feeds, res.id] // res.id 는 추가된 피드의 문서 id
+          feeds: [...userData!.feeds, `feeds/${res.id}`] // res.id 는 추가된 피드의 문서 id
         })
+        dispatch(addFeeds({
+          ...feedData,
+          id: res.id,
+          nickname: myInfo.nickname,
+          profileImg: myInfo.profileImg,
+        }))
+        dispatch(addFeedInfo(`feeds/${res.id}`))
       })
       .catch(err => console.log(err.resultMessage))
       .finally(() => alert('게시글 작성이 완료됐습니다!'))
-    dispatch(addFeeds({
-      ...feedData,
-      nickname: myInfo.nickname,
-      profileImg: myInfo.profileImg,
-    }))
+    
     dispatch(setFeedLoadingfalse())
     setFeedText("")
     setFeedImages([])

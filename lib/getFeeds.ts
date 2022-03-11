@@ -10,22 +10,16 @@ const useGetFeeds = async (
   const feedDocRef = collection(dbService, "feeds")
   const queryInstance = query(feedDocRef, orderBy("createdAt", "desc"))
   const documentSnapshots = await getDocs(queryInstance)
-  const feedWithId: FeedWithIdType[] = documentSnapshots.docs.map(doc => ({
-    id: doc.id,
-    ...(doc.data() as FeedDataType)
-  }))
-
-  const feedWithUserInfo = feedWithId.map(async (feed) => {
-    const userData = await searchUserInfo(feed.userUid)
-    const feedWithUserData: FeedWithUserInfoType = {
-      ...feed,
+  const feedWithUserData = documentSnapshots.docs.map( async (doc) => {
+    const userData = await searchUserInfo(doc.data().userRef)
+    return {
+      id: doc.id,
+      ...doc.data(),
       nickname: userData!.nickname,
       profileImg: userData!.profileImg,
     }
-    return feedWithUserData
   })
-
-  feedWithUserInfo.map(feed => feed.then(res => setFeedsState(res)))
+  feedWithUserData.map(feed => feed.then(res => setFeedsState(res)))
 }
 
 export default useGetFeeds

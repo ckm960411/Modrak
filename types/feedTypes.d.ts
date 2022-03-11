@@ -1,5 +1,6 @@
 declare interface FeedDataType {
   userUid: string
+  userRef: string
   feedText: string
   feedImages: string[]
   likes: string[]

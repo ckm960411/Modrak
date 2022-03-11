@@ -6,10 +6,12 @@ import FollowButton from "components/feeds/FollowButton";
 import styled from "@emotion/styled";
 import { format } from "date-fns";
 import formatDistanceToNowKo from "lib/formatDistanceToNowKo";
-import { deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
 import { useAppDispatch } from "store/hooks";
 import { deleteFeed } from "store/feedsSlice";
+import searchUserInfo from "lib/searchUserInfo";
+import { deleteFeedInfo } from "store/usersSlice";
 
 const NicknameTypo = styled(Typography)`
   font-family: 'Katuri';
@@ -28,7 +30,7 @@ const FeedHeader: FC<FeedHeaderProps> = ({ feedData, editing, setEditing }) => {
 
   const dispatch = useAppDispatch()
 
-  const { id, userUid, createdAt, modifiedAt, nickname, profileImg } = feedData
+  const { id, userUid, userRef, createdAt, modifiedAt, nickname, profileImg } = feedData
   
   useEffect(() => {
     if (createdAt === modifiedAt) {
@@ -52,7 +54,12 @@ const FeedHeader: FC<FeedHeaderProps> = ({ feedData, editing, setEditing }) => {
     if (!ok) return
     handleClose()
     await deleteDoc(doc(dbService, "feeds", id)).catch(err => console.log(err))
+    const userData = await searchUserInfo(userRef)
+    await updateDoc(doc(dbService, userRef), {
+      feeds: (userData!.feeds as string[]).filter(feedRef => feedRef !== `feeds/${id}`)
+    })
     dispatch(deleteFeed(id))
+    dispatch(deleteFeedInfo(`feeds/${id}`))
     alert('피드가 정상적으로 삭제되었습니다!')
   }
 
