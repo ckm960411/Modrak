@@ -51,6 +51,11 @@ export const feedsSlice = createSlice({
     deleteFeed: (state, action) => {
       state.value = state.value.filter(feed => feed.id !== action.payload)
     },
+    addFeedLikeUserUid: (state, action) => {
+      const finded = state.value.find(feed => feed.id === action.payload.feedId)
+      if (!finded) return
+      finded.likes.push(action.payload.userUid)
+    },
     removeFeedLikeUserUid: (state, action) => {
       const finded = state.value.find(feed => feed.id === action.payload.feedId)
       if (!finded) return
@@ -70,6 +75,7 @@ export const {
   clearFeeds,
   updateFeed,
   deleteFeed,
+  addFeedLikeUserUid,
   removeFeedLikeUserUid
 } = feedsSlice.actions
 

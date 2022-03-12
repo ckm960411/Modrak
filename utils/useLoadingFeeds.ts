@@ -18,8 +18,10 @@ const useLoadingFeeds = (
   const loadFeeds = useCallback( async () => {
     const feedDocsRef = collection(dbService, "feeds")
     let queryInstance
-    if (initialLoad) queryInstance = query(feedDocsRef, orderBy("createdAt", "desc"), limit(6)) // 처음 6개 로드
-    else queryInstance = query(feedDocsRef, orderBy("createdAt", "desc"), startAfter(last), limit(5)) // 이전 로드한 게시물 이후 5개 로드
+    if (initialLoad) 
+      queryInstance = query(feedDocsRef, orderBy("createdAt", "desc"), limit(6)) // 처음 6개 로드
+    else 
+      queryInstance = query(feedDocsRef, orderBy("createdAt", "desc"), startAfter(last), limit(5)) // 이전 로드한 게시물 이후 5개 로드
     const documentSnapshots = await getDocs(queryInstance)
     if (!documentSnapshots.docs[1]) return // 더 게시물이 없다면 로드X
     setLast(documentSnapshots.docs[documentSnapshots.docs.length -1]) // 게시물을 불러온 후 가장 마지막 문서 스냅샷을 상태에 저장

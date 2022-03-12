@@ -35,6 +35,9 @@ export const usersSlice = createSlice({
     deleteFeedInfo: (state, action) => {
       state.myInfo.feeds = (state.myInfo.feeds as string[]).filter(feed => feed !== action.payload)
     },
+    addLikeFeedRef: (state, action) => {
+      state.myInfo.likeFeeds.push(action.payload.feedRef)
+    },
     removeLikeFeedRef: (state, action) => {
       state.myInfo.likeFeeds = state.myInfo.likeFeeds.filter((feedRef: string) => feedRef !== action.payload.feedRef)
     }
@@ -49,6 +52,7 @@ export const {
   setUserLoadingfalse,
   addFeedInfo,
   deleteFeedInfo,
+  addLikeFeedRef,
   removeLikeFeedRef
 } = usersSlice.actions
 

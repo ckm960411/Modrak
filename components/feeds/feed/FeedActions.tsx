@@ -10,8 +10,8 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
 import searchUserInfo from "utils/searchUserInfo";
-import { removeFeedLikeUserUid } from "store/feedsSlice";
-import { removeLikeFeedRef } from "store/usersSlice";
+import { addFeedLikeUserUid, removeFeedLikeUserUid } from "store/feedsSlice";
+import { addLikeFeedRef, removeLikeFeedRef } from "store/usersSlice";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -46,20 +46,27 @@ const FeedActions: FC<FeedActionsProps> = ({ feedId, likes, bookmarks, expanded,
 
   const onLikeFeed = async () => {
     if (!myInfo) return alert('먼저 로그인을 해주세요!')
+    const feedDocRef = doc(dbService, "feeds", feedId)
     if (AmILiked) { // unlike
-      const feedDocRef = doc(dbService, "feeds", feedId)
       await getDoc(feedDocRef).then(async (res) => {
         const feedData = res.data()
         const removedFeedLikes = feedData!.likes.filter((userUid: string) => userUid !== myInfo.uid)
         await updateDoc(feedDocRef, { likes: removedFeedLikes })
-        const { userDocRef, userData } = await searchUserInfo(feedData!.userRef)
+        const { userDocRef, userData } = await searchUserInfo(`users/${myInfo.uid}`)
         const removedLikeFeeds = userData!.likeFeeds.filter((feedRef: string) => feedRef !== `feeds/${feedId}`)
         await updateDoc(userDocRef, { likeFeeds: removedLikeFeeds })
         dispatch(removeFeedLikeUserUid({ feedId, userUid: userData!.uid }))
         dispatch(removeLikeFeedRef({ feedRef: `feeds/${feedId}` }))
       }).catch(err => console.log(err))
-    } else {
-      // console.log('like')
+    } else { // like
+      await getDoc(feedDocRef).then( async (res) => {
+        const feedData = res.data()
+        await updateDoc(feedDocRef, { likes: [...feedData!.likes, myInfo.uid ] })
+        const { userDocRef, userData } = await searchUserInfo(`users/${myInfo.uid}`)
+        await updateDoc(userDocRef, { likeFeeds: [ ...userData!.likeFeeds, `feeds/${feedId}` ] })
+        dispatch(addFeedLikeUserUid({ feedId, userUid: userData!.uid }))
+        dispatch(addLikeFeedRef({ feedRef: `feeds/${feedId}` }))
+      })
     }
   }
 
