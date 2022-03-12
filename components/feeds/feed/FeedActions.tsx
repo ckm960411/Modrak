@@ -79,7 +79,7 @@ const FeedActions: FC<FeedActionsProps> = ({ feedId, likes, bookmarks, expanded,
       const removedBookmarkFeeds = userData!.bookmarkFeeds.filter((feedRef: string) => feedRef !== `feeds/${feedId}`)
       await updateDoc(userDocRef, { bookmarkFeeds: removedBookmarkFeeds })
       dispatch(removeFeedBookmarkUserUid({ feedId, userUid: userData!.uid }))
-      dispatch(removeBookmarkFeedRef({ feedRef: `feeds/{feedId}` }))
+      dispatch(removeBookmarkFeedRef({ feedRef: `feeds/${feedId}` }))
     } else { // mark
       await updateDoc(feedDocRef, { bookmarks: [ ...feedData!.bookmarks, myInfo.uid] })
       await updateDoc(userDocRef, { bookmarkFeeds: [ ...userData!.bookmarkFeeds, `feeds/${feedId}` ]  })

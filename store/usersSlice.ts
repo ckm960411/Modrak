@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { RootState } from 'store/configureStore'
 
 interface UserState {
-  myInfo: any | null
+  myInfo: UserType | null
   loading: boolean
   error: any | null
 }
@@ -30,22 +30,22 @@ export const usersSlice = createSlice({
       state.loading = false
     },
     addFeedInfo: (state, action) => {
-      state.myInfo.feeds.unshift(action.payload)
+      state.myInfo!.feeds.unshift(action.payload)
     },
     deleteFeedInfo: (state, action) => {
-      state.myInfo.feeds = (state.myInfo.feeds as string[]).filter(feed => feed !== action.payload)
+      state.myInfo!.feeds = state.myInfo!.feeds.filter(feed => feed !== action.payload)
     },
     addLikeFeedRef: (state, action) => {
-      state.myInfo.likeFeeds.push(action.payload.feedRef)
+      state.myInfo!.likeFeeds.push(action.payload.feedRef)
     },
     removeLikeFeedRef: (state, action) => {
-      state.myInfo.likeFeeds = state.myInfo.likeFeeds.filter((feedRef: string) => feedRef !== action.payload.feedRef)
+      state.myInfo!.likeFeeds = state.myInfo!.likeFeeds.filter((feedRef: string) => feedRef !== action.payload.feedRef)
     },
     addBookmarkFeedRef: (state, action) => {
-      state.myInfo.bookmarkFeeds.push(action.payload.feedRef)
+      state.myInfo!.bookmarkFeeds.push(action.payload.feedRef)
     },
     removeBookmarkFeedRef: (state, action) => {
-      state.myInfo.bookmarkFeeds = state.myInfo.bookmarkFeeds.filter((feedRef: string) => feedRef !== action.payload.feedRef)
+      state.myInfo!.bookmarkFeeds = state.myInfo!.bookmarkFeeds.filter((feedRef: string) => feedRef !== action.payload.feedRef)
     },
   },
   extraReducers: {},

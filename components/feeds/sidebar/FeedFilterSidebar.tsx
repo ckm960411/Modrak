@@ -1,20 +1,28 @@
 import { FC, useState } from "react";
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, Typography } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { setOrder, setShow, setTag } from "store/filterSlice";
 
-type OrderType = "latest" | "famous" | "interest"
-type ShowType = "allShow" | "followingOnly" | "myFeedOnly"
-type TagType = "allTag" | "restaurantOnly" | "accommodationOnly"
+type FeedFilterSidebarProps = {
+  filterOpened: boolean
+  onClose?: () => void
+}
 
-const FeedFilterSidebar: FC<{filterOpened: boolean}> = ({ filterOpened }) => {
-  const [order, setOrder] = useState<OrderType>("latest")
-  const [show, setShow] = useState<ShowType>("allShow")
-  const [tag, setTag] = useState<TagType>("allTag")
+const FeedFilterSidebar: FC<FeedFilterSidebarProps> = ({ filterOpened, onClose }) => {
+  const dispatch = useAppDispatch()
+  const { order, show, tag } = useAppSelector(state => state.filter)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if ((e.target as HTMLInputElement).name === 'order') setOrder(e.target.value as OrderType)
-    else if ((e.target as HTMLInputElement).name === 'show') setShow(e.target.value as ShowType)
-    else setTag(e.target.value as TagType)
+    if ((e.target as HTMLInputElement).name === 'order') dispatch(setOrder(e.target.value as OrderType))
+    else if ((e.target as HTMLInputElement).name === 'show') dispatch(setShow(e.target.value as ShowType))
+    else dispatch(setTag(e.target.value as TagType))
   };
+
+  const initializeFilter = () => {
+    dispatch(setOrder("latest"))
+    dispatch(setShow("allShow"))
+    dispatch(setTag("allTag"))
+  }
 
   return (
     <Card raised>
@@ -65,8 +73,8 @@ const FeedFilterSidebar: FC<{filterOpened: boolean}> = ({ filterOpened }) => {
       </CardContent>
       <CardActions>
         <Stack direction="row" spacing={1} sx={{ justifyContent: 'flex-end', width: '100%' }}>
-          {filterOpened && <Button>닫기</Button>}
-          <Button>초기화</Button>
+          {filterOpened && <Button onClick={onClose}>닫기</Button>}
+          <Button onClick={initializeFilter}>초기화</Button>
           <Button>정렬하기</Button>
         </Stack>
       </CardActions>

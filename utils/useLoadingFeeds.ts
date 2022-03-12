@@ -1,14 +1,12 @@
-import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { collection, DocumentData, getDocs, limit, orderBy, query, QueryDocumentSnapshot, startAfter } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { setFeeds } from "store/feedsSlice";
+import { clearFeeds, setFeeds } from "store/feedsSlice";
 import searchFirestoreDoc from "utils/searchFirestoreDoc";
 
-const useLoadingFeeds = (
-  initialLoad: boolean, 
-  isFetching: boolean,
-  setIsFetching: Dispatch<SetStateAction<boolean>>
+const useLoadingFeeds: UseLoadingFeedsType = (
+  initialLoad, isFetching, setIsFetching, setInitialLoad, reference
 ) => {
   const dispatch = useAppDispatch()
   const feeds = useAppSelector(state => state.feeds.value)
@@ -37,6 +35,27 @@ const useLoadingFeeds = (
     setIsFetching(false)
     feedWithUserData.map(feed => feed.then(res => dispatch(setFeeds(res)))) // 불러온 게시물 순차적으로 리덕스에 저장
   }, [dispatch, initialLoad, last, setIsFetching])
+
+  const loadMoreFeeds = useCallback( async () => {
+    setInitialLoad(false)
+    setIsFetching(true)
+  }, [])
+
+  useEffect(() => {
+    setIsFetching(true)
+    dispatch(clearFeeds())
+  }, [dispatch])
+
+  useEffect(() => {
+    let observer: IntersectionObserver
+    if (reference.current) {
+      observer = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) loadMoreFeeds()
+      }, {})
+      observer.observe(reference.current)
+    }
+    return () => observer && observer.disconnect()
+  }, [loadMoreFeeds])
 
   useEffect(() => {
     if (isFetching) loadFeeds() // isFetching 이 true 일 때만 요청

@@ -16,7 +16,7 @@ const initialState: UserState = {
 }
 
 export const feedsSlice = createSlice({
-  name: 'users',
+  name: 'feeds',
   initialState,
   reducers: {
     setFeedLoadingTrue: (state) => {
@@ -91,6 +91,6 @@ export const {
   removeFeedBookmarkUserUid,
 } = feedsSlice.actions
 
-export const selectUser = (state: RootState) => state.users.myInfo
+export const selectFeed = (state: RootState) => state.feeds.value
 
 export default feedsSlice.reducer
