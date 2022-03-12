@@ -40,9 +40,7 @@ type PreviewImageProps = {
 const PreviewImage: FC<PreviewImageProps> = ({ image, setImages, order }) => {
 
   const clearImage = useCallback(() => {
-    setImages(prev => {
-      return prev.filter(v => v !== image)
-    })
+    setImages(prev => prev.filter(v => v !== image))
   }, [setImages, image])
 
   return (

@@ -7,9 +7,8 @@ import LikeFilledIcon from '@mui/icons-material/Favorite';
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import styled from "@emotion/styled";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { dbService } from "fireBaseApp/fBase";
-import searchUserInfo from "utils/searchUserInfo";
+import { updateDoc } from "firebase/firestore";
+import searchFirestoreDoc from "utils/searchFirestoreDoc";
 import { addFeedLikeUserUid, removeFeedLikeUserUid } from "store/feedsSlice";
 import { addLikeFeedRef, removeLikeFeedRef } from "store/usersSlice";
 
@@ -46,27 +45,21 @@ const FeedActions: FC<FeedActionsProps> = ({ feedId, likes, bookmarks, expanded,
 
   const onLikeFeed = async () => {
     if (!myInfo) return alert('먼저 로그인을 해주세요!')
-    const feedDocRef = doc(dbService, "feeds", feedId)
+    const { searchedDocRef: feedDocRef, searchedData: feedData } = await searchFirestoreDoc(`feeds/${feedId}`)
     if (AmILiked) { // unlike
-      await getDoc(feedDocRef).then(async (res) => {
-        const feedData = res.data()
-        const removedFeedLikes = feedData!.likes.filter((userUid: string) => userUid !== myInfo.uid)
-        await updateDoc(feedDocRef, { likes: removedFeedLikes })
-        const { userDocRef, userData } = await searchUserInfo(`users/${myInfo.uid}`)
-        const removedLikeFeeds = userData!.likeFeeds.filter((feedRef: string) => feedRef !== `feeds/${feedId}`)
-        await updateDoc(userDocRef, { likeFeeds: removedLikeFeeds })
-        dispatch(removeFeedLikeUserUid({ feedId, userUid: userData!.uid }))
-        dispatch(removeLikeFeedRef({ feedRef: `feeds/${feedId}` }))
-      }).catch(err => console.log(err))
+      const removedFeedLikes = feedData!.likes.filter((userUid: string) => userUid !== myInfo.uid)
+      await updateDoc(feedDocRef, { likes: removedFeedLikes })
+      const { searchedDocRef: userDocRef, searchedData: userData } = await searchFirestoreDoc(`users/${myInfo.uid}`)
+      const removedLikeFeeds = userData!.likeFeeds.filter((feedRef: string) => feedRef !== `feeds/${feedId}`)
+      await updateDoc(userDocRef, { likeFeeds: removedLikeFeeds })
+      dispatch(removeFeedLikeUserUid({ feedId, userUid: userData!.uid }))
+      dispatch(removeLikeFeedRef({ feedRef: `feeds/${feedId}` }))
     } else { // like
-      await getDoc(feedDocRef).then( async (res) => {
-        const feedData = res.data()
-        await updateDoc(feedDocRef, { likes: [...feedData!.likes, myInfo.uid ] })
-        const { userDocRef, userData } = await searchUserInfo(`users/${myInfo.uid}`)
-        await updateDoc(userDocRef, { likeFeeds: [ ...userData!.likeFeeds, `feeds/${feedId}` ] })
-        dispatch(addFeedLikeUserUid({ feedId, userUid: userData!.uid }))
-        dispatch(addLikeFeedRef({ feedRef: `feeds/${feedId}` }))
-      })
+      await updateDoc(feedDocRef, { likes: [...feedData!.likes, myInfo.uid ] })
+      const { searchedDocRef: userDocRef, searchedData: userData } = await searchFirestoreDoc(`users/${myInfo.uid}`)
+      await updateDoc(userDocRef, { likeFeeds: [ ...userData!.likeFeeds, `feeds/${feedId}` ] })
+      dispatch(addFeedLikeUserUid({ feedId, userUid: userData!.uid }))
+      dispatch(addLikeFeedRef({ feedRef: `feeds/${feedId}` }))
     }
   }
 

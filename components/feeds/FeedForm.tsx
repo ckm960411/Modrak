@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import { dbService } from "fireBaseApp/fBase";
-import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, updateDoc } from "firebase/firestore";
 import { Card, CardContent } from "@mui/material";
 import TextInput from "components/parts/TextInput";
 import InputFileForm from "components/parts/InputFileForm";
@@ -10,6 +10,7 @@ import uploadImagesDB from "utils/uploadImagesDB";
 import { addFeeds, setFeedLoadingfalse, setFeedLoadingTrue } from "store/feedsSlice";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 import { addFeedInfo } from "store/usersSlice";
+import searchFirestoreDoc from "utils/searchFirestoreDoc";
 
 const FeedForm: FC = () => {
   const [feedImages, setFeedImages] = useState<string[]>([])
@@ -42,8 +43,7 @@ const FeedForm: FC = () => {
       comments: [],
     }
     // 글을 게시하는 사용자(본인)의 정보를 찾음
-    const userDocRef = doc(dbService, feedData.userRef)
-    const userData = await getDoc(userDocRef).then(res => res.data()).catch(err => console.log(err.resultMessage))
+    const { searchedDocRef: userDocRef, searchedData: userData} = await searchFirestoreDoc(feedData.userRef)
     // feeds 컬렉션에 피드를 추가하고, 사용자의 feeds 배열에 문서id 를 추가
     await addDoc(collection(dbService, "feeds"), feedData)
       .then(res => {

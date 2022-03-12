@@ -1,13 +1,13 @@
 import { FC, useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
-import { authService, dbService } from "fireBaseApp/fBase";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { authService } from "fireBaseApp/fBase";
 import { browserSessionPersistence, onAuthStateChanged, setPersistence } from "firebase/auth";
 import { useAppDispatch } from "store/hooks";
 import { loadMyInfoData } from "store/usersSlice";
 import { Box, Container, useMediaQuery, useTheme } from "@mui/material";
 import Navbar from "components/layout/Navbar";
 import Sidebar from "components/layout/Sidebar";
+import searchFirestoreDoc from "utils/searchFirestoreDoc";
 
 export const drawerWidth = 240;
 
@@ -15,7 +15,6 @@ export const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
   justifyContent: "flex-end",
 }));
@@ -46,14 +45,8 @@ const AppLayout: FC = ({ children }) => {
   const downMd = useMediaQuery(theme.breakpoints.down("md"))
   
   const onLoadUserData = async (uid: string) => {
-    const usersRef = collection(dbService, "users")
-    const q = query(usersRef, where("uid", "==", uid))
-    const userData = await getDocs(q)
-      .then(res => {
-        dispatch(loadMyInfoData(res.docs[0].data()))
-      })
-      .catch(err => console.log(err))
-    return userData
+    const { searchedData: userData } = await searchFirestoreDoc(`users/${uid}`)
+    dispatch(loadMyInfoData(userData))
   }
 
   useEffect(() => {

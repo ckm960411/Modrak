@@ -3,7 +3,7 @@ import { collection, DocumentData, getDocs, limit, orderBy, query, QueryDocument
 import { dbService } from "fireBaseApp/fBase";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { setFeeds } from "store/feedsSlice";
-import searchUserInfo from "utils/searchUserInfo";
+import searchFirestoreDoc from "utils/searchFirestoreDoc";
 
 const useLoadingFeeds = (
   initialLoad: boolean, 
@@ -26,7 +26,7 @@ const useLoadingFeeds = (
     if (!documentSnapshots.docs[1]) return // 더 게시물이 없다면 로드X
     setLast(documentSnapshots.docs[documentSnapshots.docs.length -1]) // 게시물을 불러온 후 가장 마지막 문서 스냅샷을 상태에 저장
     const feedWithUserData = documentSnapshots.docs.map( async (doc) => {
-      const { userData } = await searchUserInfo(doc.data().userRef)
+      const { searchedData: userData } = await searchFirestoreDoc(doc.data().userRef)
       return {
         id: doc.id,
         ...doc.data(),

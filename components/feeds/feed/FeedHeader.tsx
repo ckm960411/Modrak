@@ -6,11 +6,10 @@ import FollowButton from "components/feeds/FollowButton";
 import styled from "@emotion/styled";
 import { format } from "date-fns";
 import formatDistanceToNowKo from "utils/formatDistanceToNowKo";
-import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
-import { dbService } from "fireBaseApp/fBase";
+import { deleteDoc, updateDoc } from "firebase/firestore";
 import { useAppDispatch } from "store/hooks";
 import { deleteFeed } from "store/feedsSlice";
-import searchUserInfo from "utils/searchUserInfo";
+import searchFirestoreDoc from "utils/searchFirestoreDoc";
 import { deleteFeedInfo } from "store/usersSlice";
 
 const NicknameTypo = styled(Typography)`
@@ -53,16 +52,14 @@ const FeedHeader: FC<FeedHeaderProps> = ({ feedData, editing, setEditing }) => {
     const ok = window.confirm('이 피드를 정말 삭제하시겠습니까?')
     if (!ok) return
     handleClose()
-    const feedDocRef = doc(dbService, "feeds", id)
-    const document = await getDoc(feedDocRef)
-    const likeUserUidArray = document.data()!.likes
-    likeUserUidArray.forEach(async (userUid: string) => {
-      const { userDocRef, userData } = await searchUserInfo(`users/${userUid}`)
+    const { searchedDocRef: feedDocRef, searchedData: feedData} = await searchFirestoreDoc(`feeds/${id}`)
+    feedData!.likes.forEach(async (userUid: string) => {
+      const { searchedDocRef: userDocRef, searchedData: userData } = await searchFirestoreDoc(`users/${userUid}`)
       await updateDoc(userDocRef, {
         likeFeeds: userData!.likeFeeds.filter((feedRef: string) => feedRef !== `feeds/${id}`)
       })
     })
-    const { userDocRef, userData } = await searchUserInfo(userRef)
+    const { searchedDocRef: userDocRef, searchedData: userData } = await searchFirestoreDoc(userRef)
     await updateDoc(userDocRef, {
       feeds: userData!.feeds.filter((feedRef: string) => feedRef !== `feeds/${id}`),
     })
