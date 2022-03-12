@@ -66,6 +66,11 @@ export const feedsSlice = createSlice({
       if (!finded) return
       finded.bookmarks.push(action.payload.userUid)
     },
+    removeFeedBookmarkUserUid: (state, action) => {
+      const finded = state.value.find(feed => feed.id === action.payload.feedId)
+      if (!finded) return
+      finded.bookmarks = finded.bookmarks.filter(userUid => userUid !== action.payload.userUid)
+    },
   },
   extraReducers: {},
 })
@@ -83,6 +88,7 @@ export const {
   addFeedLikeUserUid,
   removeFeedLikeUserUid,
   addFeedBookmarkUserUid,
+  removeFeedBookmarkUserUid,
 } = feedsSlice.actions
 
 export const selectUser = (state: RootState) => state.users.myInfo

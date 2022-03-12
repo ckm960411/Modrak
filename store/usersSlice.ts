@@ -44,6 +44,9 @@ export const usersSlice = createSlice({
     addBookmarkFeedRef: (state, action) => {
       state.myInfo.bookmarkFeeds.push(action.payload.feedRef)
     },
+    removeBookmarkFeedRef: (state, action) => {
+      state.myInfo.bookmarkFeeds = state.myInfo.bookmarkFeeds.filter((feedRef: string) => feedRef !== action.payload.feedRef)
+    },
   },
   extraReducers: {},
 })
@@ -58,6 +61,7 @@ export const {
   addLikeFeedRef,
   removeLikeFeedRef,
   addBookmarkFeedRef,
+  removeBookmarkFeedRef,
 } = usersSlice.actions
 
 export const selectUser = (state: RootState) => state.users.myInfo

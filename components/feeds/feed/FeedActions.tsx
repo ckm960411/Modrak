@@ -10,8 +10,8 @@ import styled from "@emotion/styled";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { updateDoc } from "firebase/firestore";
 import searchFirestoreDoc from "utils/searchFirestoreDoc";
-import { addFeedBookmarkUserUid, addFeedLikeUserUid, removeFeedLikeUserUid } from "store/feedsSlice";
-import { addBookmarkFeedRef, addLikeFeedRef, removeLikeFeedRef } from "store/usersSlice";
+import { addFeedBookmarkUserUid, addFeedLikeUserUid, removeFeedBookmarkUserUid, removeFeedLikeUserUid } from "store/feedsSlice";
+import { addBookmarkFeedRef, addLikeFeedRef, removeBookmarkFeedRef, removeLikeFeedRef } from "store/usersSlice";
 import { mainColor } from "styles/GlobalStyles";
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -74,7 +74,12 @@ const FeedActions: FC<FeedActionsProps> = ({ feedId, likes, bookmarks, expanded,
     const { searchedDocRef: feedDocRef, searchedData: feedData } = await searchFirestoreDoc(`feeds/${feedId}`)
     const { searchedDocRef: userDocRef, searchedData: userData } = await searchFirestoreDoc(`users/${myInfo.uid}`)
     if (AmIMarked) { // unmark
-      console.log('unmark')
+      const removedFeedBookmarks = feedData!.bookmarks.filter((userUid: string) => userUid !== myInfo.uid)
+      await updateDoc(feedDocRef, { bookmarks: removedFeedBookmarks })
+      const removedBookmarkFeeds = userData!.bookmarkFeeds.filter((feedRef: string) => feedRef !== `feeds/${feedId}`)
+      await updateDoc(userDocRef, { bookmarkFeeds: removedBookmarkFeeds })
+      dispatch(removeFeedBookmarkUserUid({ feedId, userUid: userData!.uid }))
+      dispatch(removeBookmarkFeedRef({ feedRef: `feeds/{feedId}` }))
     } else { // mark
       await updateDoc(feedDocRef, { bookmarks: [ ...feedData!.bookmarks, myInfo.uid] })
       await updateDoc(userDocRef, { bookmarkFeeds: [ ...userData!.bookmarkFeeds, `feeds/${feedId}` ]  })
