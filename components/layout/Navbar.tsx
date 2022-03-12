@@ -6,6 +6,7 @@ import { styled } from "@mui/material/styles";
 import { drawerWidth } from "components/layout/AppLayout";
 import { useRouter } from "next/router";
 import NavbarBtns from "components/layout/NavbarBtns";
+import { mainColor } from "styles/GlobalStyles";
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -47,7 +48,7 @@ const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen }) => {
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
-            sx={{ mr: 2, ...(open && { display: "none" }), color: "#009e5d" }}
+            sx={{ mr: 2, ...(open && { display: "none" }), color: mainColor }}
           >
             <MenuIcon />
           </IconButton>
@@ -56,7 +57,7 @@ const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen }) => {
               <Typography
                 variant="h6"
                 component="div"
-                sx={{ color: "#009e5d", fontFamily: "Katuri", fontSize: 24, cursor: 'pointer' }}
+                sx={{ color: mainColor, fontFamily: "Katuri", fontSize: 24, cursor: 'pointer' }}
                 onClick={() => router.push('/')}
               >
                 모드락

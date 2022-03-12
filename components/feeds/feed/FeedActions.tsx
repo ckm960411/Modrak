@@ -2,6 +2,7 @@ import { Dispatch, FC, SetStateAction, useMemo } from "react";
 import { CardActions, Typography } from "@mui/material";
 import CommentIcon from "@mui/icons-material/CommentOutlined";
 import BookmarkIcon from "@mui/icons-material/BookmarkBorderOutlined";
+import BookmarkFilledIcon from '@mui/icons-material/Bookmark';
 import LikeIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import LikeFilledIcon from '@mui/icons-material/Favorite';
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
@@ -75,7 +76,8 @@ const FeedActions: FC<FeedActionsProps> = ({ feedId, likes, bookmarks, expanded,
       </div>
       <div>
         <IconButton aria-label="bookmark">
-          <BookmarkIcon />
+          {/* <BookmarkIcon /> */}
+          <BookmarkFilledIcon sx={{ color: '#ff0000' }} />
         </IconButton>
         <ExpandMore
           expand={expanded}

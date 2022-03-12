@@ -1,5 +1,6 @@
 import { FC } from "react";
 import Carousel from "react-material-ui-carousel";
+import { mainColor } from "styles/GlobalStyles";
 
 type CustomCarouselProps = {
   [key: string]: any
@@ -12,7 +13,7 @@ const CustomCarousel: FC<CustomCarouselProps> = ({ children, ...props }) => {
       fullHeightHover={false}
       navButtonsProps={{
         style: {
-          backgroundColor: "#009e5d",
+          backgroundColor: mainColor,
           borderRadius: 10,
         },
       }}
@@ -31,7 +32,7 @@ const CustomCarousel: FC<CustomCarouselProps> = ({ children, ...props }) => {
       }}
       activeIndicatorIconButtonProps={{
         style: {
-          color: '#009e5d',
+          color: mainColor,
         }
       }}
       {...props}

@@ -1,5 +1,7 @@
 import { GlobalStyles as GlobalStyle } from "@mui/styled-engine";
 
+export const mainColor = '#009e5d'
+
 const GlobalStyles = () => {
   return (
     <GlobalStyle
@@ -45,7 +47,7 @@ const GlobalStyles = () => {
         },
         // 사이드바 Drawer 스타일링
         '.css-12i7wg6-MuiPaper-root-MuiDrawer-paper': {
-          backgroundColor: '#009e5d !important',
+          backgroundColor: `${mainColor} !important`,
           boxShadow: '7px -6px 16px -8px rgba(176,176,176,1) !important',
           border: 'none !important',
         },
@@ -69,10 +71,10 @@ const GlobalStyles = () => {
           '&:hover': {
             backgroundColor: 'rgba(255, 255, 255, .6) !important',
             '& svg': {
-              color: '#009e5d'
+              color: mainColor
             },
             '& span': {
-              color: '#009e5d'
+              color: mainColor
             }
           },
         },
@@ -80,10 +82,10 @@ const GlobalStyles = () => {
         '.css-nzzti6-MuiButtonBase-root-MuiListItemButton-root.Mui-selected': {
           backgroundColor: '#fff !important',
           '& svg': {
-            color: '#009e5d'
+            color: mainColor
           },
           '& span': {
-            color: '#009e5d'
+            color: mainColor
           }
         },
         // 피드 페이지 각 Card 컴포넌트의 raised 그림자 밝기 조절
