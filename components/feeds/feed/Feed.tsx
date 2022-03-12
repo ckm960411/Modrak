@@ -11,7 +11,7 @@ const Feed: FC<{ feedData: FeedWithUserInfoType }> = ({ feedData }) => {
   const [expanded, setExpanded] = useState(false)
   const [editing, setEditing] = useState(false)
 
-  const { feedText, feedImages, likes, comments } = feedData;
+  const { id, feedText, feedImages, likes, bookmarks, comments } = feedData;
 
   return (
     <Card raised>
@@ -19,7 +19,7 @@ const Feed: FC<{ feedData: FeedWithUserInfoType }> = ({ feedData }) => {
       <FeedHeader feedData={feedData} editing={editing} setEditing={setEditing} />
       <FeedImages images={feedImages} />
       <FeedContent text={feedText} />
-      <FeedActions likes={likes} expanded={expanded} setExpanded={setExpanded} />
+      <FeedActions feedId={id} likes={likes} bookmarks={bookmarks} expanded={expanded} setExpanded={setExpanded} />
       <FeedComments comments={comments} expanded={expanded} />
     </Card>
   )

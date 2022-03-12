@@ -54,7 +54,7 @@ const FeedHeader: FC<FeedHeaderProps> = ({ feedData, editing, setEditing }) => {
     if (!ok) return
     handleClose()
     await deleteDoc(doc(dbService, "feeds", id)).catch(err => console.log(err))
-    const userData = await searchUserInfo(userRef)
+    const { userData } = await searchUserInfo(userRef)
     await updateDoc(doc(dbService, userRef), {
       feeds: (userData!.feeds as string[]).filter(feedRef => feedRef !== `feeds/${id}`)
     })
