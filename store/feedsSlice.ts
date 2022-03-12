@@ -32,6 +32,7 @@ export const feedsSlice = createSlice({
       state.editFeedLoading = false
     },
     setFeeds: (state, action) => {
+      if (state.value.findIndex(v => v.id === action.payload.id) !== -1) return
       state.value = [...state.value, action.payload]
     },
     addFeeds: (state, action) => {
