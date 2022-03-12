@@ -52,11 +52,17 @@ const FeedHeader: FC<FeedHeaderProps> = ({ feedData, editing, setEditing }) => {
     const ok = window.confirm('이 피드를 정말 삭제하시겠습니까?')
     if (!ok) return
     handleClose()
-    const { searchedDocRef: feedDocRef, searchedData: feedData} = await searchFirestoreDoc(`feeds/${id}`)
+    const { searchedDocRef: feedDocRef, searchedData: feedData } = await searchFirestoreDoc(`feeds/${id}`)
     feedData!.likes.forEach(async (userUid: string) => {
       const { searchedDocRef: userDocRef, searchedData: userData } = await searchFirestoreDoc(`users/${userUid}`)
       await updateDoc(userDocRef, {
-        likeFeeds: userData!.likeFeeds.filter((feedRef: string) => feedRef !== `feeds/${id}`)
+        likeFeeds: userData!.likeFeeds.filter((feedRef: string) => feedRef !== `feeds/${id}`),
+      })
+    })
+    feedData!.bookmarks.forEach(async (userUid: string) => {
+      const { searchedDocRef: userDocRef, searchedData: userData } = await searchFirestoreDoc(`users/${userUid}`)
+      await updateDoc(userDocRef, {
+        bookmarkFeeds: userData!.bookmarkFeeds.filter((feedRef: string) => feedRef !== `feeds/${id}`),
       })
     })
     const { searchedDocRef: userDocRef, searchedData: userData } = await searchFirestoreDoc(userRef)
