@@ -12,6 +12,7 @@ import { updateDoc } from "firebase/firestore";
 import searchFirestoreDoc from "utils/searchFirestoreDoc";
 import { addFeedLikeUserUid, removeFeedLikeUserUid } from "store/feedsSlice";
 import { addLikeFeedRef, removeLikeFeedRef } from "store/usersSlice";
+import { mainColor } from "styles/GlobalStyles";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -39,10 +40,15 @@ const FeedActions: FC<FeedActionsProps> = ({ feedId, likes, bookmarks, expanded,
     if (myInfo) {
       const amILikedThisFeed = likes.includes(myInfo.uid) && myInfo.likeFeeds.includes(`feeds/${feedId}`)
       return amILikedThisFeed
-    } else {
-      return false
-    }
+    } else return false
   }, [feedId, likes, myInfo])
+
+  const AmIMarked = useMemo(() => {
+    if (myInfo) {
+      const amIMarkedThisFeed = bookmarks.includes(myInfo.uid) && myInfo.bookmarkFeeds.includes(`feeds/${feedId}`)
+      return amIMarkedThisFeed
+    } else return false
+  }, [feedId, bookmarks, myInfo])
 
   const onLikeFeed = async () => {
     if (!myInfo) return alert('먼저 로그인을 해주세요!')
@@ -76,8 +82,7 @@ const FeedActions: FC<FeedActionsProps> = ({ feedId, likes, bookmarks, expanded,
       </div>
       <div>
         <IconButton aria-label="bookmark">
-          {/* <BookmarkIcon /> */}
-          <BookmarkFilledIcon sx={{ color: '#ff0000' }} />
+          {AmIMarked ? <BookmarkFilledIcon sx={{ color: mainColor }} /> : <BookmarkIcon />}
         </IconButton>
         <ExpandMore
           expand={expanded}
