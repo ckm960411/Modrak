@@ -63,11 +63,22 @@ export const filterSlice = createSlice({
       }
       state.value = [ ...showFilter ,...tagFilter, ...orderFilter, ]
     },
+    setSearchNicknameFilter: (state, action) => {
+      state.value = [ where("userUid", "==", action.payload.userUid) ]
+    },
+    setSearchTagFilter: (state, action) => {
+      state.value = [ where("tags", "array-contains", action.payload.tag) ]
+    },
   },
   extraReducers: {},
 })
 
-export const { initializeFilter, setFilter } = filterSlice.actions
+export const { 
+  initializeFilter, 
+  setFilter, 
+  setSearchNicknameFilter,
+  setSearchTagFilter
+} = filterSlice.actions
 
 export const selectFilter = (state: RootState) => state.filter.value
 
