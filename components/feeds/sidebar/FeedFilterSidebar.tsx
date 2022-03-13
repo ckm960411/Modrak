@@ -1,7 +1,9 @@
 import { FC } from "react";
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { setOrder, setShow, setTag } from "store/filterSlice";
+import { initializeFilter, setFilter, setOrder, setShow, setTag } from "store/filterSlice";
+import { setIsInitialLoad } from "store/feedsSlice";
+import { QueryConstraint, where } from "firebase/firestore";
 
 type FeedFilterSidebarProps = {
   filterOpened: boolean
@@ -18,10 +20,18 @@ const FeedFilterSidebar: FC<FeedFilterSidebarProps> = ({ filterOpened, onClose }
     else dispatch(setTag(e.target.value as TagType))
   };
 
-  const initializeFilter = () => {
+  const onInitializeFilter = () => {
     dispatch(setOrder("latest"))
     dispatch(setShow("allShow"))
     dispatch(setTag("allTag"))
+    dispatch(initializeFilter())
+    dispatch(setIsInitialLoad(true))
+    console.log('initialize filter ✅')
+  }
+
+  const onSetFilter = (filter: QueryConstraint) => () => {
+    dispatch(setFilter(filter))
+    dispatch(setIsInitialLoad(true))
   }
 
   return (
@@ -74,8 +84,8 @@ const FeedFilterSidebar: FC<FeedFilterSidebarProps> = ({ filterOpened, onClose }
       <CardActions>
         <Stack direction="row" spacing={1} sx={{ justifyContent: 'flex-end', width: '100%' }}>
           {filterOpened && <Button onClick={onClose}>닫기</Button>}
-          <Button onClick={initializeFilter}>초기화</Button>
-          <Button>정렬하기</Button>
+          <Button onClick={onInitializeFilter}>초기화</Button>
+          <Button onClick={onSetFilter(where("feedText", "==", "11"))}>정렬하기</Button>
         </Stack>
       </CardActions>
 

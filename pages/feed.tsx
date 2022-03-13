@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { NextPage } from "next";
 import Head from "next/head";
 import { Grid, Stack, useMediaQuery, useTheme, SpeedDial, SpeedDialIcon, SpeedDialAction, Dialog} from "@mui/material";
@@ -8,15 +8,11 @@ import FeedFilterSidebar from "components/feeds/sidebar/FeedFilterSidebar";
 import FeedSearchForm from "components/feeds/sidebar/FeedSearchForm";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward"
 import SortIcon from '@mui/icons-material/Sort';
-import useLoadingFeeds from "utils/useLoadingFeeds";
 
 const Feed: NextPage = () => {
   const theme = useTheme()
   const downLg = useMediaQuery(theme.breakpoints.down("lg"))
   const [filterOpened, setFilterOpened] = useState(false)
-
-  const targetRef = useRef<HTMLDivElement>(null)
-  const { feeds } = useLoadingFeeds(targetRef)
 
   const onCloseFilter = () => setFilterOpened(false)
 
@@ -35,7 +31,7 @@ const Feed: NextPage = () => {
         >
           <Stack spacing={2}>
             <FeedForm />
-            <FeedContainer targetRef={targetRef} feeds={feeds} />
+            <FeedContainer />
           </Stack>
         </Grid>
         <Grid item xs={12} lg={5} order={{ xs: 1, lg: 2 }} 

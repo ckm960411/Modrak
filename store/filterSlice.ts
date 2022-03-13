@@ -20,6 +20,12 @@ export const filterSlice = createSlice({
   name: 'filter',
   initialState,
   reducers: {
+    initializeFilter: (state) => {
+      state.value = []
+    },
+    setFilter: (state, action) => {
+      state.value = [ action.payload ]
+    },
     setOrder: (state, action) => {
       state.order = action.payload
     },
@@ -29,14 +35,17 @@ export const filterSlice = createSlice({
     setTag: (state, action) => {
       state.tag = action.payload
     },
-    initializeFilter: (state) => {
-      state.value = []
-    },
   },
   extraReducers: {},
 })
 
-export const { setOrder, setShow, setTag } = filterSlice.actions
+export const { 
+  initializeFilter,
+  setFilter,
+  setOrder, 
+  setShow, 
+  setTag 
+} = filterSlice.actions
 
 export const selectFilter = (state: RootState) => state.filter.order
 

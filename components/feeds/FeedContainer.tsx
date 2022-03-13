@@ -1,13 +1,12 @@
-import { FC, RefObject } from "react";
+import { FC, useRef } from "react";
 import { Stack } from "@mui/material";
 import Feed from "components/feeds/feed/Feed";
+import useLoadingFeeds from "utils/useLoadingFeeds";
+  
+const FeedContainer: FC = () => {
+  const targetRef = useRef<HTMLDivElement>(null)
+  const { feeds } = useLoadingFeeds(targetRef)
 
-type FeedContainerProps = {
-  feeds: FeedWithUserInfoType[]
-  targetRef: RefObject<HTMLDivElement>
-}
-
-const FeedContainer: FC<FeedContainerProps> = ({ feeds, targetRef }) => {
   return (
     <Stack direction="column" spacing={2}>
       {feeds.map(feed => <Feed key={`${feed.id}/${feed.createdAt}`} feedData={feed} />)}
