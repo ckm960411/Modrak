@@ -51,6 +51,7 @@ export const feedsSlice = createSlice({
       if (!finded) return
       finded.feedText = action.payload.feedText,
       finded.feedImages = action.payload.feedImages,
+      finded.tags = action.payload.tags,
       finded.modifiedAt = action.payload.modifiedAt
     },
     deleteFeed: (state, action) => {

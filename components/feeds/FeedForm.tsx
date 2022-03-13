@@ -25,6 +25,10 @@ const FeedForm: FC = () => {
     setFeedText(e.target.value)
   }
 
+  const onChangeTags = (e: React.SyntheticEvent<Element, Event>, value: string[]) => {
+    setTags(value)
+  }
+
   // 게시글 작성
   const onSubmitFeed = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -72,10 +76,6 @@ const FeedForm: FC = () => {
     setFeedImages([])
   }
 
-  const onChangeTags = (e: React.SyntheticEvent<Element, Event>, value: string[]) => {
-    setTags(value)
-  }
-
   return (
     <Card raised>
       <CardContent>
@@ -93,7 +93,6 @@ const FeedForm: FC = () => {
           onChange={onChangeTags}
           clearOnEscape={true}
           renderTags={(value: readonly string[], getTagProps) => {
-            // setTags(value)
             return value.map((option: string, index: number) =>  (
               <div key={index}>
                 <Chip variant="outlined" label={option} {...getTagProps({ index })} sx={{ border: `1px solid ${mainColor}` }} />

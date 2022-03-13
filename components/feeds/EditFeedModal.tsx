@@ -1,5 +1,5 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
-import { Alert, CardContent, Dialog } from "@mui/material";
+import { Alert, Autocomplete, CardContent, Chip, Dialog, TextField } from "@mui/material";
 import TextInput from "components/parts/TextInput";
 import InputFileForm from "components/parts/InputFileForm";
 import MainButton from "components/parts/MainButton";
@@ -10,6 +10,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
 import { setEditFeedLoadingFalse, setEditFeedLoadingTrue, updateFeed } from "store/feedsSlice";
 import SubmitFormButton from "components/parts/SubmitFormButton";
+import { mainColor } from "styles/GlobalStyles";
 
 type EditFeedModalProps = {
   feedData: FeedWithUserInfoType
@@ -21,22 +22,28 @@ const EditFeedModal: FC<EditFeedModalProps> = ({ feedData, editing, setEditing }
   const [editText, setEditText] = useState<string>('')
   const [newImages, setNewImages] = useState<string[]>([])
   const [editFeedError, setEditFeedError] = useState<string>('')
+  const [newTags, setNewTags] = useState<string[]>([])
   const dispatch = useAppDispatch()
   const myInfo = useAppSelector(state => state.users.myInfo)
   const editFeedLoading = useAppSelector(state => state.feeds.editFeedLoading)
 
-  const { id, feedText, feedImages, userUid } = feedData
+  const { id, feedText, feedImages, tags, userUid } = feedData
 
   useEffect(() => {
     setNewImages(feedImages)
     setEditText(feedText)
-  }, [feedText, feedImages])
+    setNewTags(tags)
+  }, [feedText, feedImages, tags])
 
   const onChangeEditText = (e: React.ChangeEvent<HTMLInputElement>) => setEditText(e.target.value)
 
   const onCloseEditing = () => {
     setEditing(false)
     setNewImages(feedImages)
+  }
+
+  const onChangeNewTags = (e: React.SyntheticEvent<Element, Event>, value: string[]) => {
+    setNewTags(value)
   }
 
   const onSubmit = async () => {
@@ -53,6 +60,7 @@ const EditFeedModal: FC<EditFeedModalProps> = ({ feedData, editing, setEditing }
     const data = {
       feedText: editText,
       feedImages: [...shouldNotUpload, ...newImagesURLs!],
+      tags: newTags,
       modifiedAt: Date.now(),
     }
 
@@ -74,20 +82,37 @@ const EditFeedModal: FC<EditFeedModalProps> = ({ feedData, editing, setEditing }
           value={editText}
           onChange={onChangeEditText}
         />
+        <Autocomplete
+          multiple
+          id="tags-filled"
+          options={['맛집', '숙소']}
+          freeSolo
+          value={newTags}
+          onChange={onChangeNewTags}
+          clearOnEscape={true}
+          renderTags={(value: readonly string[], getTagProps) => {
+            return value.map((option: string, index: number) =>  (
+              <div key={index}>
+                <Chip variant="outlined" label={option} {...getTagProps({ index })} sx={{ border: `1px solid ${mainColor}` }} />
+              </div>
+            ))
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant="outlined"
+              label="태그"
+              placeholder="피드에 태그를 추가하세요!"
+              sx={{ marginTop: '14px' }}
+            />
+          )}
+        />
         <div>
           <InputFileForm label="edit-input-file" images={newImages} setImages={setNewImages} />
-          <SubmitFormButton 
-            onClick={onSubmit}
-            sx={{ float: 'right', mt: 1 }}
-            loading={editFeedLoading}
-          >
+          <SubmitFormButton onClick={onSubmit} sx={{ float: 'right', mt: 1 }} loading={editFeedLoading}>
             Edit Feed
           </SubmitFormButton>
-          <MainButton
-            variant="outlined"
-            sx={{ float: 'right', mt: 1, mr: 1 }}
-            onClick={onCloseEditing}
-          >
+          <MainButton variant="outlined" sx={{ float: 'right', mt: 1, mr: 1 }} onClick={onCloseEditing}>
             cancel
           </MainButton>
         </div>
