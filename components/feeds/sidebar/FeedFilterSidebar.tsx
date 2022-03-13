@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { initializeFilter, setFilter, setOrder, setShow, setTag } from "store/filterSlice";
@@ -12,26 +12,33 @@ type FeedFilterSidebarProps = {
 
 const FeedFilterSidebar: FC<FeedFilterSidebarProps> = ({ filterOpened, onClose }) => {
   const dispatch = useAppDispatch()
-  const { order, show, tag } = useAppSelector(state => state.filter)
+  // const { order, show, tag } = useAppSelector(state => state.filter)
+  const [order, setOrder] = useState<OrderType>('latest')
+  const [show, setShow] = useState<ShowType>('allShow')
+  const [tag, setTag] = useState<TagType>('allTag')
+  const myInfo = useAppSelector(state => state.users.myInfo)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if ((e.target as HTMLInputElement).name === 'order') dispatch(setOrder(e.target.value as OrderType))
-    else if ((e.target as HTMLInputElement).name === 'show') dispatch(setShow(e.target.value as ShowType))
-    else dispatch(setTag(e.target.value as TagType))
+    const { target: { name, value } } = e
+    if (name === 'order') setOrder(value as OrderType)
+    else if ((e.target as HTMLInputElement).name === 'show') setShow(e.target.value as ShowType)
+    else setTag(e.target.value as TagType)
   };
 
   const onInitializeFilter = () => {
-    dispatch(setOrder("latest"))
-    dispatch(setShow("allShow"))
-    dispatch(setTag("allTag"))
+    setOrder("latest")
+    setShow("allShow")
+    setTag("allTag")
     dispatch(initializeFilter())
     dispatch(setIsInitialLoad(true))
     console.log('initialize filter ✅')
   }
 
-  const onSetFilter = (filter: QueryConstraint) => () => {
-    dispatch(setFilter(filter))
+  const onSetFilter = () => {
+    const filterData = { order, show, tag, userUid: myInfo?.uid, followings: myInfo?.followings }
     dispatch(setIsInitialLoad(true))
+    dispatch(setFilter(filterData))
+    console.log('set filter ✅')
   }
 
   return (
@@ -85,7 +92,7 @@ const FeedFilterSidebar: FC<FeedFilterSidebarProps> = ({ filterOpened, onClose }
         <Stack direction="row" spacing={1} sx={{ justifyContent: 'flex-end', width: '100%' }}>
           {filterOpened && <Button onClick={onClose}>닫기</Button>}
           <Button onClick={onInitializeFilter}>초기화</Button>
-          <Button onClick={onSetFilter(where("feedText", "==", "11"))}>정렬하기</Button>
+          <Button onClick={onSetFilter}>정렬하기</Button>
         </Stack>
       </CardActions>
 

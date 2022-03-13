@@ -17,9 +17,9 @@ const useLoadingFeeds: UseLoadingFeedsType = (reference) => {
     const feedDocsRef = collection(dbService, "feeds")
     let queryInstance
     if (isInitialLoad) {
-      queryInstance = query(feedDocsRef, orderBy("createdAt", "desc"), limit(6), ...filter) // 처음 6개 로드
+      queryInstance = query(feedDocsRef, ...filter, orderBy("createdAt", "desc"), limit(6)) // 처음 6개 로드
     } else {
-      queryInstance = query(feedDocsRef, orderBy("createdAt", "desc"), startAfter(last), limit(5), ...filter) // 이전 로드한 게시물 이후 5개 로드
+      queryInstance = query(feedDocsRef, ...filter, orderBy("createdAt", "desc"), startAfter(last), limit(5)) // 이전 로드한 게시물 이후 5개 로드
     } 
     const documentSnapshots = await getDocs(queryInstance)
 
