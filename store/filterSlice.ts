@@ -53,10 +53,10 @@ export const filterSlice = createSlice({
         case 'allTag':
           break
         case 'accommodationOnly':
-          tagFilter = [where("tags", "array-contains", "accommodation")]
+          tagFilter = [where("tags", "array-contains", "숙소")]
           break
         case 'restaurantOnly':
-          tagFilter = [where("tags", "array-contains", "restaurant")]
+          tagFilter = [where("tags", "array-contains", "맛집")]
           break
         default:
           break

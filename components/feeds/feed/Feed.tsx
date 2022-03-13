@@ -11,14 +11,14 @@ const Feed: FC<{ feedData: FeedWithUserInfoType }> = ({ feedData }) => {
   const [expanded, setExpanded] = useState(false)
   const [editing, setEditing] = useState(false)
 
-  const { id, feedText, feedImages, likes, bookmarks, comments } = feedData;
+  const { id, feedText, feedImages, likes, bookmarks, comments, tags } = feedData;
 
   return (
     <Card raised>
       {editing && <EditFeedModal feedData={feedData} editing={editing} setEditing={setEditing} />}
       <FeedHeader feedData={feedData} editing={editing} setEditing={setEditing} />
       <FeedImages images={feedImages} />
-      <FeedContent text={feedText} />
+      <FeedContent text={feedText} tags={tags} />
       <FeedActions feedId={id} likes={likes} bookmarks={bookmarks} expanded={expanded} setExpanded={setExpanded} />
       <FeedComments comments={comments} expanded={expanded} />
     </Card>
