@@ -1,5 +1,5 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
-import { Alert, Autocomplete, CardContent, Chip, Dialog, TextField } from "@mui/material";
+import { Alert, CardContent, Dialog } from "@mui/material";
 import TextInput from "components/parts/TextInput";
 import InputFileForm from "components/parts/InputFileForm";
 import MainButton from "components/parts/MainButton";
@@ -10,7 +10,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
 import { setEditFeedLoadingFalse, setEditFeedLoadingTrue, updateFeed } from "store/feedsSlice";
 import SubmitFormButton from "components/parts/SubmitFormButton";
-import { mainColor } from "styles/GlobalStyles";
+import TagInput from "components/parts/TagInput";
 
 type EditFeedModalProps = {
   feedData: FeedWithUserInfoType
@@ -82,31 +82,7 @@ const EditFeedModal: FC<EditFeedModalProps> = ({ feedData, editing, setEditing }
           value={editText}
           onChange={onChangeEditText}
         />
-        <Autocomplete
-          multiple
-          id="tags-filled"
-          options={['맛집', '숙소']}
-          freeSolo
-          value={newTags}
-          onChange={onChangeNewTags}
-          clearOnEscape={true}
-          renderTags={(value: readonly string[], getTagProps) => {
-            return value.map((option: string, index: number) =>  (
-              <div key={index}>
-                <Chip variant="outlined" label={option} {...getTagProps({ index })} sx={{ border: `1px solid ${mainColor}` }} />
-              </div>
-            ))
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              variant="outlined"
-              label="태그"
-              placeholder="피드에 태그를 추가하세요!"
-              sx={{ marginTop: '14px' }}
-            />
-          )}
-        />
+        <TagInput value={newTags} onChange={onChangeNewTags} />
         <div>
           <InputFileForm label="edit-input-file" images={newImages} setImages={setNewImages} />
           <SubmitFormButton onClick={onSubmit} sx={{ float: 'right', mt: 1 }} loading={editFeedLoading}>
