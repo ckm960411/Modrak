@@ -1,9 +1,8 @@
 import { FC, useState } from "react";
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { initializeFilter, setFilter, setOrder, setShow, setTag } from "store/filterSlice";
+import { initializeFilter, setFilter } from "store/filterSlice";
 import { setIsInitialLoad } from "store/feedsSlice";
-import { QueryConstraint, where } from "firebase/firestore";
 
 type FeedFilterSidebarProps = {
   filterOpened: boolean
@@ -12,7 +11,6 @@ type FeedFilterSidebarProps = {
 
 const FeedFilterSidebar: FC<FeedFilterSidebarProps> = ({ filterOpened, onClose }) => {
   const dispatch = useAppDispatch()
-  // const { order, show, tag } = useAppSelector(state => state.filter)
   const [order, setOrder] = useState<OrderType>('latest')
   const [show, setShow] = useState<ShowType>('allShow')
   const [tag, setTag] = useState<TagType>('allTag')

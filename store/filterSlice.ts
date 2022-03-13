@@ -4,16 +4,10 @@ import type { RootState } from 'store/configureStore'
 
 interface FilterState {
   value: QueryConstraint[]
-  order: OrderType
-  show: ShowType
-  tag: TagType
 }
 
 const initialState: FilterState = {
   value: [],
-  order: "latest",
-  show: "allShow",
-  tag: "allTag"
 }
 
 export const filterSlice = createSlice({
@@ -69,27 +63,12 @@ export const filterSlice = createSlice({
       }
       state.value = [ ...showFilter ,...tagFilter, ...orderFilter, ]
     },
-    setOrder: (state, action) => {
-      state.order = action.payload
-    },
-    setShow: (state, action) => {
-      state.show = action.payload
-    },
-    setTag: (state, action) => {
-      state.tag = action.payload
-    },
   },
   extraReducers: {},
 })
 
-export const { 
-  initializeFilter,
-  setFilter,
-  setOrder, 
-  setShow, 
-  setTag 
-} = filterSlice.actions
+export const { initializeFilter, setFilter } = filterSlice.actions
 
-export const selectFilter = (state: RootState) => state.filter.order
+export const selectFilter = (state: RootState) => state.filter.value
 
 export default filterSlice.reducer
