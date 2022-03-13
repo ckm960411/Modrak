@@ -4,7 +4,10 @@ declare interface FeedDataType {
   feedText: string
   feedImages: string[]
   likes: string[]
+  likesCount: number
   bookmarks: string[]
+  bookmarksCount: number
+  tags: string[]
   comments: string[]
   createdAt: number
   modifiedAt: number

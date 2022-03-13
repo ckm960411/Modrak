@@ -59,21 +59,25 @@ export const feedsSlice = createSlice({
     addFeedLikeUserUid: (state, action) => {
       const finded = state.value.find(feed => feed.id === action.payload.feedId)
       if (!finded) return
+      finded.likesCount +1
       finded.likes.push(action.payload.userUid)
     },
     removeFeedLikeUserUid: (state, action) => {
       const finded = state.value.find(feed => feed.id === action.payload.feedId)
       if (!finded) return
+      finded.likesCount -1
       finded.likes = finded.likes.filter(userUid => userUid !== action.payload.userUid)
     },
     addFeedBookmarkUserUid: (state, action) => {
       const finded = state.value.find(feed => feed.id === action.payload.feedId)
       if (!finded) return
+      finded.bookmarksCount +1
       finded.bookmarks.push(action.payload.userUid)
     },
     removeFeedBookmarkUserUid: (state, action) => {
       const finded = state.value.find(feed => feed.id === action.payload.feedId)
       if (!finded) return
+      finded.bookmarksCount -1
       finded.bookmarks = finded.bookmarks.filter(userUid => userUid !== action.payload.userUid)
     },
   },

@@ -56,13 +56,19 @@ const FeedActions: FC<FeedActionsProps> = ({ feedId, likes, bookmarks, expanded,
     const { searchedDocRef: userDocRef, searchedData: userData } = await searchFirestoreDoc(`users/${myInfo.uid}`)
     if (AmILiked) { // unlike
       const removedFeedLikes = feedData!.likes.filter((userUid: string) => userUid !== myInfo.uid)
-      await updateDoc(feedDocRef, { likes: removedFeedLikes })
+      await updateDoc(feedDocRef, {
+        likes: removedFeedLikes,
+        likesCount: feedData!.likesCount -1
+      })
       const removedLikeFeeds = userData!.likeFeeds.filter((feedRef: string) => feedRef !== `feeds/${feedId}`)
       await updateDoc(userDocRef, { likeFeeds: removedLikeFeeds })
       dispatch(removeFeedLikeUserUid({ feedId, userUid: userData!.uid }))
       dispatch(removeLikeFeedRef({ feedRef: `feeds/${feedId}` }))
     } else { // like
-      await updateDoc(feedDocRef, { likes: [...feedData!.likes, myInfo.uid ] })
+      await updateDoc(feedDocRef, {
+        likes: [...feedData!.likes, myInfo.uid ],
+        likesCount: feedData!.likesCount + 1,
+      })
       await updateDoc(userDocRef, { likeFeeds: [ ...userData!.likeFeeds, `feeds/${feedId}` ] })
       dispatch(addFeedLikeUserUid({ feedId, userUid: userData!.uid }))
       dispatch(addLikeFeedRef({ feedRef: `feeds/${feedId}` }))
@@ -75,13 +81,19 @@ const FeedActions: FC<FeedActionsProps> = ({ feedId, likes, bookmarks, expanded,
     const { searchedDocRef: userDocRef, searchedData: userData } = await searchFirestoreDoc(`users/${myInfo.uid}`)
     if (AmIMarked) { // unmark
       const removedFeedBookmarks = feedData!.bookmarks.filter((userUid: string) => userUid !== myInfo.uid)
-      await updateDoc(feedDocRef, { bookmarks: removedFeedBookmarks })
+      await updateDoc(feedDocRef, {
+        bookmarks: removedFeedBookmarks,
+        bookmarksCount: feedData!.bookmarksCount -1
+      })
       const removedBookmarkFeeds = userData!.bookmarkFeeds.filter((feedRef: string) => feedRef !== `feeds/${feedId}`)
       await updateDoc(userDocRef, { bookmarkFeeds: removedBookmarkFeeds })
       dispatch(removeFeedBookmarkUserUid({ feedId, userUid: userData!.uid }))
       dispatch(removeBookmarkFeedRef({ feedRef: `feeds/${feedId}` }))
     } else { // mark
-      await updateDoc(feedDocRef, { bookmarks: [ ...feedData!.bookmarks, myInfo.uid] })
+      await updateDoc(feedDocRef, {
+        bookmarks: [ ...feedData!.bookmarks, myInfo.uid],
+        bookmarksCount: feedData!.bookmarksCount +1
+      })
       await updateDoc(userDocRef, { bookmarkFeeds: [ ...userData!.bookmarkFeeds, `feeds/${feedId}` ]  })
       dispatch(addFeedBookmarkUserUid({ feedId, userUid: userData!.uid }))
       dispatch(addBookmarkFeedRef({ feedRef: `feeds/${feedId}` }))
