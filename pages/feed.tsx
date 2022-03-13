@@ -14,11 +14,9 @@ const Feed: NextPage = () => {
   const theme = useTheme()
   const downLg = useMediaQuery(theme.breakpoints.down("lg"))
   const [filterOpened, setFilterOpened] = useState(false)
-  const [isFetching, setIsFetching] = useState(false)
-  const [initialLoad, setInitialLoad] = useState(true)
 
   const targetRef = useRef<HTMLDivElement>(null)
-  const { feeds } = useLoadingFeeds(initialLoad, isFetching, setIsFetching, setInitialLoad, targetRef)
+  const { feeds } = useLoadingFeeds(targetRef)
 
   const onCloseFilter = () => setFilterOpened(false)
 

@@ -3,6 +3,8 @@ import type { RootState } from 'store/configureStore'
 
 interface UserState {
   value: FeedWithUserInfoType[]
+  isInitialLoad: boolean
+  isFetching: boolean
   loading: boolean
   editFeedLoading: boolean
   error: any | null
@@ -10,6 +12,8 @@ interface UserState {
 
 const initialState: UserState = {
   value: [],
+  isInitialLoad: true,
+  isFetching: false,
   loading: false,
   editFeedLoading: false,
   error: null
@@ -19,6 +23,12 @@ export const feedsSlice = createSlice({
   name: 'feeds',
   initialState,
   reducers: {
+    setIsInitialLoad: (state, action) => {
+      state.isInitialLoad = action.payload
+    },
+    setIsFetching: (state, action) => {
+      state.isFetching = action.payload
+    },
     setFeedLoadingTrue: (state) => {
       state.loading = true
     },
@@ -76,6 +86,8 @@ export const feedsSlice = createSlice({
 })
 
 export const { 
+  setIsInitialLoad,
+  setIsFetching,
   setFeedLoadingTrue, 
   setFeedLoadingfalse, 
   setEditFeedLoadingTrue,

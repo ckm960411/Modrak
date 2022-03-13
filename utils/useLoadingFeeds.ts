@@ -1,25 +1,24 @@
-import { useCallback, useEffect, useState } from "react";
-import { collection, DocumentData, getDocs, limit, orderBy, query, QueryDocumentSnapshot, startAfter } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { collection, DocumentData, getDocs, limit, orderBy, query, QueryConstraint, QueryDocumentSnapshot, startAfter, where } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { clearFeeds, setFeeds } from "store/feedsSlice";
+import { clearFeeds, setFeeds, setIsFetching, setIsInitialLoad } from "store/feedsSlice";
 import searchFirestoreDoc from "utils/searchFirestoreDoc";
 
-const useLoadingFeeds: UseLoadingFeedsType = (
-  initialLoad, isFetching, setIsFetching, setInitialLoad, reference
-) => {
+const useLoadingFeeds: UseLoadingFeedsType = (reference) => {
   const dispatch = useAppDispatch()
-  const feeds = useAppSelector(state => state.feeds.value)
+  const { value: feeds, isInitialLoad, isFetching } = useAppSelector(state => state.feeds)
   // 이전 불러온 게시물의 스냅샷을 보관하여 다음 데이터 요청시 해당 데이터 이후부터 불러옴
   const [last, setLast] = useState<QueryDocumentSnapshot<DocumentData> | null>(null)
+  const filter = useAppSelector(state => state.filter.value)
   
-  const loadFeeds = useCallback( async () => {
+  const loadFeeds = async () => {
     const feedDocsRef = collection(dbService, "feeds")
     let queryInstance
-    if (initialLoad) 
-      queryInstance = query(feedDocsRef, orderBy("createdAt", "desc"), limit(6)) // 처음 6개 로드
+    if (isInitialLoad) 
+      queryInstance = query(feedDocsRef, orderBy("createdAt", "desc"), limit(6), ...filter) // 처음 6개 로드
     else 
-      queryInstance = query(feedDocsRef, orderBy("createdAt", "desc"), startAfter(last), limit(5)) // 이전 로드한 게시물 이후 5개 로드
+      queryInstance = query(feedDocsRef, orderBy("createdAt", "desc"), startAfter(last), limit(5), ...filter) // 이전 로드한 게시물 이후 5개 로드
     const documentSnapshots = await getDocs(queryInstance)
     if (!documentSnapshots.docs[1]) return // 더 게시물이 없다면 로드X
     setLast(documentSnapshots.docs[documentSnapshots.docs.length -1]) // 게시물을 불러온 후 가장 마지막 문서 스냅샷을 상태에 저장
@@ -32,17 +31,17 @@ const useLoadingFeeds: UseLoadingFeedsType = (
         profileImg: userData!.profileImg,
       }
     })
-    setIsFetching(false)
+    dispatch(setIsFetching(false))
     feedWithUserData.map(feed => feed.then(res => dispatch(setFeeds(res)))) // 불러온 게시물 순차적으로 리덕스에 저장
-  }, [dispatch, initialLoad, last, setIsFetching])
+  }
 
-  const loadMoreFeeds = useCallback( async () => {
-    setInitialLoad(false)
-    setIsFetching(true)
-  }, [])
+  const loadMoreFeeds = () => {
+    dispatch(setIsInitialLoad(false))
+    dispatch(setIsFetching(true))
+  }
 
   useEffect(() => {
-    setIsFetching(true)
+    dispatch(setIsFetching(true))
     dispatch(clearFeeds())
   }, [dispatch])
 

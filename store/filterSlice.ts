@@ -1,13 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { QueryConstraint } from 'firebase/firestore'
 import type { RootState } from 'store/configureStore'
 
 interface FilterState {
+  value: QueryConstraint[]
   order: OrderType
   show: ShowType
   tag: TagType
 }
 
 const initialState: FilterState = {
+  value: [],
   order: "latest",
   show: "allShow",
   tag: "allTag"
@@ -25,7 +28,10 @@ export const filterSlice = createSlice({
     },
     setTag: (state, action) => {
       state.tag = action.payload
-    }
+    },
+    initializeFilter: (state) => {
+      state.value = []
+    },
   },
   extraReducers: {},
 })

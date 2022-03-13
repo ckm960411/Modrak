@@ -21,10 +21,4 @@ type OrderType = "latest" | "famous" | "interest"
 type ShowType = "allShow" | "followingOnly" | "myFeedOnly"
 type TagType = "allTag" | "restaurantOnly" | "accommodationOnly"
 
-type UseLoadingFeedsType = (
-  initialLoad: boolean, 
-  isFetching: boolean, 
-  setIsFetching: Dispatch<SetStateAction<boolean>>, 
-  setInitialLoad: Dispatch<SetStateAction<boolean>>, 
-  reference: RefObject<HTMLDivElement>
-) => { feeds: FeedWithUserInfoType[] }
+type UseLoadingFeedsType = (reference: RefObject<HTMLDivElement>) => { feeds: FeedWithUserInfoType[] }
