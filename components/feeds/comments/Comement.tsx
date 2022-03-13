@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import styled from "@emotion/styled";
-import { Avatar, Card, CardContent, CardHeader, Divider, Typography } from "@mui/material";
+import { Avatar, Card, CardHeader, Divider, Typography } from "@mui/material";
 import EditMenu from "components/parts/EditMenu";
 
 const NicknameTypo = styled(Typography)`

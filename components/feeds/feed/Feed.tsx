@@ -20,7 +20,7 @@ const Feed: FC<{ feedData: FeedWithUserInfoType }> = ({ feedData }) => {
       <FeedImages images={feedImages} />
       <FeedContent text={feedText} tags={tags} />
       <FeedActions feedId={id} likes={likes} bookmarks={bookmarks} expanded={expanded} setExpanded={setExpanded} />
-      <FeedComments comments={comments} expanded={expanded} />
+      <FeedComments feedId={id} comments={comments} expanded={expanded} />
     </Card>
   )
 }

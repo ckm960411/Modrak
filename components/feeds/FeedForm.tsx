@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import { dbService } from "fireBaseApp/fBase";
-import { addDoc, collection, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
 import { Card, CardContent } from "@mui/material";
 import TextInput from "components/parts/TextInput";
 import InputFileForm from "components/parts/InputFileForm";
@@ -59,6 +59,9 @@ const FeedForm: FC = () => {
         updateDoc(userDocRef, {
           feeds: [...userData!.feeds, `feeds/${res.id}`] // res.id 는 추가된 피드의 문서 id
         })
+        // 생성된 문서 ID 로 comments 컬렉션에 피드 id 로 된 문서 생성
+        const commentsCollectionRef = collection(dbService, "comments")
+        setDoc(doc(commentsCollectionRef, res.id), { comments: [] })
         dispatch(addFeeds({
           ...feedData,
           id: res.id,
@@ -69,7 +72,6 @@ const FeedForm: FC = () => {
       })
       .catch(err => console.log(err.resultMessage))
       .finally(() => alert('게시글 작성이 완료됐습니다!'))
-    
     dispatch(setFeedLoadingfalse())
     setTags([])
     setFeedText("")
