@@ -1,5 +1,7 @@
 import { FC } from "react";
-import { CardContent, Collapse, Divider } from "@mui/material";
+import { Collapse, Divider } from "@mui/material";
+import CommentForm from "components/feeds/comments/CommentForm";
+import Comment from "components/feeds/comments/Comement";
 
 type FeedCommentsProps = {
   expanded: boolean
@@ -10,9 +12,10 @@ const FeedComments: FC<FeedCommentsProps> = ({ expanded, comments }) => {
   return (
     <Collapse in={expanded} timeout="auto" unmountOnExit>
       <Divider />
-      <CardContent>
-        댓글
-      </CardContent>
+      <CommentForm />
+      <Comment />
+      <Comment />
+      <Comment />
     </Collapse>
   );
 };

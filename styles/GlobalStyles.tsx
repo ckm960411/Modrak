@@ -28,11 +28,7 @@ const GlobalStyles = () => {
         "*": {
           boxSizing: "border-box",
         },
-        // // main 영역 스타일링
-        // main: {
-        //   backgroundColor: '#f7f7f7',
-        //   height: '100vh',
-        // },
+        
         // Card 컴포넌트 마지막 CardContent 아래 padding 없애기
         '.css-46bh2p-MuiCardContent-root:last-child': {
           padding: '16px !important',
@@ -113,6 +109,10 @@ const GlobalStyles = () => {
         'div.css-16awh2u-MuiAutocomplete-root .MuiOutlinedInput-root': {
           paddingTop: '2px',
           paddingBottom: '2px',
+        },
+        // 댓글의 프로필 사진을 가운데 정렬
+        'div#comment-header': {
+          alignItems: 'flex-start',
         },
       }}
     />
