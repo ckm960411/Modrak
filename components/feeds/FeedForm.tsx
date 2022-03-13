@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import { dbService } from "fireBaseApp/fBase";
 import { addDoc, collection, updateDoc } from "firebase/firestore";
-import { Card, CardContent } from "@mui/material";
+import { Autocomplete, Card, CardContent, Chip, TextField } from "@mui/material";
 import TextInput from "components/parts/TextInput";
 import InputFileForm from "components/parts/InputFileForm";
 import PreviewImagesTab from "components/feeds/PreviewImagesTab";
@@ -11,10 +11,12 @@ import { addFeeds, setFeedLoadingfalse, setFeedLoadingTrue } from "store/feedsSl
 import SubmitFormButton from "components/parts/SubmitFormButton";
 import { addFeedInfo } from "store/usersSlice";
 import searchFirestoreDoc from "utils/searchFirestoreDoc";
+import { mainColor } from "styles/GlobalStyles";
 
 const FeedForm: FC = () => {
   const [feedImages, setFeedImages] = useState<string[]>([])
   const [feedText, setFeedText] = useState<string>('')
+  const [tags, setTags] = useState<string[]>([])
   const dispatch = useAppDispatch()
   const myInfo = useAppSelector(state => state.users.myInfo)
   const feedLoading = useAppSelector(state => state.feeds.loading)
@@ -42,7 +44,7 @@ const FeedForm: FC = () => {
       likesCount: 0,
       bookmarks: [],
       bookmarksCount: 0,
-      tags: [],
+      tags: tags,
       comments: [],
     }
     // 글을 게시하는 사용자(본인)의 정보를 찾음
@@ -65,8 +67,13 @@ const FeedForm: FC = () => {
       .finally(() => alert('게시글 작성이 완료됐습니다!'))
     
     dispatch(setFeedLoadingfalse())
+    setTags([])
     setFeedText("")
     setFeedImages([])
+  }
+
+  const onChangeTags = (e: React.SyntheticEvent<Element, Event>, value: string[]) => {
+    setTags(value)
   }
 
   return (
@@ -76,6 +83,32 @@ const FeedForm: FC = () => {
           value={feedText}
           onChange={onChangeText}
           placeholder="당신의 제주에서의 하루는 어땠나요?" 
+        />
+        <Autocomplete
+          multiple
+          id="tags-filled"
+          options={['맛집', '숙소']}
+          freeSolo
+          value={tags}
+          onChange={onChangeTags}
+          clearOnEscape={true}
+          renderTags={(value: readonly string[], getTagProps) => {
+            // setTags(value)
+            return value.map((option: string, index: number) =>  (
+              <div key={index}>
+                <Chip variant="outlined" label={option} {...getTagProps({ index })} sx={{ border: `1px solid ${mainColor}` }} />
+              </div>
+            ))
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant="outlined"
+              label="태그"
+              placeholder="피드에 태그를 추가하세요!"
+              sx={{ marginTop: '14px' }}
+            />
+          )}
         />
         <div>
           <InputFileForm label="input-file" images={feedImages} setImages={setFeedImages} />

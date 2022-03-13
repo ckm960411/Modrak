@@ -105,6 +105,15 @@ const GlobalStyles = () => {
         '.css-2c1ffl-MuiFormLabel-root-MuiInputLabel-root#feed-search-label-label': {
           top: '-6px',
         },
+        // 게시글 작성시 태그 입력 폼 스타일링
+        'label#tags-filled-label.css-2c1ffl-MuiFormLabel-root-MuiInputLabel-root': {
+          top: '-2px',
+          fontSize: '12px'
+        },
+        'div.css-16awh2u-MuiAutocomplete-root .MuiOutlinedInput-root': {
+          paddingTop: '2px',
+          paddingBottom: '2px',
+        },
       }}
     />
   );

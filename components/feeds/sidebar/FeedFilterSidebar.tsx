@@ -30,6 +30,7 @@ const FeedFilterSidebar: FC<FeedFilterSidebarProps> = ({ filterOpened, onClose }
     dispatch(initializeFilter())
     dispatch(setIsInitialLoad(true))
     console.log('initialize filter ✅')
+    if (onClose) onClose()
   }
 
   const onSetFilter = () => {
@@ -37,6 +38,7 @@ const FeedFilterSidebar: FC<FeedFilterSidebarProps> = ({ filterOpened, onClose }
     dispatch(setIsInitialLoad(true))
     dispatch(setFilter(filterData))
     console.log('set filter ✅')
+    if (onClose) onClose()
   }
 
   return (

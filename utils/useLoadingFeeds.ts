@@ -7,11 +7,11 @@ import searchFirestoreDoc from "utils/searchFirestoreDoc";
 
 const useLoadingFeeds: UseLoadingFeedsType = (reference) => {
   const dispatch = useAppDispatch()
-  const { value: feeds, isInitialLoad } = useAppSelector(state => state.feeds)
   // 이전 불러온 게시물의 스냅샷을 보관하여 다음 데이터 요청시 해당 데이터 이후부터 불러옴
   const [last, setLast] = useState<QueryDocumentSnapshot<DocumentData> | string>('hello')
   const [hasMore, setHasMore] = useState(true)
   const filter = useAppSelector(state => state.filter.value)
+  const { value: feeds, isInitialLoad } = useAppSelector(state => state.feeds)
   
   const loadFeeds = async () => {
     const feedDocsRef = collection(dbService, "feeds")
