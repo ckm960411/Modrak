@@ -21,6 +21,7 @@ declare interface FeedWithUserInfoType extends FeedWithIdType {
 }
 
 interface CommentType {
+  id: string
   userUid: string
   feedId: string
   commentText: string

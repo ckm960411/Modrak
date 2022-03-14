@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 import { Button, CardContent } from "@mui/material";
+import { v4 as uuid_v4 } from "uuid";
 import { updateDoc } from "firebase/firestore";
 import searchFirestoreDoc from "utils/searchFirestoreDoc";
 import { useAppDispatch, useAppSelector } from "store/hooks";
@@ -22,6 +23,7 @@ const CommentForm: FC<{feedId: string}> = ({ feedId }) => {
     if (comment.trim() === '') return alert('댓글 내용을 작성해주세요!')
     setLoading(true)
     const commentData: CommentType = {
+      id: uuid_v4(),
       userUid: myInfo.uid,
       feedId: feedId,
       commentText: comment,
