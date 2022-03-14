@@ -7,7 +7,7 @@ import styled from "@emotion/styled";
 import { format } from "date-fns";
 import formatDistanceToNowKo from "utils/formatDistanceToNowKo";
 import { deleteDoc, updateDoc } from "firebase/firestore";
-import { useAppDispatch } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import { deleteFeed } from "store/feedsSlice";
 import searchFirestoreDoc from "utils/searchFirestoreDoc";
 import { deleteFeedInfo } from "store/usersSlice";
@@ -18,16 +18,16 @@ const NicknameTypo = styled(Typography)`
 `
 type FeedHeaderProps = {
   feedData: FeedWithUserInfoType
-  editing: boolean
   setEditing: Dispatch<SetStateAction<boolean>>
 }
 
-const FeedHeader: FC<FeedHeaderProps> = ({ feedData, editing, setEditing }) => {
+const FeedHeader: FC<FeedHeaderProps> = ({ feedData, setEditing }) => {
   const [timeAgo, setTimeAgo] = useState<string>("0");
   const [date, setDate] = useState<string>('')
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
   const dispatch = useAppDispatch()
+  const myInfo = useAppSelector(state => state.users.myInfo)
 
   const { id, userUid, userRef, createdAt, modifiedAt, nickname, profileImg } = feedData
   
@@ -83,13 +83,13 @@ const FeedHeader: FC<FeedHeaderProps> = ({ feedData, editing, setEditing }) => {
     <CardHeader
       avatar={<Avatar alt={nickname} src={profileImg ? profileImg : defaultImg.src} />}
       title={
-        <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "center" }}>
+        <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "center", height: "30.75px" }}>
           <NicknameTypo>{nickname}</NicknameTypo>
-          <FollowButton />
+          {myInfo && myInfo.uid !== userUid &&  <FollowButton userUid={userUid} />}
         </Stack>
       }
       subheader={`${date} (${timeAgo})`}
-      action={
+      action={ myInfo &&
         <EditMenu
           userUid={userUid}
           anchorEl={anchorEl}

@@ -16,7 +16,7 @@ const Feed: FC<{ feedData: FeedWithUserInfoType }> = ({ feedData }) => {
   return (
     <Card raised>
       {editing && <EditFeedModal feedData={feedData} editing={editing} setEditing={setEditing} />}
-      <FeedHeader feedData={feedData} editing={editing} setEditing={setEditing} />
+      <FeedHeader feedData={feedData} setEditing={setEditing} />
       <FeedImages images={feedImages} />
       <FeedContent text={feedText} tags={tags} />
       <FeedActions feedId={id} likes={likes} bookmarks={bookmarks} expanded={expanded} setExpanded={setExpanded} />
