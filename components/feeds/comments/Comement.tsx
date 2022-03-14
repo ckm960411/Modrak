@@ -46,7 +46,7 @@ const Comment: FC<{comment: CommentWithUserInfoType}> = ({ comment }) => {
     <Card sx={{ boxShadow: 'none' }}>
       <Divider sx={{ ml: 2, mr: 2 }} />
       {editing ? (
-        <CommentEditForm setEditing={setEditing} commentText={commentText} />
+        <CommentEditForm setEditing={setEditing} comment={comment} />
       ): (
         <CardHeader
           id="comment-header"

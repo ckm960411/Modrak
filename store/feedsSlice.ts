@@ -94,6 +94,16 @@ export const feedsSlice = createSlice({
       if (!finded) return
       finded.comments = []
     },
+    // 댓글을 수정하려는 피드id 를 찾아 해당 댓글을 수정함
+    // (action.payload 에는 feedId, commentId, editText, modifiedAt 이 객체로 들어옴)
+    updateComment: (state, action) => {
+      const finded = state.value.find(feed => feed.id === action.payload.feedId)
+      if (!finded) return
+      const findedComment = finded.comments.find(comment => comment.id === action.payload.commentId)
+      if (!findedComment) return
+      findedComment.commentText = action.payload.editText
+      findedComment.modifiedAt = action.payload.modifiedAt
+    },
   },
   extraReducers: {},
 })
@@ -112,6 +122,7 @@ export const {
   addComment,
   setComments,
   clearComments,
+  updateComment,
 } = feedsSlice.actions
 
 export const selectFeed = (state: RootState) => state.feeds.value
