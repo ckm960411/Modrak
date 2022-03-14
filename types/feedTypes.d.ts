@@ -8,7 +8,7 @@ declare interface FeedDataType {
   bookmarks: string[]
   bookmarksCount: number
   tags: string[]
-  comments: string[]
+  comments: CommentWithUserInfoType[]
   createdAt: number
   modifiedAt: number
 }
@@ -16,6 +16,19 @@ declare interface FeedWithIdType extends FeedDataType {
   id: string
 }
 declare interface FeedWithUserInfoType extends FeedWithIdType {
+  nickname: string
+  profileImg: string | null
+}
+
+interface CommentType {
+  userUid: string
+  feedId: string
+  commentText: string
+  createdAt: number
+  modifiedAt: number
+}
+
+interface CommentWithUserInfoType extends CommentType {
   nickname: string
   profileImg: string | null
 }

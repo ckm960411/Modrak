@@ -1,22 +1,20 @@
 import { FC } from "react";
 import { Collapse, Divider } from "@mui/material";
 import CommentForm from "components/feeds/comments/CommentForm";
-import Comment from "components/feeds/comments/Comement";
+import Comments from "components/feeds/comments/Comments";
 
 type FeedCommentsProps = {
   feedId: string
   expanded: boolean
-  comments: string[]
 }
 
-const FeedComments: FC<FeedCommentsProps> = ({ expanded, comments, feedId }) => {
+const FeedComments: FC<FeedCommentsProps> = ({ expanded, feedId }) => {
+
   return (
     <Collapse in={expanded} timeout="auto" unmountOnExit>
       <Divider />
       <CommentForm feedId={feedId} />
-      <Comment />
-      <Comment />
-      <Comment />
+      <Comments feedId={feedId} />
     </Collapse>
   );
 };

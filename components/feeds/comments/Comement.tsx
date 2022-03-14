@@ -1,15 +1,21 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { Avatar, Card, CardHeader, Divider, Typography } from "@mui/material";
+import formatDistanceToNowKo from "utils/formatDistanceToNowKo";
 import EditMenu from "components/parts/EditMenu";
+import defaultImg from "public/imgs/profileImg.png"
+import { format } from "date-fns";
 
 const NicknameTypo = styled(Typography)`
   font-family: 'Katuri';
   color: #353535;
 `
 
-const Comment: FC = () => {
+const Comment: FC<{comment: CommentWithUserInfoType}> = ({ comment }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+  const [timeAgo, setTimeAgo] = useState<string>("0");
+  const [date, setDate] = useState<string>('')
+  const { userUid, commentText, createdAt, modifiedAt, nickname, profileImg } = comment
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () =>  setAnchorEl(null);
@@ -23,24 +29,34 @@ const Comment: FC = () => {
     handleClose()
   }
 
+  useEffect(() => {
+    if (createdAt === modifiedAt) {
+      setTimeAgo(`${formatDistanceToNowKo(createdAt)} 전`);
+      setDate(format(createdAt, 'yyyy년 MM월 d일 H시 m분'))
+    } else {
+      setTimeAgo(`${formatDistanceToNowKo(modifiedAt)} 전 수정됨`);
+      setDate(format(modifiedAt, 'yyyy년 MM월 d일 H시 m분'))
+    }
+  }, [createdAt, modifiedAt, setTimeAgo]);
+
   return (
     <Card>
       <Divider sx={{ ml: 2, mr: 2 }} />
       <CardHeader
         id="comment-header"
-        avatar={<Avatar alt="닉네임" src="https://firebasestorage.googleapis.com/v0/b/modrak-c7468.appspot.com/o/FJwflfhOqWSu0zXXD7BbZqj3FTu2%2F186686b7-c50d-4cbb-8e27-658706601994?alt=media&token=cb4be561-0d2f-4df0-bcbf-73cc6c199b01" />}
-        title={<NicknameTypo>{'짱버츠'}</NicknameTypo>}
+        avatar={<Avatar alt={nickname} src={profileImg ? profileImg : defaultImg.src} />}
+        title={<NicknameTypo>{nickname}</NicknameTypo>}
         subheader={
           <div>
             <Typography variant="body2" sx={{ color: '#000', mb: '6px' }}>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Odio error dolorem odit porro tenetur repellat maiores magni veritatis nam. Quas.
+              {commentText}
             </Typography>
-            <Typography variant="caption" component="div">2022년 03월 14일 05시 42분 (1초 전)</Typography>
+            <Typography variant="caption" component="div">{`${date} (${timeAgo})`}</Typography>
           </div>
         }
         action={
           <EditMenu
-            userUid={`OqIL4ckT2qc9t3hpxutUk3QQ9Rp2`}
+            userUid={userUid}
             anchorEl={anchorEl}
             handleClick={handleClick}
             handleClose={handleClose}
