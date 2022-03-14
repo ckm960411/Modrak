@@ -104,6 +104,14 @@ export const feedsSlice = createSlice({
       findedComment.commentText = action.payload.editText
       findedComment.modifiedAt = action.payload.modifiedAt
     },
+    // 댓글을 삭제하려는 피드id 를 찾아 해당 댓글을 삭제함
+    // (action.payload 에는 feedId, commentId 가 객체로 들어옴)
+    deleteComment: (state, action) => {
+      const finded = state.value.find(feed => feed.id === action.payload.feedId)
+      if (!finded) return
+      const filteredComments = finded.comments.filter(comment => comment.id !== action.payload.commentId)
+      finded.comments = filteredComments
+    },
   },
   extraReducers: {},
 })
@@ -123,6 +131,7 @@ export const {
   setComments,
   clearComments,
   updateComment,
+  deleteComment,
 } = feedsSlice.actions
 
 export const selectFeed = (state: RootState) => state.feeds.value
