@@ -70,6 +70,9 @@ const FeedHeader: FC<FeedHeaderProps> = ({ feedData, editing, setEditing }) => {
       feeds: userData!.feeds.filter((feedRef: string) => feedRef !== `feeds/${id}`),
     })
     await deleteDoc(feedDocRef).catch(err => console.log(err))
+    const { searchedDocRef: commentsDocRef } = await searchFirestoreDoc(`comments/${id}`)
+    await deleteDoc(commentsDocRef).catch(err => console.log(err))
+    
     
     dispatch(deleteFeed({ feedId: id }))
     dispatch(deleteFeedInfo(`feeds/${id}`))
