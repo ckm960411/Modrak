@@ -7,7 +7,9 @@ declare interface UserType {
   profileImg: string | null
   feeds: string[] = []
   followers: string[]
+  followersCount: number
   followings: string[]
+  followingsCount: number
   likeFeeds: string[]
   bookmarkFeeds: string[]
 }

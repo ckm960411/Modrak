@@ -65,7 +65,9 @@ const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
           nickname: nickname,
           profileImg: null,
           followers: [],
+          followersCount: 0,
           followings: [],
+          followingsCount: 0,
           feeds: [],
           likeFeeds: [],
           bookmarkFeeds: []
