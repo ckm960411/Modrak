@@ -91,7 +91,7 @@ export const feedsSlice = createSlice({
     setComments: (state, action) => {
       const finded = state.value.find(feed => feed.id === action.payload.feedId)
       if (!finded) return
-      finded.comments = [ action.payload, ...finded.comments ]
+      finded.comments = [ ...finded.comments, action.payload ]
     },
     // 모든 댓글 상태들을 지움
     clearComments: (state, action) => {

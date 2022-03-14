@@ -40,7 +40,7 @@ const Comment: FC<{comment: CommentWithUserInfoType}> = ({ comment }) => {
   }, [createdAt, modifiedAt, setTimeAgo]);
 
   return (
-    <Card>
+    <Card sx={{ boxShadow: 'none' }}>
       <Divider sx={{ ml: 2, mr: 2 }} />
       <CardHeader
         id="comment-header"
