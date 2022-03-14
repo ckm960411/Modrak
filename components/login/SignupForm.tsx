@@ -10,8 +10,6 @@ import { red } from "@mui/material/colors";
 import onCheckDuplicate from "utils/onCheckDuplicate";
 import HookFormInput from "components/login/HookFormInput";
 import SideAlert from "components/parts/SideAlert";
-import { useAppDispatch, useAppSelector } from "store/hooks";
-import { setUserLoadingfalse, setUserLoadingTrue } from "store/usersSlice";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 
 const ErrorParagraph = styled.span`
@@ -23,8 +21,7 @@ const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
   const [checkedNickname, setCheckedNickname] = useState('')
   const [checkedEmail, setCheckedEmail] = useState('')
   const [alertOpened, setAlertOpened] = useState(false)
-  const dispatch = useAppDispatch()
-  const userLoading = useAppSelector(state => state.users.loading)
+  const [signupLoading, setSignupLoading] = useState(false)
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<SignUpFormValue>()
 
@@ -58,7 +55,7 @@ const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
     if (!Boolean(checkedEmail) || checkedEmail !== emailRef.current!.value) 
       return alert('이메일 중복 체크를 완료해주세요!')
     // 신규 사용자 계정 생성
-    dispatch(setUserLoadingTrue())
+    setSignupLoading(true)
     createUserWithEmailAndPassword(authService, email, password)
       .then( async() => {
         const newUserObj = {
@@ -79,7 +76,7 @@ const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
       })
       .catch(err => console.log(err.resultMessage))
       .finally(() => {
-        dispatch(setUserLoadingfalse())
+        setSignupLoading(false)
         handleClose()
         router.push('/')
       })
@@ -175,7 +172,7 @@ const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
       </DialogContent>
       <DialogActions sx={{ p: "0 24px 20px" }}>
         <Button onClick={handleClose}>취소</Button>
-        <SubmitFormButton loading={userLoading} onClick={handleSubmit(onSubmit)}>
+        <SubmitFormButton loading={signupLoading} onClick={handleSubmit(onSubmit)}>
           회원가입
         </SubmitFormButton>
       </DialogActions>

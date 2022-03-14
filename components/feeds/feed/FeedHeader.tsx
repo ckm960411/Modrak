@@ -71,7 +71,7 @@ const FeedHeader: FC<FeedHeaderProps> = ({ feedData, editing, setEditing }) => {
     })
     await deleteDoc(feedDocRef).catch(err => console.log(err))
     
-    dispatch(deleteFeed(id))
+    dispatch(deleteFeed({ feedId: id }))
     dispatch(deleteFeedInfo(`feeds/${id}`))
     alert('피드가 정상적으로 삭제되었습니다!')
   }

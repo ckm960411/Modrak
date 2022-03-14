@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import uploadImagesDB from "utils/uploadImagesDB";
 import { doc, updateDoc } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
-import { setEditFeedLoadingFalse, setEditFeedLoadingTrue, updateFeed } from "store/feedsSlice";
+import { updateFeed } from "store/feedsSlice";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 import TagInput from "components/parts/TagInput";
 
@@ -23,9 +23,10 @@ const EditFeedModal: FC<EditFeedModalProps> = ({ feedData, editing, setEditing }
   const [newImages, setNewImages] = useState<string[]>([])
   const [editFeedError, setEditFeedError] = useState<string>('')
   const [newTags, setNewTags] = useState<string[]>([])
+  const [editFeedLoading, setEditFeedLoading] = useState(false)
+
   const dispatch = useAppDispatch()
   const myInfo = useAppSelector(state => state.users.myInfo)
-  const editFeedLoading = useAppSelector(state => state.feeds.editFeedLoading)
 
   const { id, feedText, feedImages, tags, userUid } = feedData
 
@@ -53,7 +54,7 @@ const EditFeedModal: FC<EditFeedModalProps> = ({ feedData, editing, setEditing }
       return alert("로그인한 이후에 피드를 수정해주세요.")
     if (myInfo.uid !== userUid) 
       return alert("당신의 피드가 아닌 글은 수정할 수 없습니다!")
-    dispatch(setEditFeedLoadingTrue())
+    setEditFeedLoading(true)
     const shouldUpload = newImages.filter(img => img.startsWith('data:image'))
     const shouldNotUpload = newImages.filter(img => !img.startsWith('data:image'))
     const newImagesURLs = await uploadImagesDB(shouldUpload, myInfo.uid).catch(err => console.log(err))
@@ -66,8 +67,8 @@ const EditFeedModal: FC<EditFeedModalProps> = ({ feedData, editing, setEditing }
 
     const feedDocRef = doc(dbService, "feeds", id)
     await updateDoc(feedDocRef, data)
-    dispatch(updateFeed({...data, id}))
-    dispatch(setEditFeedLoadingFalse())
+    dispatch(updateFeed({...data, feedId: id}))
+    setEditFeedLoading(false)
     setEditing(false)
   }
 

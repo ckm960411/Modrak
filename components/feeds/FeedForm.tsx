@@ -7,7 +7,7 @@ import InputFileForm from "components/parts/InputFileForm";
 import PreviewImagesTab from "components/feeds/PreviewImagesTab";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import uploadImagesDB from "utils/uploadImagesDB";
-import { addFeeds, setFeedLoadingfalse, setFeedLoadingTrue } from "store/feedsSlice";
+import { addFeeds } from "store/feedsSlice";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 import { addFeedInfo } from "store/usersSlice";
 import searchFirestoreDoc from "utils/searchFirestoreDoc";
@@ -17,9 +17,10 @@ const FeedForm: FC = () => {
   const [feedImages, setFeedImages] = useState<string[]>([])
   const [feedText, setFeedText] = useState<string>('')
   const [tags, setTags] = useState<string[]>([])
+  const [submitLoading, setSubmitLoading] = useState(false)
+
   const dispatch = useAppDispatch()
   const myInfo = useAppSelector(state => state.users.myInfo)
-  const feedLoading = useAppSelector(state => state.feeds.loading)
 
   const onChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFeedText(e.target.value)
@@ -34,7 +35,7 @@ const FeedForm: FC = () => {
     e.preventDefault()
     if (!myInfo) return alert('게시글 작성을 위해 먼저 로그인해주세요!')
     if (feedText.trim() === '') return alert('게시글 내용을 작성해주세요!')
-    dispatch(setFeedLoadingTrue())
+    setSubmitLoading(true)
     // 이미지배열을 스토리지에 저장하고 저장된 스토리지 경로를 배열로 리턴
     const imagesURLs = await uploadImagesDB(feedImages, myInfo.uid).catch(err => console.log(err.resultMessage))
     const feedData = {
@@ -72,7 +73,7 @@ const FeedForm: FC = () => {
       })
       .catch(err => console.log(err.resultMessage))
       .finally(() => alert('게시글 작성이 완료됐습니다!'))
-    dispatch(setFeedLoadingfalse())
+    setSubmitLoading(false)
     setTags([])
     setFeedText("")
     setFeedImages([])
@@ -92,7 +93,7 @@ const FeedForm: FC = () => {
           <SubmitFormButton
             onClick={onSubmitFeed}
             sx={{ float: 'right', mt: 1 }}
-            loading={feedLoading}
+            loading={submitLoading}
           >
             작성하기
           </SubmitFormButton>
