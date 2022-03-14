@@ -36,10 +36,14 @@ export const filterSlice = createSlice({
         case 'allShow':
           break
         case 'followingOnly':
-          if (action.payload.userUid) 
+          if (action.payload.userUid) {
             showFilter = [where("followers", "array-contains", action.payload.userUid)]
             const whereArray = action.payload.followings.map((followingId: string) => where("userUid", "==", followingId))
             showFilter = [...whereArray]
+          } else {
+            showFilter = []
+          }
+            
           break
         case 'myFeedOnly':
           if (action.payload.userUid)

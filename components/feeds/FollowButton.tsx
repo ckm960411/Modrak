@@ -6,6 +6,7 @@ const FollowButton: FC = () => {
     <Button 
       variant="outlined" 
       size="small" 
+      sx={{ mr: 1 }}
     >
       팔로우
     </Button>
