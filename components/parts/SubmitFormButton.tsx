@@ -5,10 +5,11 @@ import SendIcon from "@mui/icons-material/Send";
 
 type SubmitFormButtonProps = {
   loading: boolean
+  icon?: boolean
   [key: string]: any
 }
 
-const SubmitFormButton: FC<SubmitFormButtonProps> = ({ loading, children, ...props }) => {
+const SubmitFormButton: FC<SubmitFormButtonProps> = ({ loading, icon = true, children, ...props }) => {
 
   return (
     <LoadingButton
@@ -24,7 +25,7 @@ const SubmitFormButton: FC<SubmitFormButtonProps> = ({ loading, children, ...pro
           />
         </span>
       }
-      endIcon={<SendIcon />}
+      endIcon={icon ? <SendIcon /> : undefined}
       {...props}
     >
       { children }

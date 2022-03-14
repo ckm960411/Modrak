@@ -2,9 +2,10 @@ import { FC, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { Avatar, Card, CardHeader, Divider, Typography } from "@mui/material";
 import formatDistanceToNowKo from "utils/formatDistanceToNowKo";
-import EditMenu from "components/parts/EditMenu";
 import defaultImg from "public/imgs/profileImg.png"
 import { format } from "date-fns";
+import EditMenu from "components/parts/EditMenu";
+import CommentEditForm from "components/feeds/comments/CommentEditForm";
 
 const NicknameTypo = styled(Typography)`
   font-family: 'Katuri';
@@ -15,13 +16,15 @@ const Comment: FC<{comment: CommentWithUserInfoType}> = ({ comment }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const [timeAgo, setTimeAgo] = useState<string>("0");
   const [date, setDate] = useState<string>('')
+  const [editing, setEditing] = useState(false)
+
   const { userUid, commentText, createdAt, modifiedAt, nickname, profileImg } = comment
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () =>  setAnchorEl(null);
 
   const onEditComment = () => {
-    // setEditing(true)
+    setEditing(true)
     handleClose()
   }
 
@@ -42,29 +45,33 @@ const Comment: FC<{comment: CommentWithUserInfoType}> = ({ comment }) => {
   return (
     <Card sx={{ boxShadow: 'none' }}>
       <Divider sx={{ ml: 2, mr: 2 }} />
-      <CardHeader
-        id="comment-header"
-        avatar={<Avatar alt={nickname} src={profileImg ? profileImg : defaultImg.src} />}
-        title={<NicknameTypo>{nickname}</NicknameTypo>}
-        subheader={
-          <div>
-            <Typography variant="body2" sx={{ color: '#000', mb: '6px' }}>
-              {commentText}
-            </Typography>
-            <Typography variant="caption" component="div">{`${date} (${timeAgo})`}</Typography>
-          </div>
-        }
-        action={
-          <EditMenu
-            userUid={userUid}
-            anchorEl={anchorEl}
-            handleClick={handleClick}
-            handleClose={handleClose}
-            onEditContent={onEditComment}
-            onDeleteContent={onDeleteComment}
-          />
-        }
-      />
+      {editing ? (
+        <CommentEditForm setEditing={setEditing} commentText={commentText} />
+      ): (
+        <CardHeader
+          id="comment-header"
+          avatar={<Avatar alt={nickname} src={profileImg ? profileImg : defaultImg.src} />}
+          title={<NicknameTypo>{nickname}</NicknameTypo>}
+          subheader={
+            <div>
+              <Typography variant="body2" sx={{ color: '#000', mb: '6px' }}>
+                {commentText}
+              </Typography>
+              <Typography variant="caption" component="div">{`${date} (${timeAgo})`}</Typography>
+            </div>
+          }
+          action={
+            <EditMenu
+              userUid={userUid}
+              anchorEl={anchorEl}
+              handleClick={handleClick}
+              handleClose={handleClose}
+              onEditContent={onEditComment}
+              onDeleteContent={onDeleteComment}
+            />
+          }
+        />
+      )}
     </Card>
   )
 }
