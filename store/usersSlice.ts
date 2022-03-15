@@ -54,6 +54,11 @@ export const usersSlice = createSlice({
       state.myInfo!.followings.push(action.payload.userUid)
       state.myInfo!.followingsCount = state.myInfo!.followingsCount +1
     },
+    // 상대방 언팔로우
+    removeFollowings: (state, action) => {
+      state.myInfo!.followings = state.myInfo!.followings.filter(followingId => followingId !== action.payload.userUid)
+      state.myInfo!.followingsCount = state.myInfo!.followingsCount -1
+    },
   },
   extraReducers: {},
 })
@@ -68,6 +73,7 @@ export const {
   addBookmarkFeedRef,
   removeBookmarkFeedRef,
   addFollowings,
+  removeFollowings,
 } = usersSlice.actions
 
 export const selectUser = (state: RootState) => state.users.myInfo
