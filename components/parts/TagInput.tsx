@@ -10,6 +10,7 @@ type TagInputProps = {
 const options = [
   "맛집",
   "숙소",
+  "명소",
 ]
 
 const TagInput: FC<TagInputProps> = ({ value, onChange }) => {
