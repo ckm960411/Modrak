@@ -44,7 +44,7 @@ const EditFeedModal: FC<EditFeedModalProps> = ({ feedData, editing, setEditing }
   }
 
   const onChangeNewTags = (e: React.SyntheticEvent<Element, Event>, value: string[]) => {
-    setNewTags(value)
+    setNewTags(value.map(v => v.trim()))
   }
 
   const onSubmit = async () => {

@@ -19,9 +19,9 @@ const FeedContent: FC<{ text: string; tags: string[] }> = ({ text, tags }) => {
       </CardContent>
       {tags[0] && (
         <CardContent sx={{ pt: 0, pb: 0 }}>
-          <Stack direction="row" spacing={1}>
-            {tags.map((tag, i) => <Chip key={i} label={tag} onClick={onClickTag(tag)} /> )}
-          </Stack>
+          <div style={{ overflowWrap: 'normal' }}>
+            {tags.map((tag, i) => <Chip key={i} label={tag} onClick={onClickTag(tag)} sx={{ margin: '2px' }} /> )}
+          </div>
         </CardContent>
       )}
     </>

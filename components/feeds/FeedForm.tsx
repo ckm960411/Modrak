@@ -23,7 +23,7 @@ const FeedForm: FC = () => {
   const myInfo = useAppSelector(state => state.users.myInfo)
 
   const onChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFeedText(e.target.value)
+    setFeedText(e.target.value.trim())
   }
 
   const onChangeTags = (e: React.SyntheticEvent<Element, Event>, value: string[]) => {
