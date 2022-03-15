@@ -6,10 +6,11 @@ import SendIcon from "@mui/icons-material/Send";
 type SubmitFormButtonProps = {
   loading: boolean
   icon?: boolean
+  spinColor?: string
   [key: string]: any
 }
 
-const SubmitFormButton: FC<SubmitFormButtonProps> = ({ loading, icon = true, children, ...props }) => {
+const SubmitFormButton: FC<SubmitFormButtonProps> = ({ loading, icon = true, spinColor = '#fff', children, ...props }) => {
 
   return (
     <LoadingButton
@@ -17,7 +18,7 @@ const SubmitFormButton: FC<SubmitFormButtonProps> = ({ loading, icon = true, chi
       variant="contained"
       loading={loading}
       loadingIndicator={
-        <span style={{ color: "#fff" }}>
+        <span style={{ color: spinColor }}>
           <CircularProgress
             color="inherit"
             size={16}

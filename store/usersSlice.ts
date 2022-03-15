@@ -49,12 +49,12 @@ export const usersSlice = createSlice({
     removeBookmarkFeedRef: (state, action) => {
       state.myInfo!.bookmarkFeeds = state.myInfo!.bookmarkFeeds.filter((feedRef: string) => feedRef !== action.payload.feedRef)
     },
-    // 상대방 팔로우
+    // 상대방 팔로우: 내 팔로잉에 상대 id 를 추가하고 팔로잉수 +1 증가
     addFollowings: (state, action) => {
       state.myInfo!.followings.push(action.payload.userUid)
       state.myInfo!.followingsCount = state.myInfo!.followingsCount +1
     },
-    // 상대방 언팔로우
+    // 상대방 언팔로우: 내 팔로잉에 상대 id 를 제거하고 팔로잉수 -1 감소
     removeFollowings: (state, action) => {
       state.myInfo!.followings = state.myInfo!.followings.filter(followingId => followingId !== action.payload.userUid)
       state.myInfo!.followingsCount = state.myInfo!.followingsCount -1
