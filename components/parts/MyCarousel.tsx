@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { mainColor } from "styles/GlobalStyles";
 
 const Container = styled.div`
   position: relative;
@@ -41,13 +42,17 @@ const CarouselList = styled.ul`
 `;
 
 const CarouselListItem = styled.li<{ activeIndex: number }>`
-  width: 100%;
+  display: flex;
+  max-height: 400px;
+  background-color: #e7e7e7;
   flex: 1 0 100%;
   transform: translateX(-${({ activeIndex }) => activeIndex * 100}%);
-  transition: 200ms ease;
+  transition: 300ms ease;
   > img {
     width: 100%;
-    height: fit-content;
+    object-fit: contain;
+    min-height: 100px;
+    max-height: 400px;
   }
 `;
 
@@ -73,9 +78,12 @@ const Nav = styled.ul`
   }
 `;
 
+type MyCarouselProps = {
+  imgsArray: string[] 
+  autoplay?: boolean
+}
 
-
-const MyCarousel: FC<{imgsArray: string[]}> = ({ imgsArray }) => {
+const MyCarousel: FC<MyCarouselProps> = ({ imgsArray, autoplay = true }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -89,20 +97,20 @@ const MyCarousel: FC<{imgsArray: string[]}> = ({ imgsArray }) => {
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
 
-    if (!isFocused) {
+    if (autoplay && !isFocused) {
       intervalId = setInterval(handleNext, 3000);
     }
 
     return () => {
       clearInterval(intervalId);
     };
-  }, [isFocused]);
+  }, [isFocused, autoplay]);
 
   return (
     <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <Container>
         {imgsArray.length && <ArrowButton pos="left" onClick={handlePrev}>
-          <ArrowBackIosIcon />
+          <ArrowBackIosIcon sx={{ color: mainColor }} />
         </ArrowButton>}
         <CarouselList>
           {
@@ -114,7 +122,7 @@ const MyCarousel: FC<{imgsArray: string[]}> = ({ imgsArray }) => {
           }
         </CarouselList>
         {imgsArray.length && <ArrowButton pos="right" onClick={handleNext}>
-          <ArrowForwardIosIcon />
+          <ArrowForwardIosIcon sx={{ color: mainColor }} />
         </ArrowButton>}
       </Container>
       {imgsArray.length && (

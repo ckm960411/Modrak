@@ -16,12 +16,12 @@ const FoodListContainer: FC = () => {
         {itemData.map(item => (
           <Link key={item.id} href={`/restaurant/${item.id}`}>
             <a>
-              <Card key={item.img} raised>
+              <Card key={item.images[0]} raised>
                 <CardContent>
                   <ImageListItem>
                     <img
-                      src={`${item.img}?w=560&h=448&c=Y`}
-                      srcSet={`${item.img}?w=560&h=448&c=Y 2x`}
+                      src={`${item.images[0]}?w=560&h=448&c=Y`}
+                      srcSet={`${item.images[0]}?w=560&h=448&c=Y 2x`}
                       alt={item.title}
                       loading="lazy"
                       style={{ height: '200px' }}
@@ -35,7 +35,7 @@ const FoodListContainer: FC = () => {
                       )}
                       subtitle={(
                         <div>
-                          <Typography variant="subtitle2">{item.address}</Typography>
+                          <Typography variant="subtitle2">{item.division}</Typography>
                           <Stack direction="row" sx={{ height: '50px', flexWrap: 'wrap' }}>
                             {item.menu.map((v, i) => 
                               <Typography key={i} variant="subtitle2" sx={{ mr: 1 }}>{v}</Typography>

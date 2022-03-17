@@ -6,13 +6,22 @@ declare type FoodCategory = "한식/분식" | "양식" | "일식/중식" | "카�
 
 declare type RestaurantType = {
   id: string
-  img: string,
+  images: string[],
   title: string
-  address: DivisionType
+  subtitle: string
+  division: DivisionType
+  detailDivision: string
+  address: string
+  description: string
+  phoneNumber: string
+  workHours: string
+  breaktime?: string
+  holiday: string
   menu: string[]
   rating: number
   recommend: number
   bookmark: number
   category: FoodCategory
+  detailCategory: string
   tags: Tags[]
 }

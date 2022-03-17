@@ -1,7 +1,7 @@
 import { Stack } from "@mui/material";
-import FoodBanner from "components/restaurant/banner/FoodBanner";
-import FoodListContainer from "components/restaurant/cardContainer/FoodListContainer";
-import CategoryBar from "components/restaurant/category/CategoryBar";
+import FoodBanner from "components/restaurant/FoodBanner";
+import FoodListContainer from "components/restaurant/FoodListContainer";
+import CategoryBar from "components/restaurant/CategoryBar";
 import FoodTagbar from "components/restaurant/FoodTagbar";
 import { NextPage } from "next";
 import Head from "next/head";
