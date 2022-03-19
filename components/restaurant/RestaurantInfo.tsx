@@ -17,7 +17,7 @@ const Description = styled(Typography)`
 `
 
 const RestaurantInfo: FC<{data: RestaurantType}> = ({ data }) => {
-  const { title, subtitle, images, division, detailDivision, address, description, menu, rating, phoneNumber, workHours, breaktime, holiday, recommend, bookmark, category, detailCategory, tags } = data
+  const { name, subtitle, images, division, detailDivision, address, description, menu, rating, phoneNumber, workHours, breaktime, holiday, recommend, bookmark, category, detailCategory, tags } = data
 
   return (
     <Card raised>
@@ -25,8 +25,8 @@ const RestaurantInfo: FC<{data: RestaurantType}> = ({ data }) => {
         <Stack spacing={2}>
           <div>
             <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-              <Typography variant="h5" component="span" sx={{ fontFamily: 'Katuri' }}>{data.title}</Typography>
-              <Rating name={title} defaultValue={rating} precision={0.1} readOnly />
+              <Typography variant="h5" component="span" sx={{ fontFamily: 'Katuri' }}>{name}</Typography>
+              <Rating name={name} defaultValue={rating} precision={0.1} readOnly />
               <Typography component="span">{data.rating}</Typography>
             </Stack>
             <Typography sx={{ color: '#555', mt: 1 }}>{subtitle}</Typography>
@@ -57,10 +57,6 @@ const RestaurantInfo: FC<{data: RestaurantType}> = ({ data }) => {
           <DescContainer spacing={0.5}>
             <DescHeader>매장소개</DescHeader>
             <Description>{description}</Description>
-          </DescContainer>
-          <DescContainer spacing={0.5}>
-            <DescHeader>매장소개</DescHeader>
-            <Description>{category} &gt; {detailCategory}</Description>
           </DescContainer>
           <DescContainer spacing={0.5}>
             <DescHeader>전화번호</DescHeader>

@@ -1,6 +1,5 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import RestaurantReviewForm from "components/restaurant/RestaurantReviewForm";
-
 
 const RestaurantReview: FC = () => {
 
