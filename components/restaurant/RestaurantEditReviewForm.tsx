@@ -1,5 +1,5 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
-import { Alert, CardContent, Dialog } from "@mui/material";
+import { Alert, CardContent, Dialog, Rating, Stack, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import TextInput from "components/parts/TextInput";
 import InputFileForm from "components/parts/InputFileForm";
@@ -19,18 +19,20 @@ type RestaurantEditReviewFormProps = {
 const RestaurantEditReviewForm: FC<RestaurantEditReviewFormProps> = ({ reviewData, editing, setEditing }) => {
   const [editText, setEditText] = useState<string>('')
   const [newImages, setNewImages] = useState<string[]>([])
+  const [newRating, setNewRating] = useState<number | null>(null)
   const [editReviewError, setEditReviewError] = useState<string>('')
   const [editReviewLoading, setEditReviewLoading] = useState(false)
 
   const dispatch = useAppDispatch()
   const myInfo = useAppSelector(state => state.users.myInfo)
 
-  const { reviewId, reviewText, reviewImages, restaurantId, userUid } = reviewData
+  const { reviewId, reviewText, reviewImages, rating, restaurantId, userUid } = reviewData
 
   useEffect(() => {
     setNewImages(reviewImages)
     setEditText(reviewText)
-  }, [reviewText, reviewImages])
+    setNewRating(rating)
+  }, [reviewText, reviewImages, rating])
 
   const onChangeEditText = (e: React.ChangeEvent<HTMLInputElement>) => setEditText(e.target.value)
 
@@ -53,6 +55,7 @@ const RestaurantEditReviewForm: FC<RestaurantEditReviewFormProps> = ({ reviewDat
     const data = {
       reviewText: editText,
       reviewImages: [...shouldNotUpload, ...newImagesURLs!],
+      rating: newRating,
       reviewId,
       modifiedAt: Date.now(),
     }
@@ -62,6 +65,7 @@ const RestaurantEditReviewForm: FC<RestaurantEditReviewFormProps> = ({ reviewDat
     reviewsArray[reviewIndex].reviewText = data.reviewText
     reviewsArray[reviewIndex].modifiedAt = data.modifiedAt
     reviewsArray[reviewIndex].reviewImages = data.reviewImages
+    reviewsArray[reviewIndex].rating = data.rating
 
     await updateDoc(reviewDocRef, { reviews: reviewsArray })
     dispatch(updateReview(data))
@@ -77,6 +81,10 @@ const RestaurantEditReviewForm: FC<RestaurantEditReviewFormProps> = ({ reviewDat
       fullWidth
     >
       <CardContent>
+        <Stack direction="row" spacing={1} sx={{ alignItems: 'center', mb: 1 }}>
+          <Rating size="large" precision={0.1} value={newRating} onChange={(e, v) => setNewRating(v)} />
+          <span>({newRating})</span>
+        </Stack>
         <TextInput 
           value={editText}
           onChange={onChangeEditText}

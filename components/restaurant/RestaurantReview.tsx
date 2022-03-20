@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import Image from "next/image";
 import styled from "@emotion/styled";
-import { Avatar, Card, CardContent, CardHeader, Divider, Stack, Typography } from "@mui/material";
+import { Avatar, Card, CardContent, CardHeader, Divider, Rating, Stack, Typography } from "@mui/material";
 import defaultImg from "public/imgs/profileImg.png"
 import { format } from "date-fns";
 import { updateDoc } from "firebase/firestore";
@@ -34,7 +34,7 @@ const RestaurantReview: FC<{reviewData: ReviewWithUserInfo}> = ({ reviewData }) 
   const [editing, setEditing] = useState(false)
   
   const dispatch = useAppDispatch()
-  const { restaurantId, reviewId, reviewText, reviewImages, createdAt, modifiedAt, userUid, nickname, profileImg } = reviewData
+  const { restaurantId, reviewId, reviewText, reviewImages, rating, createdAt, modifiedAt, userUid, nickname, profileImg } = reviewData
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () =>  setAnchorEl(null);
@@ -97,6 +97,10 @@ const RestaurantReview: FC<{reviewData: ReviewWithUserInfo}> = ({ reviewData }) 
             ))}
           </Stack>
           {reviewImages[0] && <div style={{ height: '8px' }}></div>}
+          <Stack direction="row" spacing={0.5} sx={{ alignItems: 'center' }}>
+            <Rating value={rating} precision={0.1} readOnly />
+            <span>({rating})</span>
+          </Stack>
           <Typography variant="body2" sx={{ color: '#000' }}>
             {reviewText}
           </Typography>

@@ -35,6 +35,7 @@ export const restaurantsSlice = createSlice({
       finded.reviewText = action.payload.reviewText
       finded.reviewImages = action.payload.reviewImages
       finded.modifiedAt = action.payload.modifiedAt
+      finded.rating = action.payload.rating
     },
     // 삭제하려는 리뷰를 찾아 해당 리뷰를 삭제함
     // (action.payload 에는 reviewId 를 담은 객체가 들어옴)

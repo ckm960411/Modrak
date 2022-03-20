@@ -34,6 +34,7 @@ declare interface ReviewType {
   userUid: string
   reviewText: string
   reviewImages: string[]
+  rating: number
   createdAt: number
   modifiedAt: number
 }
