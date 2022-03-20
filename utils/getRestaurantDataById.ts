@@ -1,6 +1,6 @@
-import { itemData } from "dummyData/itemData"
+import searchFirestoreDoc from "./searchFirestoreDoc"
 
 export const getRestaurantDataById = async (restaurantId: string) => {
-  const restaurantData = itemData.find(item => item.id === restaurantId)
+  const { searchedData: restaurantData } = await searchFirestoreDoc(`restaurants/${restaurantId}`)
   return restaurantData
 }

@@ -1,12 +1,13 @@
-import { itemData } from "dummyData/itemData"
+import { collection, getDocs } from "firebase/firestore"
+import { dbService } from "fireBaseApp/fBase"
 
 export const getAllRestaurantsId = async () => {
-  const restaurants = itemData
-  return restaurants.map(restaurant => {
+  const restaurantsRef = collection(dbService, "restaurants")
+  return await getDocs(restaurantsRef).then(res => res.docs.map(doc => {
     return {
       params: {
-        id: restaurant.id
+        id: doc.id,
       }
     }
-  })
+  }))
 }
