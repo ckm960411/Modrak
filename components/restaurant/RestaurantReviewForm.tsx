@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { Card, CardContent, CardHeader, Divider, Typography } from "@mui/material";
+import { CardContent, CardHeader, Divider, Typography } from "@mui/material";
 import { v4 as uuid_v4 } from "uuid";
 import { useAppSelector } from "store/hooks";
 import TextInput from "components/parts/TextInput";
@@ -47,7 +47,7 @@ const RestaurantReviewForm: FC<{restaurantId: string}> = ({ restaurantId }) => {
   }
 
   return (
-    <Card raised>
+    <>
       <CardHeader title={<Typography sx={{ fontFamily: 'Katuri' }}>리뷰 남기기!</Typography>} />
       <Divider />
       <CardContent>
@@ -64,7 +64,7 @@ const RestaurantReviewForm: FC<{restaurantId: string}> = ({ restaurantId }) => {
         </div>
         {reviewImages[0] && <PreviewImagesTab images={reviewImages} setImages={setReviewImages} />}
       </CardContent>
-    </Card>
+    </>
   )
 }
 

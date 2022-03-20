@@ -4,14 +4,14 @@ import { Stack } from "@mui/material";
 import { getRestaurantDataById } from "utils/getRestaurantDataById";
 import { getAllRestaurantsId } from "utils/getAllRestaurantsId";
 import RestaurantInfo from "components/restaurant/RestaurantInfo";
-import RestaurantReview from "components/restaurant/RestaurantReview";
+import RestaurantReviewContainer from "components/restaurant/RestaurantReviewContainer";
 
 const RestaurantDetail: FC<{data: RestaurantWithId}> = ({ data }) => {
 
   return (
     <Stack spacing={2} sx={{ minWidth: '340px', maxWidth: '920px', m: '0 auto', pb: 6 }}>
       <RestaurantInfo data={data} />
-      <RestaurantReview data={data} />
+      <RestaurantReviewContainer data={data} />
     </Stack>
   )
 }
