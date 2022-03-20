@@ -2,11 +2,10 @@ import { FC } from "react";
 import { Card, CardContent, ImageList, ImageListItem, ImageListItemBar, Rating, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
-import { itemData } from "dummyData/itemData";
 import Link from "next/link";
 import { mainColor } from "styles/GlobalStyles";
 
-const FoodListContainer: FC = () => {
+const FoodListContainer: FC<{restaurantsData: RestaurantWithId[]}> = ({ restaurantsData }) => {
   const theme = useTheme()
   const downMd = useMediaQuery(theme.breakpoints.down('md'))
   const downSm = useMediaQuery(theme.breakpoints.down('sm'))
@@ -14,7 +13,7 @@ const FoodListContainer: FC = () => {
   return (
     <>
       <ImageList cols={downSm ? 1 : downMd ? 2 : 3} gap={16}>
-        {itemData.map(item => (
+        {restaurantsData.map(item => (
           <Link key={item.id} href={`/restaurant/${item.id}`}>
             <a>
               <Card key={item.images[0]} raised>

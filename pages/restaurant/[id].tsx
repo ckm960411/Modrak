@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { GetStaticPaths } from "next";
 import { Stack } from "@mui/material";
-import { getRestaurantData } from "utils/getRestaurantData";
-import { getRestaurantsData } from "utils/getRestaurantsData";
+import { getRestaurantDataById } from "utils/getRestaurantDataById";
+import { getAllRestaurantsId } from "utils/getAllRestaurantsId";
 import RestaurantInfo from "components/restaurant/RestaurantInfo";
 import RestaurantReview from "components/restaurant/RestaurantReview";
 
@@ -17,7 +17,7 @@ const RestaurantDetail: FC<{data: RestaurantType}> = ({ data }) => {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = await getRestaurantsData()
+  const paths = await getAllRestaurantsId()
   return {
     paths,
     fallback: false
@@ -25,7 +25,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 export const getStaticProps = async ({ params }:  { params: {id: string} }) => {
-  const data = await getRestaurantData(params.id)
+  const data = await getRestaurantDataById(params.id)
   return {
     props: {
       data

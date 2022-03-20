@@ -1,6 +1,6 @@
 import { itemData } from "dummyData/itemData"
 
-export const getRestaurantsData = async () => {
+export const getAllRestaurantsId = async () => {
   const restaurants = itemData
   return restaurants.map(restaurant => {
     return {

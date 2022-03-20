@@ -4,8 +4,7 @@ declare type Tags = "로컬맛집" | "데이트" | "가족식사" | "모임" | "
 
 declare type FoodCategory = "한식/분식" | "양식" | "일식/중식" | "카페"
 
-declare type RestaurantType = {
-  id: string
+declare interface RestaurantType {
   images: string[],
   name: string
   subtitle: string
@@ -24,4 +23,7 @@ declare type RestaurantType = {
   category: FoodCategory
   detailCategory: string
   tags: Tags[]
+}
+declare interface RestaurantWithId extends RestaurantType {
+  id: string
 }

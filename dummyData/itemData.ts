@@ -1,6 +1,5 @@
 export const itemData: RestaurantType[] = [
   {
-    id: "422426990263",
     images: [
       "https://img.siksinhot.com/place/1453703956080502.jpg",
       "https://img.siksinhot.com/place/1453703984518506.jpg",
@@ -25,7 +24,6 @@ export const itemData: RestaurantType[] = [
     tags: ["로컬맛집", "혼밥/혼술"],
   },
   {
-    id: "815959934404",
     images: [
       "https://img.siksinhot.com/place/1462267888156098.jpg",
       "https://img.siksinhot.com/place/1439732248869676.jpg",
@@ -49,7 +47,6 @@ export const itemData: RestaurantType[] = [
     tags: ["로컬맛집", "혼밥/혼술"],
   },
   {
-    id: "288099407604",
     images: [
       "https://img.siksinhot.com/place/1585280193732708.jpg",
       "https://img.siksinhot.com/place/1585280277234711.jpg",
@@ -74,7 +71,6 @@ export const itemData: RestaurantType[] = [
     tags: ["혼밥/혼술"],
   },
   {
-    id: "330619496102",
     images: [
       "https://img.siksinhot.com/place/1353571925600254.jpg",
       "https://img.siksinhot.com/story/1532059845475912.jpg",
@@ -98,7 +94,6 @@ export const itemData: RestaurantType[] = [
     tags: ["가족식사", "데이트", "모임"],
   },
   {
-    id: "8915397235",
     images: [
       "https://img.siksinhot.com/place/1457076763271833.jpg",
       "https://img.siksinhot.com/place/1457076747495831.jpg",
@@ -122,7 +117,6 @@ export const itemData: RestaurantType[] = [
     tags: ["가족식사", "데이트", "로컬맛집"],
   },
   {
-    id: "247952774102",
     images: [
       "https://img.siksinhot.com/place/1456981562575200.jpg",
       "https://img.siksinhot.com/place/1456982102032212.jpg",
@@ -146,7 +140,6 @@ export const itemData: RestaurantType[] = [
     tags: ["가족식사", "로컬맛집"],
   },
   {
-    id: "89548123143",
     images: [
       "https://img.siksinhot.com/place/1456993552121346.jpg",
       "https://img.siksinhot.com/place/1540257388981186.JPG",
@@ -170,7 +163,6 @@ export const itemData: RestaurantType[] = [
     tags: ["가족식사", "데이트", "로컬맛집", "모임"],
   },
   {
-    id: "16849843047",
     images: [
       "https://img.siksinhot.com/place/1463374987054430.jpg",
       "https://img.siksinhot.com/place/1463374987054430.jpg",
@@ -195,7 +187,6 @@ export const itemData: RestaurantType[] = [
     tags: ["가족식사", "데이트", "모임"],
   },
   {
-    id: "20460726785",
     images: [
       "https://img.siksinhot.com/place/1540175014635046.JPG",
       "https://img.siksinhot.com/place/1540175060489052.JPG",
@@ -220,7 +211,6 @@ export const itemData: RestaurantType[] = [
     tags: ["데이트", "로컬맛집", "혼밥/혼술"],
   },
   {
-    id: "557511967682",
     images: [
       "https://img.siksinhot.com/place/1462971279225139.png",
       "https://img.siksinhot.com/place/1359159112893954.jpg",
@@ -243,7 +233,6 @@ export const itemData: RestaurantType[] = [
     tags: ["가족식사", "데이트", "혼밥/혼술"],
   },
   {
-    id: "1517075970784",
     images: [
       "https://img.siksinhot.com/place/1463968923373126.png",
       "https://img.siksinhot.com/place/1571047420473577.jpg",
@@ -267,7 +256,6 @@ export const itemData: RestaurantType[] = [
     tags: ["가족식사", "데이트", "모임"],
   },
   {
-    id: "992591033782",
     images: [
       "https://img.siksinhot.com/place/1536901893883255.jpg",
       "https://img.siksinhot.com/place/1536901916566256.jpg",
