@@ -1,11 +1,11 @@
 import { FC } from "react";
 import RestaurantReviewForm from "components/restaurant/RestaurantReviewForm";
 
-const RestaurantReview: FC = () => {
+const RestaurantReview: FC<{data: RestaurantWithId}> = ({ data }) => {
 
   return (
     <>
-      <RestaurantReviewForm />
+      <RestaurantReviewForm restaurantId={data.id} />
     </>
   )
 }

@@ -6,12 +6,12 @@ import { getAllRestaurantsId } from "utils/getAllRestaurantsId";
 import RestaurantInfo from "components/restaurant/RestaurantInfo";
 import RestaurantReview from "components/restaurant/RestaurantReview";
 
-const RestaurantDetail: FC<{data: RestaurantType}> = ({ data }) => {
+const RestaurantDetail: FC<{data: RestaurantWithId}> = ({ data }) => {
 
   return (
     <Stack spacing={2} sx={{ minWidth: '340px', maxWidth: '920px', m: '0 auto', pb: 6 }}>
       <RestaurantInfo data={data} />
-      <RestaurantReview />
+      <RestaurantReview data={data} />
     </Stack>
   )
 }

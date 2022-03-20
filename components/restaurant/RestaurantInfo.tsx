@@ -16,7 +16,7 @@ const Description = styled(Typography)`
   font-size: 14px;
 `
 
-const RestaurantInfo: FC<{data: RestaurantType}> = ({ data }) => {
+const RestaurantInfo: FC<{data: RestaurantWithId}> = ({ data }) => {
   const { name, subtitle, images, division, detailDivision, address, description, menu, rating, phoneNumber, workHours, breaktime, holiday, recommend, bookmark, category, detailCategory, tags } = data
 
   return (
