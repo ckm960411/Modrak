@@ -6,20 +6,7 @@ import defaultImg from "public/imgs/profileImg.png"
 import EditMenu from "components/parts/EditMenu";
 import formatDistanceToNowKo from "utils/formatDistanceToNowKo";
 import { format } from "date-fns";
-
-const images = [
-  "https://img.siksinhot.com/place/1453703909205496.jpg?w=540&h=436&c=X",
-  "https://img.siksinhot.com/place/1453703956080502.jpg?w=307&h=300&c=Y",
-  "https://img.siksinhot.com/place/1453703984518506.jpg?w=307&h=300&c=Y",
-  "https://img.siksinhot.com/place/1453703909204495.jpg?w=307&h=300&c=Y",
-  "https://img.siksinhot.com/place/1453703956080502.jpg?w=307&h=300&c=Y",
-  "https://img.siksinhot.com/place/1453703984518506.jpg?w=307&h=300&c=Y",
-  "https://img.siksinhot.com/place/1453703909204495.jpg?w=307&h=300&c=Y",
-  "https://img.siksinhot.com/place/1453703956080502.jpg?w=307&h=300&c=Y",
-  "https://img.siksinhot.com/place/1453703984518506.jpg?w=307&h=300&c=Y",
-  "https://img.siksinhot.com/place/1453703909204495.jpg?w=307&h=300&c=Y",
-  "https://img.siksinhot.com/place/1453703956080502.jpg?w=307&h=300&c=Y",
-]
+import RestaurantEditReviewForm from "components/restaurant/RestaurantEditReviewForm";
 
 const ImageWrapper = styled.div`
   height: 150px;
@@ -40,13 +27,17 @@ const RestaurantReview: FC<{reviewData: ReviewWithUserInfo}> = ({ reviewData }) 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const [timeAgo, setTimeAgo] = useState<string>("0");
   const [date, setDate] = useState<string>('')
+  const [editing, setEditing] = useState(false)
   
   const { reviewText, reviewImages, createdAt, modifiedAt, userUid, nickname, profileImg } = reviewData
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () =>  setAnchorEl(null);
 
-  const onEditComment = () => {}
+  const onEditComment = () => {
+    setEditing(true)
+    handleClose()
+  }
 
   const onDeleteComment = async () => {}
 
@@ -63,6 +54,7 @@ const RestaurantReview: FC<{reviewData: ReviewWithUserInfo}> = ({ reviewData }) 
   return (
     <>
       <Card sx={{ boxShadow: 'none' }}>
+        {editing && <RestaurantEditReviewForm reviewData={reviewData} editing={editing} setEditing={setEditing} />}
         <CardHeader 
           id="review-header"
           avatar={<Avatar alt={nickname} src={profileImg ? profileImg : defaultImg.src} />}
@@ -79,21 +71,21 @@ const RestaurantReview: FC<{reviewData: ReviewWithUserInfo}> = ({ reviewData }) 
             />
           }
         />
+        <CardContent sx={{ pt: 0 }}>
+          <Stack direction="row" spacing={1} sx={{ overflowX: 'scroll' }}>
+            {reviewImages.map((img, i) => (
+              <ImageWrapper key={i}>
+                <Image alt="사진" src={img} layout="fill" objectFit="contain" />
+              </ImageWrapper>
+            ))}
+          </Stack>
+          {reviewImages[0] && <div style={{ height: '8px' }}></div>}
+          <Typography variant="body2" sx={{ color: '#000' }}>
+            {reviewText}
+          </Typography>
+        </CardContent>
+        <Divider />
       </Card>
-      <CardContent sx={{ pt: 0 }}>
-        <Stack direction="row" spacing={1} sx={{ overflowX: 'scroll' }}>
-          {reviewImages.map((img, i) => (
-            <ImageWrapper key={i}>
-              <Image alt="사진" src={img} layout="fill" objectFit="contain" />
-            </ImageWrapper>
-          ))}
-        </Stack>
-        {reviewImages[0] && <div style={{ height: '8px' }}></div>}
-        <Typography variant="body2" sx={{ color: '#000' }}>
-          {reviewText}
-        </Typography>
-      </CardContent>
-      <Divider />
     </>
   )
 }

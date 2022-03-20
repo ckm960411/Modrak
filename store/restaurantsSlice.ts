@@ -27,6 +27,15 @@ export const restaurantsSlice = createSlice({
     clearReviews: (state) => {
       state.reviews = []
     },
+    // 수정하려는 리뷰를 찾아 해당 리뷰를 수정함
+    // (action.payload 에는 reviewId, reviewText, reviewImages, modifiedAt 이 객체로 들어옴)
+    updateReview: (state, action) => {
+      const finded = state.reviews.find(review => review.reviewId === action.payload.reviewId)
+      if (!finded) return
+      finded.reviewText = action.payload.reviewText
+      finded.reviewImages = action.payload.reviewImages
+      finded.modifiedAt = action.payload.modifiedAt
+    },
   },
   extraReducers: {}
 })
@@ -34,7 +43,8 @@ export const restaurantsSlice = createSlice({
 export const { 
   addReview,
   setReviews, 
-  clearReviews
+  clearReviews,
+  updateReview,
 } = restaurantsSlice.actions
 
 export default restaurantsSlice.reducer
