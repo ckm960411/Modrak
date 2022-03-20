@@ -1,19 +1,24 @@
-import { FC } from "react";
+import { FC, useRef } from "react";
+import Link from "next/link";
 import { Card, CardContent, ImageList, ImageListItem, ImageListItemBar, Rating, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
-import Link from "next/link";
 import { mainColor } from "styles/GlobalStyles";
+import useLoadingRestaurants from "utils/useLoadingRestaurants";
 
-const FoodListContainer: FC<{restaurantsData: RestaurantWithId[]}> = ({ restaurantsData }) => {
+const FoodListContainer: FC = () => {
   const theme = useTheme()
   const downMd = useMediaQuery(theme.breakpoints.down('md'))
   const downSm = useMediaQuery(theme.breakpoints.down('sm'))
 
+  const targetRef = useRef<HTMLDivElement>(null)
+  const { restaurants } = useLoadingRestaurants(targetRef)
+
+
   return (
     <>
       <ImageList cols={downSm ? 1 : downMd ? 2 : 3} gap={16}>
-        {restaurantsData.map(item => (
+        {restaurants.map(item => (
           <Link key={item.id} href={`/restaurant/${item.id}`}>
             <a>
               <Card key={item.images[0]} raised>
@@ -58,6 +63,7 @@ const FoodListContainer: FC<{restaurantsData: RestaurantWithId[]}> = ({ restaura
           </Link>
         ))}
       </ImageList>
+      <div ref={targetRef} style={{ width: '100%', height: '30px', backgroundColor: 'transparent' }}></div>
     </>
   )
 }

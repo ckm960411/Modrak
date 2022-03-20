@@ -1,11 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { QueryConstraint } from "firebase/firestore";
 
 interface RestaurantState {
+  value: RestaurantWithId[]
+  filter: QueryConstraint[]
+  isInitialLoad: boolean
   reviews: ReviewWithUserInfo[]
   loading: boolean
   error: any | null
 }
 const initialState: RestaurantState = {
+  value: [],
+  filter: [],
+  isInitialLoad: true,
   reviews: [],
   loading: false,
   error: null
@@ -14,7 +21,21 @@ const initialState: RestaurantState = {
 export const restaurantsSlice = createSlice({
   name: 'restaurants',
   initialState,
-  reducers: {
+  reducers: {    
+    // 맛집 리스트를 처음 로드하는지 아닌지 isInitialLoad 상태를 변경
+    // true 가 들어오면 첫 리스트 몇개를 새로 로드함 (action.payload 로 boolean 이 들어옴)
+    setIsInitialLoad: (state, action) => {
+      state.isInitialLoad = action.payload
+    },
+    // 로드한 맛집리스트를 전역 상태 value 에 저장 (action.payload 로 RestaurantWIthId 객체가 들어옴)
+    setRestaurantsData: (state, action) => {
+      if (state.value.findIndex(v => v.id === action.payload.id) !== -1) return
+      state.value = [ ...state.value, action.payload ]
+    },
+    // 새로 리스트를 로드하기 위해 기존 value 에 저장되어 있던 피드들을 지움
+    clearRestaurantsData: (state) => {
+      state.value = []
+    },
     // 리뷰 작성시 기존 리뷰 제일 위에 추가 (action.payload 로 리뷰객체가 1개씩 들어옴)
     addReview: (state, action) => {
       state.reviews.unshift(action.payload)
@@ -47,6 +68,9 @@ export const restaurantsSlice = createSlice({
 })
 
 export const { 
+  setIsInitialLoad,
+  setRestaurantsData,
+  clearRestaurantsData,
   addReview,
   setReviews, 
   clearReviews,

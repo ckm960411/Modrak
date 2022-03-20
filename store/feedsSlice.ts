@@ -25,7 +25,7 @@ export const feedsSlice = createSlice({
     // 로드한 피드들을 전역 상태 value 에 저장 (action.payload 로 FeedWithUserInfoType 객체가 들어옴)
     setFeeds: (state, action) => {
       if (state.value.findIndex(v => v.id === action.payload.id) !== -1) return
-      state.value = [...state.value, action.payload]
+      state.value = [...state.value, action.payload ]
     },
     // 새로 작성한 피드를 전역 상태 value 맨앞에 저장 (action.payload 로 FeedWithUserInfoType 객체가 들어옴)
     addFeeds: (state, action) => {
