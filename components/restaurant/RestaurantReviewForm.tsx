@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { CardContent, CardHeader, Divider, Typography } from "@mui/material";
 import { v4 as uuid_v4 } from "uuid";
-import { useAppSelector } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import TextInput from "components/parts/TextInput";
 import InputFileForm from "components/parts/InputFileForm";
 import SubmitFormButton from "components/parts/SubmitFormButton";
@@ -9,12 +9,14 @@ import searchFirestoreDoc from "utils/searchFirestoreDoc";
 import { updateDoc } from "firebase/firestore";
 import PreviewImagesTab from "components/feeds/PreviewImagesTab";
 import uploadImagesDB from "utils/uploadImagesDB";
+import { addReview } from "store/restaurantsSlice";
 
 const RestaurantReviewForm: FC<{restaurantId: string}> = ({ restaurantId }) => {
-
   const [reviewText, setReviewText] = useState('')
   const [reviewImages, setReviewImages] = useState<string[]>([])
   const [submitReviewLoading, setSubmitReviewLoading] = useState(false)
+
+  const dispatch = useAppDispatch()
   const myInfo = useAppSelector(state => state.users.myInfo)
 
   const onChangeReview = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,6 +43,11 @@ const RestaurantReviewForm: FC<{restaurantId: string}> = ({ restaurantId }) => {
     await updateDoc(reviewDocRef, {
       reviews: [ ...reviewData!.reviews, myReviewData ]
     }).then(() => alert('리뷰 작성이 완료됐습니다!'))
+    dispatch(addReview({
+      ...myReviewData,
+      nickname: myInfo.nickname,
+      profileImg: myInfo.profileImg,
+    }))
     setReviewText('')
     setReviewImages([])
     setSubmitReviewLoading(false)
