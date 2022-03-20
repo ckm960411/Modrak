@@ -3,9 +3,13 @@ import Image from "next/image";
 import styled from "@emotion/styled";
 import { Avatar, Card, CardContent, CardHeader, Divider, Stack, Typography } from "@mui/material";
 import defaultImg from "public/imgs/profileImg.png"
-import EditMenu from "components/parts/EditMenu";
-import formatDistanceToNowKo from "utils/formatDistanceToNowKo";
 import { format } from "date-fns";
+import { updateDoc } from "firebase/firestore";
+import { useAppDispatch } from "store/hooks";
+import { deleteReview } from "store/restaurantsSlice";
+import formatDistanceToNowKo from "utils/formatDistanceToNowKo";
+import searchFirestoreDoc from "utils/searchFirestoreDoc";
+import EditMenu from "components/parts/EditMenu";
 import RestaurantEditReviewForm from "components/restaurant/RestaurantEditReviewForm";
 
 const ImageWrapper = styled.div`
@@ -29,7 +33,8 @@ const RestaurantReview: FC<{reviewData: ReviewWithUserInfo}> = ({ reviewData }) 
   const [date, setDate] = useState<string>('')
   const [editing, setEditing] = useState(false)
   
-  const { reviewText, reviewImages, createdAt, modifiedAt, userUid, nickname, profileImg } = reviewData
+  const dispatch = useAppDispatch()
+  const { restaurantId, reviewId, reviewText, reviewImages, createdAt, modifiedAt, userUid, nickname, profileImg } = reviewData
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () =>  setAnchorEl(null);
@@ -39,7 +44,19 @@ const RestaurantReview: FC<{reviewData: ReviewWithUserInfo}> = ({ reviewData }) 
     handleClose()
   }
 
-  const onDeleteComment = async () => {}
+  const onDeleteComment = async () => {
+    const ok = window.confirm('이 리뷰를 정말 삭제하시겠습니까?')
+    if (!ok) return handleClose()
+
+    const { searchedDocRef: reviewDocRef, searchedData: reviewData } = await searchFirestoreDoc(`reviews/${restaurantId}`)
+    const reviewsArray = reviewData!.reviews
+    const filteredReviews = reviewsArray.filter((review: ReviewType) => review.reviewId !== reviewId)
+
+    await updateDoc(reviewDocRef, { reviews: filteredReviews })
+    dispatch(deleteReview({ reviewId }))
+
+    handleClose()
+  }
 
   useEffect(() => {
     if (createdAt === modifiedAt) {
