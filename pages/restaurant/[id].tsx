@@ -4,7 +4,7 @@ import { Stack } from "@mui/material";
 import { getRestaurantDataById } from "utils/getRestaurantDataById";
 import { getAllRestaurantsId } from "utils/getAllRestaurantsId";
 import RestaurantInfo from "components/restaurant/RestaurantInfo";
-import RestaurantReviewContainer from "components/restaurant/RestaurantReviewContainer";
+import RestaurantReviewContainer from "components/restaurant/review/RestaurantReviewContainer";
 
 const RestaurantDetail: FC<{data: RestaurantWithId}> = ({ data }) => {
 

@@ -10,7 +10,7 @@ import { deleteReview } from "store/restaurantsSlice";
 import formatDistanceToNowKo from "utils/formatDistanceToNowKo";
 import searchFirestoreDoc from "utils/searchFirestoreDoc";
 import EditMenu from "components/parts/EditMenu";
-import RestaurantEditReviewForm from "components/restaurant/RestaurantEditReviewForm";
+import RestaurantEditReviewForm from "components/restaurant/review/RestaurantEditReviewForm";
 
 const ImageWrapper = styled.div`
   height: 150px;

@@ -1,9 +1,9 @@
 import { FC } from "react";
+import styled from "@emotion/styled";
 import { Card, CardContent, Rating, Stack, Typography } from "@mui/material";
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import MyCarousel from "components/parts/MyCarousel";
-import styled from "@emotion/styled";
 
 const DescContainer = styled(Stack)`
   margin-top: 8px;

@@ -1,7 +1,7 @@
 import { FC } from "react";
-import RestaurantReviewForm from "components/restaurant/RestaurantReviewForm";
-import RestaurantReviews from "components/restaurant/RestaurantReviews";
 import { Card, Divider, Grid } from "@mui/material";
+import RestaurantReviewForm from "components/restaurant/review/RestaurantReviewForm";
+import RestaurantReviews from "components/restaurant/review/RestaurantReviews";
 
 const RestaurantReviewContainer: FC<{ data: RestaurantWithId }> = ({ data }) => {
   return (
