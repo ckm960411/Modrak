@@ -27,3 +27,17 @@ declare interface RestaurantType {
 declare interface RestaurantWithId extends RestaurantType {
   id: string
 }
+
+declare interface ReviewType {
+  reviewId: string
+  restaurantId: string
+  userUid: string
+  reviewText: string
+  reviewImages: string[]
+  createdAt: number
+  modifiedAt: number
+}
+declare interface ReviewWithUserInfo extends ReviewType {
+  nickname: string
+  profileImg: string
+}

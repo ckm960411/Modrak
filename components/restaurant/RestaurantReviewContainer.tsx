@@ -1,11 +1,9 @@
 import { FC } from "react";
 import RestaurantReviewForm from "components/restaurant/RestaurantReviewForm";
-import RestaurantReviews from "./RestaurantReviews";
+import RestaurantReviews from "components/restaurant/RestaurantReviews";
 import { Card, Divider, Grid } from "@mui/material";
 
-const RestaurantReviewContainer: FC<{ data: RestaurantWithId }> = ({
-  data,
-}) => {
+const RestaurantReviewContainer: FC<{ data: RestaurantWithId }> = ({ data }) => {
   return (
     <Card raised>
       <Grid container >
@@ -14,7 +12,7 @@ const RestaurantReviewContainer: FC<{ data: RestaurantWithId }> = ({
         </Grid>
         <Grid item xs={12} sx={{ width: '300px', maxWidth: '720px' }}>
           <Divider />
-          <RestaurantReviews />
+          <RestaurantReviews restaurantId={data.id} />
         </Grid>
       </Grid>
     </Card>

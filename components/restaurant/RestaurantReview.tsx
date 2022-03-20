@@ -1,9 +1,11 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Image from "next/image";
 import styled from "@emotion/styled";
 import { Avatar, Card, CardContent, CardHeader, Divider, Stack, Typography } from "@mui/material";
 import defaultImg from "public/imgs/profileImg.png"
 import EditMenu from "components/parts/EditMenu";
+import formatDistanceToNowKo from "utils/formatDistanceToNowKo";
+import { format } from "date-fns";
 
 const images = [
   "https://img.siksinhot.com/place/1453703909205496.jpg?w=540&h=436&c=X",
@@ -34,8 +36,12 @@ const NicknameTypo = styled(Typography)`
   color: #353535;
 `
 
-const RestaurantReview: FC = () => {
+const RestaurantReview: FC<{reviewData: ReviewWithUserInfo}> = ({ reviewData }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+  const [timeAgo, setTimeAgo] = useState<string>("0");
+  const [date, setDate] = useState<string>('')
+  
+  const { reviewText, reviewImages, createdAt, modifiedAt, userUid, nickname, profileImg } = reviewData
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () =>  setAnchorEl(null);
@@ -44,17 +50,27 @@ const RestaurantReview: FC = () => {
 
   const onDeleteComment = async () => {}
 
+  useEffect(() => {
+    if (createdAt === modifiedAt) {
+      setTimeAgo(`${formatDistanceToNowKo(createdAt)} 전`);
+      setDate(format(createdAt, 'yyyy년 MM월 d일 H시 m분'))
+    } else {
+      setTimeAgo(`${formatDistanceToNowKo(modifiedAt)} 전 수정됨`);
+      setDate(format(modifiedAt, 'yyyy년 MM월 d일 H시 m분'))
+    }
+  }, [createdAt, modifiedAt, setTimeAgo]);
+
   return (
     <>
       <Card sx={{ boxShadow: 'none' }}>
         <CardHeader 
           id="review-header"
-          avatar={<Avatar alt="닉네임" src={defaultImg.src} />}
-          title={<NicknameTypo>닉네임</NicknameTypo>}
-          subheader={<Typography variant="caption">2022년 3월 20일 11시 51분 (0초 전)</Typography>}
+          avatar={<Avatar alt={nickname} src={profileImg ? profileImg : defaultImg.src} />}
+          title={<NicknameTypo>{nickname}</NicknameTypo>}
+          subheader={<Typography variant="caption">{`${date} (${timeAgo})`}</Typography>}
           action={
             <EditMenu
-              userUid="유저uid"
+              userUid={userUid}
               anchorEl={anchorEl}
               handleClick={handleClick}
               handleClose={handleClose}
@@ -66,14 +82,15 @@ const RestaurantReview: FC = () => {
       </Card>
       <CardContent sx={{ pt: 0 }}>
         <Stack direction="row" spacing={1} sx={{ overflowX: 'scroll' }}>
-          {images.map((img, i) => (
+          {reviewImages.map((img, i) => (
             <ImageWrapper key={i}>
               <Image alt="사진" src={img} layout="fill" objectFit="contain" />
             </ImageWrapper>
           ))}
         </Stack>
+        {reviewImages[0] && <div style={{ height: '8px' }}></div>}
         <Typography variant="body2" sx={{ color: '#000' }}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem porro a consequuntur quos laudantium rerum, veritatis reiciendis debitis ipsam accusamus.
+          {reviewText}
         </Typography>
       </CardContent>
       <Divider />
