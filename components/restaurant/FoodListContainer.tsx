@@ -1,10 +1,13 @@
 import { FC, useRef } from "react";
 import Link from "next/link";
 import { Card, CardContent, ImageList, ImageListItem, ImageListItemBar, Rating, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import { mainColor } from "styles/GlobalStyles";
 import useLoadingRestaurants from "utils/useLoadingRestaurants";
+import { useAppSelector } from "store/hooks";
 
 const FoodListContainer: FC = () => {
   const theme = useTheme()
@@ -13,11 +16,11 @@ const FoodListContainer: FC = () => {
 
   const targetRef = useRef<HTMLDivElement>(null)
   const { restaurants } = useLoadingRestaurants(targetRef)
-
+  const myInfo = useAppSelector(state => state.users.myInfo)
 
   return (
     <>
-      <ImageList cols={downSm ? 1 : downMd ? 2 : 3} gap={16}>
+      <ImageList cols={downSm ? 1 : downMd ? 2 : 3} gap={16} sx={{ overflow: 'visible' }}>
         {restaurants.map(item => (
           <Link key={item.id} href={`/restaurant/${item.id}`}>
             <a>
@@ -47,9 +50,15 @@ const FoodListContainer: FC = () => {
                             )}
                           </Stack>
                           <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-                            <ThumbUpOutlinedIcon fontSize="small" />
+                            {myInfo && myInfo.recommendRestaurants.includes(item.id) 
+                              ? <ThumbUpIcon sx={{ color: mainColor }} fontSize="small" /> 
+                              : <ThumbUpOutlinedIcon fontSize="small" />
+                            }
                             <Typography variant="subtitle2">{item.recommend}</Typography>
-                            <BookmarkBorderOutlinedIcon fontSize="small" />
+                            {myInfo && myInfo.bookmarkRestaurants.includes(item.id) 
+                              ? <BookmarkIcon sx={{ color: mainColor }} fontSize="small" /> 
+                              : <BookmarkBorderOutlinedIcon fontSize="small" />
+                            }
                             <Typography variant="subtitle2">{item.bookmark}</Typography>
                           </Stack>
                         </div>
