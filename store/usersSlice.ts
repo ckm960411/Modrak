@@ -67,6 +67,14 @@ export const usersSlice = createSlice({
     removeRecommendRestaurant: (state, action) => {
       state.myInfo!.recommendRestaurants = state.myInfo!.recommendRestaurants.filter(restId => restId !== action.payload.restaurantId)
     },
+    // 맛집 찜(북마크) id 등록
+    addBookmarkRestaurant: (state, action) => {
+      state.myInfo!.bookmarkRestaurants.push(action.payload.restaurantId)
+    },
+    // 맛집 찜(북마크) 취소
+    removeBookmarkRestaurant: (state, action) => {
+      state.myInfo!.bookmarkRestaurants = state.myInfo!.bookmarkRestaurants.filter(restId => restId !== action.payload.restaurantId)
+    },
   },
   extraReducers: {},
 })
@@ -84,6 +92,8 @@ export const {
   removeFollowings,
   addRecommendRestaurant,
   removeRecommendRestaurant,
+  addBookmarkRestaurant,
+  removeBookmarkRestaurant,
 } = usersSlice.actions
 
 export const selectUser = (state: RootState) => state.users.myInfo

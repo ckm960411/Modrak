@@ -13,6 +13,7 @@ declare interface UserType {
   likeFeeds: string[]
   bookmarkFeeds: string[]
   recommendRestaurants: string[]
+  bookmarkRestaurants: string[]
 }
 
 // 회원가입 시 입력할 값들 타입

@@ -3,12 +3,13 @@ import styled from "@emotion/styled";
 import { Card, CardContent, CardHeader, Chip, IconButton, Rating, Stack, Typography } from "@mui/material";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import { doc, updateDoc } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { dbService } from "fireBaseApp/fBase";
 import { mainColor } from "styles/GlobalStyles";
-import { addRecommendRestaurant, removeRecommendRestaurant } from "store/usersSlice";
+import { addBookmarkRestaurant, addRecommendRestaurant, removeBookmarkRestaurant, removeRecommendRestaurant } from "store/usersSlice";
 import MyCarousel from "components/parts/MyCarousel";
 
 const DescContainer = styled(Stack)`
@@ -44,10 +45,29 @@ const RestaurantInfo: FC<{data: RestaurantWithId}> = ({ data }) => {
       setIsRecommended(true)
     } else { // 추천 취소하기
       await updateDoc(restaurantRef, { recommend: recommendCount -1 })
-      await updateDoc(userRef, { recommendRestaurants: myInfo.recommendRestaurants.filter(rest => rest !== id) })
+      await updateDoc(userRef, { recommendRestaurants: myInfo.recommendRestaurants.filter(restId => restId !== id) })
       dispatch(removeRecommendRestaurant({ restaurantId: id }))
       setRecommendCount(prev => prev -1)
       setIsRecommended(false)
+    }
+  }
+
+  const toggleBookmarkRestaurants = async () => {
+    if (!myInfo) return
+    const restaurantRef = doc(dbService, "restaurants", id)
+    const userRef = doc(dbService, "users", myInfo.uid)
+    if (!isBookmarked) { // 찜(북마크) 하기
+      await updateDoc(restaurantRef, { bookmark: bookmarkCount +1 })
+      await updateDoc(userRef, { bookmarkRestaurants: [ ...myInfo.bookmarkRestaurants, id ] })
+      dispatch(addBookmarkRestaurant({ restaurantId: id }))
+      setBookmarkCount(prev => prev +1)
+      setIsBookmarked(true)
+    } else { // 찜(북마크) 취소하기
+      await updateDoc(restaurantRef, { bookmark: bookmarkCount -1 })
+      await updateDoc(userRef, { bookmarkRestaurants: myInfo.bookmarkRestaurants.filter(restId => restId !== id) })
+      dispatch(removeBookmarkRestaurant({ restaurantId: id }))
+      setBookmarkCount(prev => prev -1)
+      setIsBookmarked(false)
     }
   }
 
@@ -57,6 +77,11 @@ const RestaurantInfo: FC<{data: RestaurantWithId}> = ({ data }) => {
       setIsRecommended(true)
     } else {
       setIsRecommended(false)
+    }
+    if (myInfo.bookmarkRestaurants.includes(id)) {
+      setIsBookmarked(true)
+    } else {
+      setIsBookmarked(false)
     }
   }, [myInfo, id])
 
@@ -82,8 +107,8 @@ const RestaurantInfo: FC<{data: RestaurantWithId}> = ({ data }) => {
               {isRecommended ? <ThumbUpIcon sx={{ color: mainColor }} /> : <ThumbUpOutlinedIcon sx={{ color: '#555' }} />}
             </IconButton>
             <Typography sx={{ color: '#555' }}>{recommendCount}</Typography>
-            <IconButton>
-              <BookmarkBorderOutlinedIcon sx={{ color: '#555' }} />
+            <IconButton onClick={toggleBookmarkRestaurants}>
+              {isBookmarked ? <BookmarkIcon sx={{ color: mainColor }} /> : <BookmarkBorderOutlinedIcon sx={{ color: '#555' }} />}
             </IconButton>
             <Typography sx={{ color: '#555' }}>{bookmarkCount}</Typography>
           </Stack>
