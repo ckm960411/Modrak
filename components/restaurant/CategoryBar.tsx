@@ -29,6 +29,12 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 const CategoryBar: FC = () => {
   const [divisionSelect, setDivisionSelect] = useState<DivisionType>("전체 지역")
   const [expanded, setExpanded] = useState(true);
+  const [allClicked, setAllClicked] = useState(true)
+  const [koreanClicked, setKoreanClicked] = useState(false)
+  const [westernClicked, setWesternClicked] = useState(false)
+  const [japaneseClicked, setJapaneseClicked] = useState(false)
+  const [cafeClicked, setCafeClicked] = useState(false)
+  
   const dispatch = useAppDispatch()
 
   const theme = useTheme()
@@ -41,8 +47,28 @@ const CategoryBar: FC = () => {
     dispatch(setDivisionFilter({ division: e.target.value as DivisionType }))
   };
 
+  const clearAllCategory = () => {
+    setAllClicked(false)
+    setKoreanClicked(false)
+    setWesternClicked(false)
+    setJapaneseClicked(false)
+    setCafeClicked(false)
+  }
+
   const handleCategory = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { innerText } = e.target as HTMLElement
+    clearAllCategory()
+    if (innerText === '전체') {
+      setAllClicked(true)
+    } else if (innerText === '한식/분식') {
+      setKoreanClicked(true)
+    } else if (innerText === '양식') {
+      setWesternClicked(true)
+    } else if (innerText === '일식/중식') {
+      setJapaneseClicked(true)
+    } else if (innerText === '카페') {
+      setCafeClicked(true)
+    }
     dispatch(setCategoryFilter({ category: innerText }))
   }
   
@@ -84,11 +110,11 @@ const CategoryBar: FC = () => {
           <Divider />
           <CardContent>
             <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', justifyContent: 'center' }}>
-              <Button variant="contained" onClick={handleCategory}>전체</Button>
-              <Button variant="outlined" onClick={handleCategory}>한식/분식</Button>
-              <Button variant="outlined" onClick={handleCategory}>양식</Button>
-              <Button variant="outlined" onClick={handleCategory}>일식/중식</Button>
-              <Button variant="outlined" onClick={handleCategory}>카페</Button>
+              <Button variant={allClicked ? "contained" : "outlined"} onClick={handleCategory}>전체</Button>
+              <Button variant={koreanClicked ? "contained" : "outlined"} onClick={handleCategory}>한식/분식</Button>
+              <Button variant={westernClicked ? "contained" : "outlined"} onClick={handleCategory}>양식</Button>
+              <Button variant={japaneseClicked ? "contained" : "outlined"} onClick={handleCategory}>일식/중식</Button>
+              <Button variant={cafeClicked ? "contained" : "outlined"} onClick={handleCategory}>카페</Button>
             </Stack>
           </CardContent>
         </Collapse>
