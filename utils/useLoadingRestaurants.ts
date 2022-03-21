@@ -9,19 +9,29 @@ const useLoadingRestaurants = (reference: RefObject<HTMLDivElement>) => {
   // 이전 불러온 맛집정보들의 스냅샷을 보관하여 다음 데이터 요청시 해당 데이터 이후부터 불러옴
   const [last, setLast] = useState<QueryDocumentSnapshot<DocumentData> | string>('initialLoad')
   const [hasMore, setHasMore] = useState(true)
-  const filter = useAppSelector(state => state.restaurants.filter)
+  const divisionFilter = useAppSelector(state => state.restaurants.divisionFilter)
   const { value: restaurants, isInitialLoad } = useAppSelector(state => state.restaurants)
 
   const loadRestaurantsList = async () => {
     const restaurantsRef = collection(dbService, "restaurants")
     let queryInstance
     if (isInitialLoad) {
-      queryInstance = query(restaurantsRef, ...filter, orderBy("rating", "desc"), limit(9)) // 처음 9개 로드
+      queryInstance = query(
+        restaurantsRef, 
+        ...divisionFilter, 
+        orderBy("rating", "desc"), 
+        limit(9) // 처음 9개 로드
+      ) 
     } else {
-      queryInstance = query(restaurantsRef, ...filter, orderBy("rating", "desc"), startAfter(last), limit(9)) // 이전 로드한 리스트 이후 9개 로드
+      queryInstance = query(
+        restaurantsRef, 
+        ...divisionFilter, 
+        orderBy("rating", "desc"), 
+        startAfter(last), 
+        limit(9) // 이전 로드한 리스트 이후 9개 로드
+      ) 
     }
     const documentSnapshots = await getDocs(queryInstance)
-    console.log('documentSnapshots: ', documentSnapshots)
 
     // 더 로드할 리스트가 없다면 로드 요청 자체를 중지함
     if (!documentSnapshots.docs[0]) {
@@ -35,8 +45,6 @@ const useLoadingRestaurants = (reference: RefObject<HTMLDivElement>) => {
   const loadMoreRestaurantsList = () => {
     loadRestaurantsList()
   }
-
-  console.log('last: ', last)
 
   useEffect(() => {
     let observer: IntersectionObserver
@@ -59,7 +67,7 @@ const useLoadingRestaurants = (reference: RefObject<HTMLDivElement>) => {
       setHasMore(true)
       setLast('initialLoad')
     }
-  }, [])
+  }, [dispatch, isInitialLoad])
 
   return {
     restaurants

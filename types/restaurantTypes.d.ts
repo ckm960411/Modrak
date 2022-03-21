@@ -2,7 +2,7 @@ declare type DivisionType = "전체 지역" | "제주시" | "애월" | "한경/�
 
 declare type Tags = "로컬맛집" | "데이트" | "가족식사" | "모임" | "혼밥/혼술"
 
-declare type FoodCategory = "한식/분식" | "양식" | "일식/중식" | "카페"
+declare type FoodCategory = "전체" | "한식/분식" | "양식" | "일식/중식" | "카페"
 
 declare interface RestaurantType {
   images: string[],

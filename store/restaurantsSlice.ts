@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { QueryConstraint } from "firebase/firestore";
+import { QueryConstraint, where } from "firebase/firestore";
 
 interface RestaurantState {
   value: RestaurantWithId[]
-  filter: QueryConstraint[]
+  divisionFilter: QueryConstraint[]
   isInitialLoad: boolean
   reviews: ReviewWithUserInfo[]
   loading: boolean
@@ -11,7 +11,7 @@ interface RestaurantState {
 }
 const initialState: RestaurantState = {
   value: [],
-  filter: [],
+  divisionFilter: [],
   isInitialLoad: true,
   reviews: [],
   loading: false,
@@ -63,6 +63,44 @@ export const restaurantsSlice = createSlice({
     deleteReview: (state, action) => {
       state.reviews = state.reviews.filter(review => review.reviewId !== action.payload.reviewId)
     },
+    // 위치별 맛집 필터 적용
+    setDivisionFilter: (state, action) => {
+      switch (action.payload.division as DivisionType) {
+        case '전체 지역': 
+          state.divisionFilter = []
+          break
+        case '제주시':
+          state.divisionFilter = [ where("division", "==", "제주시") ]
+          break
+        case '애월':
+          state.divisionFilter = [ where("division", "==", "애월") ]
+          break
+        case '한경/한림':
+          state.divisionFilter = [ where("division", "==", "한경/한림") ]
+          break
+        case '대정/안덕':
+          state.divisionFilter = [ where("division", "==", "대정/안덕") ]
+          break
+        case '서귀포':
+          state.divisionFilter = [ where("division", "==", "서귀포") ]
+          break
+        case '남원':
+          state.divisionFilter = [ where("division", "==", "남원") ]
+          break
+        case '표선/성산':
+          state.divisionFilter = [ where("division", "==", "표선/성산") ]
+          break
+        case '구좌':
+          state.divisionFilter = [ where("division", "==", "구좌") ]
+          break
+        case '조천':
+          state.divisionFilter = [ where("division", "==", "조천") ]
+          break
+        default:
+          state.divisionFilter = []
+          break
+      }
+    },
   },
   extraReducers: {}
 })
@@ -76,6 +114,7 @@ export const {
   clearReviews,
   updateReview,
   deleteReview,
+  setDivisionFilter,
 } = restaurantsSlice.actions
 
 export default restaurantsSlice.reducer

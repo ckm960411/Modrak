@@ -1,9 +1,11 @@
 import { FC, useEffect, useState } from "react";
 import { styled } from '@mui/material/styles';
 import { Card, CardContent, Collapse, Divider, MenuItem, Select, SelectChangeEvent, Stack, useTheme, Typography, useMediaQuery, Button } from "@mui/material";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { mainColor } from "styles/GlobalStyles";
+import { useAppDispatch } from "store/hooks";
+import { setDivisionFilter, setIsInitialLoad } from "store/restaurantsSlice";
 
 const divisions: DivisionType[] = [ "전체 지역", "제주시", "애월", "한경/한림", "대정/안덕", "서귀포", "남원", "표선/성산", "구좌", "조천" ]
 
@@ -26,7 +28,8 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 const CategoryBar: FC = () => {
   const [divisionSelect, setDivisionSelect] = useState<DivisionType>("전체 지역")
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
+  const dispatch = useAppDispatch()
 
   const theme = useTheme()
   const downSm = useMediaQuery(theme.breakpoints.down('sm'))
@@ -36,11 +39,16 @@ const CategoryBar: FC = () => {
   };
 
   const handleChange = (event: SelectChangeEvent) => {
-    setDivisionSelect(event.target.value as DivisionType);
+    setDivisionSelect(event.target.value as DivisionType)
+    dispatch(setIsInitialLoad(true))
+    dispatch(setDivisionFilter({ division: event.target.value as DivisionType }))
   };
   
   useEffect(() => {
-    if (downSm) setExpanded(true)
+    if (downSm) 
+      setExpanded(false)
+    else
+      setExpanded(true)
   }, [downSm])
 
   return (
