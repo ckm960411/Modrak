@@ -11,6 +11,7 @@ import { dbService } from "fireBaseApp/fBase";
 import { mainColor } from "styles/GlobalStyles";
 import { addBookmarkRestaurant, addRecommendRestaurant, removeBookmarkRestaurant, removeRecommendRestaurant } from "store/usersSlice";
 import MyCarousel from "components/parts/MyCarousel";
+import Map from "components/parts/Map";
 
 const DescContainer = styled(Stack)`
   margin-top: 8px;
@@ -141,10 +142,6 @@ const RestaurantInfo: FC<{data: RestaurantWithId}> = ({ data }) => {
             <Description>{phoneNumber}</Description>
           </DescContainer>
           <DescContainer spacing={0.5}>
-            <DescHeader>주소</DescHeader>
-            <Description>{address}</Description>
-          </DescContainer>
-          <DescContainer spacing={0.5}>
             <DescHeader>영업시간</DescHeader>
             <Description>{workHours}</Description>
             {breaktime && <Description>브레이크타임 {breaktime}</Description>}
@@ -153,7 +150,12 @@ const RestaurantInfo: FC<{data: RestaurantWithId}> = ({ data }) => {
             <DescHeader>휴무일</DescHeader>
             <Description>{holiday}</Description>
           </DescContainer>
+          <DescContainer spacing={0.5}>
+            <DescHeader>주소</DescHeader>
+            <Description>{address}</Description>
+          </DescContainer>
         </div>
+        <Map address={address} />
       </CardContent>
     </Card>
   )
