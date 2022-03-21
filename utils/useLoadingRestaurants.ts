@@ -9,7 +9,7 @@ const useLoadingRestaurants = (reference: RefObject<HTMLDivElement>) => {
   // 이전 불러온 맛집정보들의 스냅샷을 보관하여 다음 데이터 요청시 해당 데이터 이후부터 불러옴
   const [last, setLast] = useState<QueryDocumentSnapshot<DocumentData> | string>('initialLoad')
   const [hasMore, setHasMore] = useState(true)
-  const { divisionFilter, categoryFilter } = useAppSelector(state => state.restaurants)
+  const { divisionFilter, categoryFilter, tagFilter } = useAppSelector(state => state.restaurants)
   const { value: restaurants, isInitialLoad } = useAppSelector(state => state.restaurants)
 
   const loadRestaurantsList = async () => {
@@ -20,6 +20,7 @@ const useLoadingRestaurants = (reference: RefObject<HTMLDivElement>) => {
         restaurantsRef, 
         ...divisionFilter,
         ...categoryFilter,
+        ...tagFilter,
         orderBy("rating", "desc"), 
         limit(9) // 처음 9개 로드
       ) 
@@ -28,6 +29,7 @@ const useLoadingRestaurants = (reference: RefObject<HTMLDivElement>) => {
         restaurantsRef, 
         ...divisionFilter, 
         ...categoryFilter,
+        ...tagFilter,
         orderBy("rating", "desc"), 
         startAfter(last), 
         limit(9) // 이전 로드한 리스트 이후 9개 로드

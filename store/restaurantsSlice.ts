@@ -6,6 +6,7 @@ interface RestaurantState {
   isInitialLoad: boolean
   divisionFilter: QueryConstraint[]
   categoryFilter: QueryConstraint[]
+  tagFilter: QueryConstraint[]
   reviews: ReviewWithUserInfo[]
   loading: boolean
   error: any | null
@@ -14,6 +15,7 @@ const initialState: RestaurantState = {
   value: [],
   divisionFilter: [],
   categoryFilter: [],
+  tagFilter: [],
   isInitialLoad: true,
   reviews: [],
   loading: false,
@@ -128,6 +130,33 @@ export const restaurantsSlice = createSlice({
           break
       }
     },
+    // 태그별 맛집 필터 적용
+    setTagFilter: (state, action) => {
+      state.isInitialLoad = true // 바뀐 필터로 첫 9개부터 로드하기 위함
+      switch (action.payload.tag as Tags) {
+        case '전체':
+          state.tagFilter = []
+          break
+        case '로컬맛집':
+          state.tagFilter = [ where("tags", "array-contains", "로컬맛집") ]
+          break
+        case '데이트':
+          state.tagFilter = [ where("tags", "array-contains", "데이트") ]
+          break
+        case '가족식사':
+          state.tagFilter = [ where("tags", "array-contains", "가족식사") ]
+          break
+        case '모임':
+          state.tagFilter = [ where("tags", "array-contains", "모임") ]
+          break
+        case '혼밥/혼술':
+          state.tagFilter = [ where("tags", "array-contains", "혼밥/혼술") ]
+          break
+        default:
+          state.tagFilter = []
+          break
+      }
+    },
   },
   extraReducers: {}
 })
@@ -143,6 +172,7 @@ export const {
   deleteReview,
   setDivisionFilter,
   setCategoryFilter,
+  setTagFilter,
 } = restaurantsSlice.actions
 
 export default restaurantsSlice.reducer

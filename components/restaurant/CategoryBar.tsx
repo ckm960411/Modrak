@@ -5,7 +5,7 @@ import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { mainColor } from "styles/GlobalStyles";
 import { useAppDispatch } from "store/hooks";
-import { setCategoryFilter, setDivisionFilter, setIsInitialLoad } from "store/restaurantsSlice";
+import { setCategoryFilter, setDivisionFilter } from "store/restaurantsSlice";
 
 const divisions: DivisionType[] = [ "전체 지역", "제주시", "애월", "한경/한림", "대정/안덕", "서귀포", "남원", "표선/성산", "구좌", "조천" ]
 
