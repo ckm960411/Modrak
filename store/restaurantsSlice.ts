@@ -3,8 +3,9 @@ import { QueryConstraint, where } from "firebase/firestore";
 
 interface RestaurantState {
   value: RestaurantWithId[]
-  divisionFilter: QueryConstraint[]
   isInitialLoad: boolean
+  divisionFilter: QueryConstraint[]
+  categoryFilter: QueryConstraint[]
   reviews: ReviewWithUserInfo[]
   loading: boolean
   error: any | null
@@ -12,6 +13,7 @@ interface RestaurantState {
 const initialState: RestaurantState = {
   value: [],
   divisionFilter: [],
+  categoryFilter: [],
   isInitialLoad: true,
   reviews: [],
   loading: false,
@@ -65,6 +67,7 @@ export const restaurantsSlice = createSlice({
     },
     // 위치별 맛집 필터 적용
     setDivisionFilter: (state, action) => {
+      state.isInitialLoad = true // 바뀐 필터로 첫 9개부터 로드하기 위함
       switch (action.payload.division as DivisionType) {
         case '전체 지역': 
           state.divisionFilter = []
@@ -101,6 +104,30 @@ export const restaurantsSlice = createSlice({
           break
       }
     },
+    // 카테고리별 맛집 필터 적용
+    setCategoryFilter: (state, action) => {
+      state.isInitialLoad = true // 바뀐 필터로 첫 9개부터 로드하기 위함
+      switch (action.payload.category as FoodCategory) {
+        case '전체':
+          state.categoryFilter = []
+          break
+        case '한식/분식': 
+          state.categoryFilter = [ where("category", "==", "한식/분식") ]
+          break
+        case '양식':
+          state.categoryFilter = [ where("category", "==", "양식") ]
+          break
+        case '일식/중식':
+          state.categoryFilter = [ where("category", "==", "일식/중식") ]
+          break
+        case '카페':
+          state.categoryFilter = [ where("category", "==", "카페") ]
+          break
+        default:
+          state.categoryFilter = []
+          break
+      }
+    },
   },
   extraReducers: {}
 })
@@ -115,6 +142,7 @@ export const {
   updateReview,
   deleteReview,
   setDivisionFilter,
+  setCategoryFilter,
 } = restaurantsSlice.actions
 
 export default restaurantsSlice.reducer
