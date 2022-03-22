@@ -17,7 +17,10 @@ const themeOptions = createTheme({
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      <Script strategy='beforeInteractive' src={ `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAOMAP_APPKEY}&autoload=false&libraries=services`}></Script>
+      <Script 
+        strategy='beforeInteractive' 
+        src={ `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAOMAP_APPKEY}&autoload=false&libraries=services`}
+      />
       <ThemeProvider theme={themeOptions}>
         <Provider store={store}>
           <GlobalStyles />

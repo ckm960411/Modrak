@@ -43,7 +43,7 @@ const CarouselList = styled.ul`
 
 const CarouselListItem = styled.li<{ activeIndex: number }>`
   display: flex;
-  max-height: 400px;
+  max-height: 600px;
   background-color: #e7e7e7;
   flex: 1 0 100%;
   transform: translateX(-${({ activeIndex }) => activeIndex * 100}%);
@@ -52,7 +52,7 @@ const CarouselListItem = styled.li<{ activeIndex: number }>`
     width: 100%;
     object-fit: contain;
     min-height: 100px;
-    max-height: 400px;
+    max-height: 600px;
   }
 `;
 
