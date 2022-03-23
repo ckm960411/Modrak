@@ -1,4 +1,4 @@
-export const accommodations = [
+export const accommodations: AccommodationWithId[] = [
   {
     id: 'asdfasdf',
     name: '서머셋 제주신화월드',
@@ -27,7 +27,8 @@ export const accommodations = [
       '46평의 넓은 공간 안에 3개의 침실, 2개의 욕실, 풀옵션 주방과 거실을 갖춘 풀옵션 스위트로 제주 가족여행의 모범답안을 제시하고 있습니다.',
       '대형 냉장고, 오븐, 와인셀러까지 갖춘 풀옵션 주방과 46평의 넓은 공간은 3대가 함께 해도 넉넉합니다. 서머셋 투숙객 전용 탐모라 수영장에서의 즐거운 수영과 투숙객 전원 무료로 제공되는 테마파크 BIG3!',
     ],
-    checkinAndOut: '체크인 15:00 ~ 체크아웃 11:00',
+    checkin: '15:00',
+    checkout: '11:00',
     convenience: ['레스토랑', '수영장', '유아시설', '카페', '키즈플레이룸', '피트니스'],
     service: ['금연', '라운지', '장애인', '짐보관', 'wifi', '주차가능', '조식서비스'],
     notice: [
@@ -80,7 +81,7 @@ export const accommodations = [
           'https://image.goodchoice.kr/resize_490x348/affiliate/2020/02/11/5e4233d785a5d.jpg',
           'https://image.goodchoice.kr/resize_490x348/affiliate/2020/02/11/5e4233d564a0c.jpg',
         ],
-        decription: [
+        description: [
           '[객실 소개]',
           '46평의 넓은 공간에 3개의 침실, 2개의 욕실, 풀옵션 주방을 갖춘 풀옵션 스위트룸',
           '서머셋 투숙객이라면, 투숙객 전원 탐모라수영장, 테마파크BIG3 이용이 무료로 제공됩니다.',

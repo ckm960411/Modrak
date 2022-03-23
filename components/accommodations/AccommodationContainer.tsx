@@ -12,7 +12,7 @@ const AccommodationContainer: FC = () => {
   return (
     <Stack spacing={2}>
       {accommodations.map(acc => (
-        <Link key={acc.id} href={acc.id}>
+        <Link key={acc.id} href={`/accommodation/${acc.id}`}>
           <a>
             <AccommodationCard downSm={downSm}>
               <img 
