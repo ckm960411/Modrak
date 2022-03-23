@@ -11,10 +11,14 @@ import { useAppSelector } from "store/hooks";
 import styled from "@emotion/styled";
 
 const RestaurantCard = styled('a')`
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
   transition: all .2s;
+  overflow: hidden;
   &:hover {
     z-index: 1;
     box-shadow: 0px 5px 5px -3px rgb(0 0 0 / 20%), 0px 8px 10px 1px rgb(0 0 0 / 14%), 0px 3px 14px 2px rgb(0 0 0 / 12%);
+    transform: translateY(-4px);
   }
 `
 
@@ -71,6 +75,7 @@ const FoodListContainer: FC = () => {
                     </div>
                   )}
                   position="below"
+                  sx={{ p: 1 }}
                 />
               </ImageListItem>
             </RestaurantCard>
