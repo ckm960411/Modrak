@@ -29,20 +29,15 @@ const CategoryBar: FC = () => {
   const [divisionSelect, setDivisionSelect] = useState<DivisionType>("전체 지역")
   const [accommodationCategory, setAccommodationCategory] = useState<AccommodationCategories>("전체")
   const [expanded, setExpanded] = useState(true);
-
-  const handleCategory = (e: React.MouseEvent<HTMLElement>) => {
-    const { innerText } = e.target as HTMLElement
-    setAccommodationCategory(innerText as AccommodationCategories)
-  }
-
   const theme = useTheme()
   const downSm = useMediaQuery(theme.breakpoints.down('sm'))
 
   const handleExpandClick = () => setExpanded(!expanded);
-
-  const handleChange = (e: SelectChangeEvent) => {
-    setDivisionSelect(e.target.value as DivisionType)
-  };
+  const handleChangeDivision = (e: SelectChangeEvent) => setDivisionSelect(e.target.value as DivisionType)
+  const handleCategory = (e: React.MouseEvent<HTMLElement>) => {
+    const { innerText } = e.target as HTMLElement
+    setAccommodationCategory(innerText as AccommodationCategories)
+  }
 
   useEffect(() => {
     if (downSm) 
@@ -52,7 +47,7 @@ const CategoryBar: FC = () => {
   }, [downSm])
 
   return (
-    <Card raised>
+    <Card raised sx={{ zIndex: 1 }}>
       <CardContent>
         <Stack direction="row" spacing={1} sx={{ justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
           <>{downSm || <Typography>현재 보고 계신 지역은</Typography>}</>
@@ -61,7 +56,7 @@ const CategoryBar: FC = () => {
             id="division-select"
             size="small"
             value={divisionSelect}
-            onChange={handleChange}
+            onChange={handleChangeDivision}
             sx={{ flexGrow: 1, maxWidth: '160px', fontFamily: 'Katuri' }}
           >
             {divisions.map(division => <MenuItem key={division} value={division}>{division}</MenuItem>)}

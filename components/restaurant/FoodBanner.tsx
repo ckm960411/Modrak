@@ -11,7 +11,7 @@ const banners = [
 const FoodBanner: FC = () => {
   return (
     <div>
-      <Typography sx={{ fontFamily: 'Katuri', mb: 1 }}>요즘 뜨는 제주 맛집!</Typography>
+      <Typography sx={{ fontFamily: 'Katuri', mt: 2, mb: 1 }}>요즘 뜨는 제주 맛집!</Typography>
       <MyCarousel imgsArray={banners} />
     </div>
   )
