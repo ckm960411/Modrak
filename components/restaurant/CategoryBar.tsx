@@ -8,6 +8,7 @@ import { useAppDispatch } from "store/hooks";
 import { setCategoryFilter, setDivisionFilter } from "store/restaurantsSlice";
 
 const divisions: DivisionType[] = [ "전체 지역", "제주시", "애월", "한경/한림", "대정/안덕", "서귀포", "남원", "표선/성산", "구좌", "조천" ]
+type RestaurantCategories = "전체" | "한식/분식" | "양식" | "일식/중식" | "카페"
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -28,12 +29,8 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 const CategoryBar: FC = () => {
   const [divisionSelect, setDivisionSelect] = useState<DivisionType>("전체 지역")
+  const [restaurantCategory, setRestaurantCategory] = useState<RestaurantCategories>('전체')
   const [expanded, setExpanded] = useState(true);
-  const [allClicked, setAllClicked] = useState(true)
-  const [koreanClicked, setKoreanClicked] = useState(false)
-  const [westernClicked, setWesternClicked] = useState(false)
-  const [japaneseClicked, setJapaneseClicked] = useState(false)
-  const [cafeClicked, setCafeClicked] = useState(false)
   
   const dispatch = useAppDispatch()
 
@@ -47,28 +44,9 @@ const CategoryBar: FC = () => {
     dispatch(setDivisionFilter({ division: e.target.value as DivisionType }))
   };
 
-  const clearAllCategory = () => {
-    setAllClicked(false)
-    setKoreanClicked(false)
-    setWesternClicked(false)
-    setJapaneseClicked(false)
-    setCafeClicked(false)
-  }
-
   const handleCategory = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { innerText } = e.target as HTMLElement
-    clearAllCategory()
-    if (innerText === '전체') {
-      setAllClicked(true)
-    } else if (innerText === '한식/분식') {
-      setKoreanClicked(true)
-    } else if (innerText === '양식') {
-      setWesternClicked(true)
-    } else if (innerText === '일식/중식') {
-      setJapaneseClicked(true)
-    } else if (innerText === '카페') {
-      setCafeClicked(true)
-    }
+    setRestaurantCategory(innerText as RestaurantCategories)
     dispatch(setCategoryFilter({ category: innerText }))
   }
   
@@ -110,11 +88,11 @@ const CategoryBar: FC = () => {
           <Divider />
           <CardContent>
             <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', justifyContent: 'center' }}>
-              <Button variant={allClicked ? "contained" : "outlined"} onClick={handleCategory}>전체</Button>
-              <Button variant={koreanClicked ? "contained" : "outlined"} onClick={handleCategory}>한식/분식</Button>
-              <Button variant={westernClicked ? "contained" : "outlined"} onClick={handleCategory}>양식</Button>
-              <Button variant={japaneseClicked ? "contained" : "outlined"} onClick={handleCategory}>일식/중식</Button>
-              <Button variant={cafeClicked ? "contained" : "outlined"} onClick={handleCategory}>카페</Button>
+              <Button variant={restaurantCategory === '전체' ? "contained" : "outlined"} onClick={handleCategory}>전체</Button>
+              <Button variant={restaurantCategory === '한식/분식' ? "contained" : "outlined"} onClick={handleCategory}>한식/분식</Button>
+              <Button variant={restaurantCategory === '양식' ? "contained" : "outlined"} onClick={handleCategory}>양식</Button>
+              <Button variant={restaurantCategory === '일식/중식' ? "contained" : "outlined"} onClick={handleCategory}>일식/중식</Button>
+              <Button variant={restaurantCategory === '카페' ? "contained" : "outlined"} onClick={handleCategory}>카페</Button>
             </Stack>
           </CardContent>
         </Collapse>
