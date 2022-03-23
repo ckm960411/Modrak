@@ -46,12 +46,12 @@ const FoodTagbar: FC = () => {
       <CardContent>
         <Typography sx={{ fontFamily: 'Katuri' }}>에디터 픽 추천태그!</Typography>
         <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', mt: 1 }}>
-          <Chip id="restaurant-tag" onClick={handleTags} label="전체" variant={allTag ? "filled" : "outlined"} />
-          <Chip id="restaurant-tag" onClick={handleTags} label="로컬맛집" variant={localTag ? "filled" : "outlined"} />
-          <Chip id="restaurant-tag" onClick={handleTags} label="데이트" variant={dateTag ? "filled" : "outlined"} />
-          <Chip id="restaurant-tag" onClick={handleTags} label="가족식사" variant={familyTag ? "filled" : "outlined"} />
-          <Chip id="restaurant-tag" onClick={handleTags} label="모임" variant={meetingTag ? "filled" : "outlined"} />
-          <Chip id="restaurant-tag" onClick={handleTags} label="혼밥/혼술" variant={soloTag ? "filled" : "outlined"} />
+          <Chip id="filter-tag" onClick={handleTags} label="전체" variant={allTag ? "filled" : "outlined"} />
+          <Chip id="filter-tag" onClick={handleTags} label="로컬맛집" variant={localTag ? "filled" : "outlined"} />
+          <Chip id="filter-tag" onClick={handleTags} label="데이트" variant={dateTag ? "filled" : "outlined"} />
+          <Chip id="filter-tag" onClick={handleTags} label="가족식사" variant={familyTag ? "filled" : "outlined"} />
+          <Chip id="filter-tag" onClick={handleTags} label="모임" variant={meetingTag ? "filled" : "outlined"} />
+          <Chip id="filter-tag" onClick={handleTags} label="혼밥/혼술" variant={soloTag ? "filled" : "outlined"} />
         </Stack>
       </CardContent>
     </Card>

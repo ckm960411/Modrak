@@ -115,11 +115,11 @@ const GlobalStyles = () => {
           alignItems: 'flex-start',
         },
         // 맛집 태그 필터 색깔 스타일링
-        'div#restaurant-tag.MuiChip-filledDefault': {
+        'div#filter-tag.MuiChip-filledDefault': {
           backgroundColor: mainColor,
           color: '#fff',
         },
-        'div#restaurant-tag.MuiChip-outlinedDefault': {
+        'div#filter-tag.MuiChip-outlinedDefault': {
           border: `1px solid ${mainColor}`,
           color: mainColor,
         }
