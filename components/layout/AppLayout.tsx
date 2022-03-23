@@ -28,9 +28,10 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  backgroundColor: '#f0f7f1',
+  backgroundColor: '#fff',
   minHeight: '100vh',
   marginLeft: `-${drawerWidth}px`,
+  position: 'relative',
   ...(open && {
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,

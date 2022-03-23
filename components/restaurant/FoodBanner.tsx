@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Card, CardContent, Divider, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import MyCarousel from "components/parts/MyCarousel";
 
 const banners = [
@@ -10,15 +10,10 @@ const banners = [
 
 const FoodBanner: FC = () => {
   return (
-    <>
-      <Card raised>
-        <CardContent>
-          <Typography sx={{ fontFamily: 'Katuri' }}>요즘 뜨는 제주 맛집!</Typography>
-          <Divider sx={{ mt: 1, mb: 2 }} />
-          <MyCarousel imgsArray={banners} />
-        </CardContent> 
-      </Card>
-    </>
+    <div>
+      <Typography sx={{ fontFamily: 'Katuri', mb: 1 }}>요즘 뜨는 제주 맛집!</Typography>
+      <MyCarousel imgsArray={banners} />
+    </div>
   )
 }
 

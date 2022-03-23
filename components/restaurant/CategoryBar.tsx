@@ -59,7 +59,7 @@ const CategoryBar: FC = () => {
 
   return (
     <>
-      <Card raised>
+      <Card raised sx={{ zIndex: 1 }}>
         <CardContent>
           <Stack direction="row" spacing={1} sx={{ justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
             <>{downSm || <Typography>현재 보고 계신 지역은</Typography>}</>
