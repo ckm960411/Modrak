@@ -5,7 +5,7 @@ import SubmitFormButton from "components/parts/SubmitFormButton";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import searchFirestoreDoc from "utils/searchFirestoreDoc";
 import { updateDoc } from "firebase/firestore";
-import { updateComment } from "store/feedsSlice";
+import { updateComment } from "store/slices/feedsSlice";
 
 type CommentEditFormProps = {
   setEditing: Dispatch<SetStateAction<boolean>>

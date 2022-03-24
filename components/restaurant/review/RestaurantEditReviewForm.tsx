@@ -2,7 +2,7 @@ import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { Alert, CardContent, Dialog, Rating, Stack } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { updateDoc } from "firebase/firestore";
-import { updateReview } from "store/restaurantsSlice";
+import { updateReview } from "store/slices/restaurantsSlice";
 import uploadImagesDB from "utils/uploadImagesDB";
 import searchFirestoreDoc from "utils/searchFirestoreDoc";
 import TextInput from "components/parts/TextInput";

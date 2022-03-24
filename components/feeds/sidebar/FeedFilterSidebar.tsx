@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { initializeFilter, setFilter } from "store/filterSlice";
-import { setIsInitialLoad } from "store/feedsSlice";
+import { initializeFilter, setFilter } from "store/slices/filterSlice";
+import { setIsInitialLoad } from "store/slices/feedsSlice";
 
 type FeedFilterSidebarProps = {
   filterOpened: boolean

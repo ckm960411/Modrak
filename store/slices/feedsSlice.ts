@@ -1,13 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
-import type { RootState } from 'store/configureStore'
 
-interface UserState {
+export interface FeedState {
   value: FeedWithUserInfoType[]
   isInitialLoad: boolean
   error: any | null
 }
 
-const initialState: UserState = {
+const initialState: FeedState = {
   value: [],
   isInitialLoad: true,
   error: null
@@ -134,6 +133,5 @@ export const {
   deleteComment,
 } = feedsSlice.actions
 
-export const selectFeed = (state: RootState) => state.feeds.value
 
 export default feedsSlice.reducer

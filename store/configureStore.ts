@@ -1,23 +1,17 @@
-import { configureStore } from '@reduxjs/toolkit'
-import userReducer from 'store/usersSlice'
-import feedReducer from 'store/feedsSlice'
-import filterReducer from 'store/filterSlice'
-import restaurantReducer from 'store/restaurantsSlice'
-import roomsReducer from 'store/roomsSlice'
+import { AnyAction, configureStore, Reducer, Store } from '@reduxjs/toolkit'
+import { createWrapper } from 'next-redux-wrapper'
+import rootReducer, { IState } from 'store/reducer'
 
-export const store = configureStore({
-  reducer: {
-    users: userReducer,
-    feeds: feedReducer,
-    filter: filterReducer,
-    restaurants: restaurantReducer,
-    rooms: roomsReducer,
-  },
-  middleware: (getDefaultMiddleware) => 
-    getDefaultMiddleware({
-      serializableCheck: false
-    })
-})
+const createStore = () => {
+  const store = configureStore({
+    reducer: rootReducer as Reducer<IState, AnyAction>,
+  })
+  return store
+}
+const store = createStore()
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
+
+const wrapper = createWrapper<Store<IState>>(createStore)
+export default wrapper

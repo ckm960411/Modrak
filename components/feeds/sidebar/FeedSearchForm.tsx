@@ -7,8 +7,8 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
 import { useAppDispatch } from "store/hooks";
-import { setSearchNicknameFilter, setSearchTagFilter } from "store/filterSlice";
-import { setIsInitialLoad } from "store/feedsSlice";
+import { setSearchNicknameFilter, setSearchTagFilter } from "store/slices/filterSlice";
+import { setIsInitialLoad } from "store/slices/feedsSlice";
 
 type SearchFilterType = "nickname" | "tag"
 

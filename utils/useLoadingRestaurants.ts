@@ -2,7 +2,7 @@ import { RefObject, useEffect, useState } from "react"
 import { dbService } from "fireBaseApp/fBase"
 import { collection, DocumentData, getDocs, limit, orderBy, query, QueryDocumentSnapshot, startAfter } from "firebase/firestore"
 import { useAppDispatch, useAppSelector } from "store/hooks"
-import { clearRestaurantsData, setIsInitialLoad, setRestaurantsData } from "store/restaurantsSlice"
+import { clearRestaurantsData, setIsInitialLoad, setRestaurantsData } from "store/slices/restaurantsSlice"
 
 const useLoadingRestaurants = (reference: RefObject<HTMLDivElement>) => {
   const dispatch = useAppDispatch()

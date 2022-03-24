@@ -3,7 +3,7 @@ import { CardContent, CardHeader, Divider, Input, Rating, Stack, Typography } fr
 import { v4 as uuid_v4 } from "uuid";
 import { updateDoc } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { addReview } from "store/restaurantsSlice";
+import { addReview } from "store/slices/restaurantsSlice";
 import searchFirestoreDoc from "utils/searchFirestoreDoc";
 import uploadImagesDB from "utils/uploadImagesDB";
 import TextInput from "components/parts/TextInput";

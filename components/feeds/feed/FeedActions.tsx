@@ -10,8 +10,8 @@ import styled from "@emotion/styled";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { updateDoc } from "firebase/firestore";
 import searchFirestoreDoc from "utils/searchFirestoreDoc";
-import { addFeedBookmarkUserUid, addFeedLikeUserUid, removeFeedBookmarkUserUid, removeFeedLikeUserUid } from "store/feedsSlice";
-import { addBookmarkFeedRef, addLikeFeedRef, removeBookmarkFeedRef, removeLikeFeedRef } from "store/usersSlice";
+import { addFeedBookmarkUserUid, addFeedLikeUserUid, removeFeedBookmarkUserUid, removeFeedLikeUserUid } from "store/slices/feedsSlice";
+import { addBookmarkFeedRef, addLikeFeedRef, removeBookmarkFeedRef, removeLikeFeedRef } from "store/slices/usersSlice";
 import { mainColor } from "styles/GlobalStyles";
 
 interface ExpandMoreProps extends IconButtonProps {

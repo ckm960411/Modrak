@@ -3,7 +3,7 @@ import { styled } from "@mui/material/styles";
 import { authService } from "fireBaseApp/fBase";
 import { browserSessionPersistence, onAuthStateChanged, setPersistence } from "firebase/auth";
 import { useAppDispatch } from "store/hooks";
-import { loadMyInfoData } from "store/usersSlice";
+import { loadMyInfoData } from "store/slices/usersSlice";
 import { Box, Container, useMediaQuery, useTheme } from "@mui/material";
 import Navbar from "components/layout/Navbar";
 import Sidebar from "components/layout/Sidebar";

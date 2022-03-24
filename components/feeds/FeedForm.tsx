@@ -7,9 +7,9 @@ import InputFileForm from "components/parts/InputFileForm";
 import PreviewImagesTab from "components/feeds/PreviewImagesTab";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import uploadImagesDB from "utils/uploadImagesDB";
-import { addFeeds } from "store/feedsSlice";
+import { addFeeds } from "store/slices/feedsSlice";
 import SubmitFormButton from "components/parts/SubmitFormButton";
-import { addFeedInfo } from "store/usersSlice";
+import { addFeedInfo } from "store/slices/usersSlice";
 import searchFirestoreDoc from "utils/searchFirestoreDoc";
 import TagInput from "components/parts/TagInput";
 

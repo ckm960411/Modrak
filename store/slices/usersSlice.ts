@@ -1,12 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
-import type { RootState } from 'store/configureStore'
 
-interface UserState {
+export interface UserState {
   myInfo: UserType | null
   loading: boolean
   error: any | null
 }
-
 const initialState: UserState = {
   myInfo: null,
   loading: false,
@@ -96,6 +94,5 @@ export const {
   removeBookmarkRestaurant,
 } = usersSlice.actions
 
-export const selectUser = (state: RootState) => state.users.myInfo
 
 export default usersSlice.reducer

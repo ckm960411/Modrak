@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-interface RoomState {
+export interface RoomState {
   value: any[]
   roomData: any | null
 }

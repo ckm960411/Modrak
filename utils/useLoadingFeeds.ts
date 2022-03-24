@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { collection, DocumentData, getDocs, limit, orderBy, query, QueryDocumentSnapshot, startAfter } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { clearFeeds, setFeeds, setIsInitialLoad } from "store/feedsSlice";
+import { clearFeeds, setFeeds, setIsInitialLoad } from "store/slices/feedsSlice";
 import searchFirestoreDoc from "utils/searchFirestoreDoc";
 
 const useLoadingFeeds: UseLoadingFeedsType = (reference) => {

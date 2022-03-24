@@ -10,7 +10,7 @@ const RoomInfoHeader: FC = () => {
   const downMd = useMediaQuery(theme.breakpoints.down(1000))
   const roomData: AccommodationWithId = useAppSelector(state => state.rooms.roomData)
 
-  if(!roomData) return <div>Loading...</div>
+  // if(!roomData) return <div>Loading...</div>
 
   const { name, tags, rating, address, images } = roomData
 

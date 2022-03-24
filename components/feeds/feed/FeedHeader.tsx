@@ -8,9 +8,9 @@ import { format } from "date-fns";
 import formatDistanceToNowKo from "utils/formatDistanceToNowKo";
 import { deleteDoc, updateDoc } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { deleteFeed } from "store/feedsSlice";
+import { deleteFeed } from "store/slices/feedsSlice";
 import searchFirestoreDoc from "utils/searchFirestoreDoc";
-import { deleteFeedInfo } from "store/usersSlice";
+import { deleteFeedInfo } from "store/slices/usersSlice";
 
 const NicknameTypo = styled(Typography)`
   font-family: 'Katuri';

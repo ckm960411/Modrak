@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { QueryConstraint, where } from "firebase/firestore";
 
-interface RestaurantState {
+export interface RestaurantState {
   value: RestaurantWithId[]
   isInitialLoad: boolean
   divisionFilter: QueryConstraint[]

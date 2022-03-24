@@ -9,7 +9,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { dbService } from "fireBaseApp/fBase";
 import { mainColor } from "styles/GlobalStyles";
-import { addBookmarkRestaurant, addRecommendRestaurant, removeBookmarkRestaurant, removeRecommendRestaurant } from "store/usersSlice";
+import { addBookmarkRestaurant, addRecommendRestaurant, removeBookmarkRestaurant, removeRecommendRestaurant } from "store/slices/usersSlice";
 import MyCarousel from "components/parts/MyCarousel";
 import Map from "components/parts/Map";
 

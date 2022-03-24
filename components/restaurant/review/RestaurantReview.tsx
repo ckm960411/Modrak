@@ -6,7 +6,7 @@ import defaultImg from "public/imgs/profileImg.png"
 import { format } from "date-fns";
 import { updateDoc } from "firebase/firestore";
 import { useAppDispatch } from "store/hooks";
-import { deleteReview } from "store/restaurantsSlice";
+import { deleteReview } from "store/slices/restaurantsSlice";
 import formatDistanceToNowKo from "utils/formatDistanceToNowKo";
 import searchFirestoreDoc from "utils/searchFirestoreDoc";
 import EditMenu from "components/parts/EditMenu";

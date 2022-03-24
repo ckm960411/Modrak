@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { Chip, Stack, Typography } from "@mui/material";
 import { useAppDispatch } from "store/hooks";
-import { setTagFilter } from "store/restaurantsSlice";
+import { setTagFilter } from "store/slices/restaurantsSlice";
 
 type RestaurantTags = "전체" | "로컬맛집" | "데이트" | "가족식사" | "모임" | "혼밥/혼술"
 

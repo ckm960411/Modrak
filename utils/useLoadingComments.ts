@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import searchFirestoreDoc from "utils/searchFirestoreDoc";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { setComments, clearComments } from "store/feedsSlice";
+import { setComments, clearComments } from "store/slices/feedsSlice";
 
 const LoadMoreCommentLength = 3 // 한번에 가져올 댓글의 개수
 

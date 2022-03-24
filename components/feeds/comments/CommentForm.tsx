@@ -4,7 +4,7 @@ import { v4 as uuid_v4 } from "uuid";
 import { updateDoc } from "firebase/firestore";
 import searchFirestoreDoc from "utils/searchFirestoreDoc";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { addComment } from "store/feedsSlice";
+import { addComment } from "store/slices/feedsSlice";
 import TextInput from "components/parts/TextInput";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 

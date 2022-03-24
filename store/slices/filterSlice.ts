@@ -1,8 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { orderBy, QueryConstraint, where } from 'firebase/firestore'
-import type { RootState } from 'store/configureStore'
 
-interface FilterState {
+export interface FilterState {
   value: QueryConstraint[]
 }
 
@@ -82,6 +81,5 @@ export const {
   setSearchTagFilter
 } = filterSlice.actions
 
-export const selectFilter = (state: RootState) => state.filter.value
 
 export default filterSlice.reducer

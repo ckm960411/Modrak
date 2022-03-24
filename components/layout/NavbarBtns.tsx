@@ -4,7 +4,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Badge, Button, IconButton, Stack, Tooltip } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { removeMyInfoData } from "store/usersSlice";
+import { removeMyInfoData } from "store/slices/usersSlice";
 import CertificationModal from "components/login/CertificationModal";
 
 export type CertificationType = "로그인" | "회원가입"

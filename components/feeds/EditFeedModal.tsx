@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import uploadImagesDB from "utils/uploadImagesDB";
 import { doc, updateDoc } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
-import { updateFeed } from "store/feedsSlice";
+import { updateFeed } from "store/slices/feedsSlice";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 import TagInput from "components/parts/TagInput";
 

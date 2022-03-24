@@ -4,7 +4,7 @@ import { Avatar, Card, CardHeader, Divider, Typography } from "@mui/material";
 import { format } from "date-fns";
 import { updateDoc } from "firebase/firestore";
 import { useAppDispatch } from "store/hooks";
-import { deleteComment } from "store/feedsSlice";
+import { deleteComment } from "store/slices/feedsSlice";
 import formatDistanceToNowKo from "utils/formatDistanceToNowKo";
 import searchFirestoreDoc from "utils/searchFirestoreDoc";
 import defaultImg from "public/imgs/profileImg.png"
