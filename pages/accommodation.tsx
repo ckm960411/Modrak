@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import Head from "next/head";
-import { Stack, useMediaQuery, useTheme } from "@mui/material";
+import { useMediaQuery, useTheme } from "@mui/material";
 import CategoryBar from "components/accommodations/CategoryBar";
 import ImageBanner from "components/accommodations/ImageBanner";
 import AccommodationContainer from "components/accommodations/AccommodationContainer";

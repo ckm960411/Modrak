@@ -1,12 +1,13 @@
-import { accommodations } from "dummyData/accommodation"
+import { collection, getDocs } from "firebase/firestore"
+import { dbService } from "fireBaseApp/fBase"
 
 export const getAllAccommodationsId = async () => {
-  const accommodationsData = accommodations
-  return accommodationsData.map(accommodation => {
+  const accommodationsRef = collection(dbService, "accommodations")
+  return await getDocs(accommodationsRef).then(res => res.docs.map(doc => {
     return {
       params: {
-        id: accommodation.id
+        id: doc.id
       }
     }
-  })
+  }))
 }
