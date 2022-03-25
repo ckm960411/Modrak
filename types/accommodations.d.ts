@@ -31,3 +31,18 @@ declare interface RoomType {
   images: string[]
   description: string[]
 }
+
+declare interface RoomReviewType {
+  reviewId: string
+  roomId: string
+  userUid: string
+  reviewText: string
+  reviewImages: string[]
+  rating: number
+  createdAt: number
+  modifiedAt: number
+}
+declare interface RoomReviewWithUserInfo extends RoomReviewType {
+  nickname: string
+  profileImg: string
+}

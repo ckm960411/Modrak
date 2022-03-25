@@ -8,6 +8,7 @@ export interface RoomState {
   divisionFilter: QueryConstraint[]
   categoryFilter: QueryConstraint[]
   tagFilter: QueryConstraint[]
+  reviews: RoomReviewWithUserInfo[]
 }
 const initialState: RoomState = {
   value: [],
@@ -16,6 +17,7 @@ const initialState: RoomState = {
   divisionFilter: [],
   categoryFilter: [],
   tagFilter: [],
+  reviews: [],
 }
 
 export const roomsSlice = createSlice({
@@ -39,6 +41,10 @@ export const roomsSlice = createSlice({
     // 숙소 상세페이지 접속시 숙소 정보를 roomData 에 저장
     addRoomInfo: (state, action) => {
       state.roomData = action.payload
+    },
+    // 리뷰 작성시 기존 리뷰 제일 위에 추가 (action.payload 로 리뷰객체가 1개씩 들어옴)
+    addRoomReview: (state, action) => {
+      state.reviews.unshift(action.payload)
     },
     // 위치별 숙소 필터 적용
     setDivisionFilter: (state, action) => {
@@ -139,6 +145,7 @@ export const {
   setAccommodationsData,
   clearAccommodationsData,
   addRoomInfo,
+  addRoomReview,
   setDivisionFilter,
   setCategoryFilter,
   setTagFilter,
