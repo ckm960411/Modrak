@@ -1,26 +1,18 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
+import Image from "next/image";
 import { Avatar, CardContent, CardHeader, Divider, Rating, Stack, Typography } from "@mui/material";
+import styled from "@emotion/styled";
+import { format } from "date-fns";
+import formatDistanceToNowKo from "utils/functions/formatDistanceToNowKo";
 import defaultImg from "public/imgs/profileImg.png"
 import EditMenu from "components/parts/EditMenu";
-import styled from "@emotion/styled";
-import Image from "next/image";
 
-const images = [
-  "https://img.siksinhot.com/place/1453703909205496.jpg?w=540&h=436&c=X",
-  "https://img.siksinhot.com/place/1453703956080502.jpg?w=307&h=300&c=Y",
-  "https://img.siksinhot.com/place/1453703984518506.jpg?w=307&h=300&c=Y",
-  "https://img.siksinhot.com/place/1453703909204495.jpg?w=307&h=300&c=Y",
-  "https://img.siksinhot.com/place/1453703956080502.jpg?w=307&h=300&c=Y",
-  "https://img.siksinhot.com/place/1453703984518506.jpg?w=307&h=300&c=Y",
-  "https://img.siksinhot.com/place/1453703909204495.jpg?w=307&h=300&c=Y",
-  "https://img.siksinhot.com/place/1453703956080502.jpg?w=307&h=300&c=Y",
-  "https://img.siksinhot.com/place/1453703984518506.jpg?w=307&h=300&c=Y",
-  "https://img.siksinhot.com/place/1453703909204495.jpg?w=307&h=300&c=Y",
-  "https://img.siksinhot.com/place/1453703956080502.jpg?w=307&h=300&c=Y",
-]
-
-const AccommodationReview: FC = () => {
+const AccommodationReview: FC<{reviewData: RoomReviewWithUserInfo}> = ({ reviewData }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+  const [timeAgo, setTimeAgo] = useState<string>("0");
+  const [date, setDate] = useState<string>('')
+
+  const { reviewText, reviewImages, rating, createdAt, modifiedAt, userUid, nickname, profileImg } = reviewData
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () =>  setAnchorEl(null);
@@ -29,16 +21,26 @@ const AccommodationReview: FC = () => {
 
   const onDeleteReview = async () => {}
 
+  useEffect(() => {
+    if (createdAt === modifiedAt) {
+      setTimeAgo(`${formatDistanceToNowKo(createdAt)} 전`);
+      setDate(format(createdAt, 'yyyy년 MM월 d일 H시 m분'))
+    } else {
+      setTimeAgo(`${formatDistanceToNowKo(modifiedAt)} 전 수정됨`);
+      setDate(format(modifiedAt, 'yyyy년 MM월 d일 H시 m분'))
+    }
+  }, [createdAt, modifiedAt, setTimeAgo]);
+
   return (
     <ReviewCard>
       <CardHeader 
         id="accommodation-review-header"
-        avatar={<Avatar alt="닉네임" src={defaultImg.src} />}
-        title={<NicknameTypo>닉네임</NicknameTypo>}
-        subheader={<Typography variant="caption">2022년 3월 26일 06시 44분 (0초 전)</Typography>}
+        avatar={<Avatar alt={nickname} src={profileImg ? profileImg : defaultImg.src} />}
+        title={<NicknameTypo>{nickname}</NicknameTypo>}
+        subheader={<Typography variant="caption">{`${date} (${timeAgo})`}</Typography>}
         action={
           <EditMenu
-            userUid="유저uid"
+            userUid={userUid}
             anchorEl={anchorEl}
             handleClick={handleClick}
             handleClose={handleClose}
@@ -50,19 +52,19 @@ const AccommodationReview: FC = () => {
       />
       <CardContent sx={{ pt: 0, px: 0 }}>
         <Stack direction="row" spacing={1} sx={{ overflowX: 'scroll' }}>
-          {images.map((img, i) => (
+          {reviewImages.map((img, i) => (
             <ImageWrapper key={i}>
               <Image alt="사진" src={img} layout="fill" objectFit="contain" />
             </ImageWrapper>
           ))}
         </Stack>
-        {images[0] && <div style={{ height: '8px' }}></div>}
+        {reviewImages[0] && <div style={{ height: '8px' }}></div>}
         <Stack direction="row" spacing={0.5} sx={{ alignItems: 'center' }}>
-          <Rating value={5} precision={0.1} readOnly />
-          <span>({5})</span>
+          <Rating value={rating} precision={0.1} readOnly />
+          <span>({rating})</span>
         </Stack>
         <Typography variant="body2" sx={{ color: '#000' }}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem porro a consequuntur quos laudantium rerum, veritatis reiciendis debitis ipsam accusamus.
+          {reviewText}
         </Typography>
       </CardContent>
       <Divider />

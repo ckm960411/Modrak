@@ -46,6 +46,14 @@ export const roomsSlice = createSlice({
     addRoomReview: (state, action) => {
       state.reviews.unshift(action.payload)
     },
+    // 서버에서 가져온 리뷰들을 저장 (action.payload 로 리뷰객체가 1개씩 들어옴)
+    setRoomReviews: (state, action) => {
+      state.reviews = [ ...state.reviews, action.payload ]
+    },
+    // 모든 리뷰 상태들을 지움
+    clearRoomReviews: (state) => {
+      state.reviews = []
+        },
     // 위치별 숙소 필터 적용
     setDivisionFilter: (state, action) => {
       state.isInitialLoad = true // 바뀐 필터로 첫 몇개부터 로드하기 위함
@@ -146,6 +154,8 @@ export const {
   clearAccommodationsData,
   addRoomInfo,
   addRoomReview,
+  setRoomReviews,
+  clearRoomReviews,
   setDivisionFilter,
   setCategoryFilter,
   setTagFilter,
