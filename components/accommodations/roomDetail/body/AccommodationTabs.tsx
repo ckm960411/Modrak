@@ -15,7 +15,7 @@ const TabPanel = (props: TabPanelProps) => {
     <div role="tabpanel" hidden={value !== index} {...other}>
       {value === index && (
         <Box sx={{ pt: 2 }}>
-          <Typography>{children}</Typography>
+          <Typography component="div">{children}</Typography>
         </Box>
       )}
     </div>

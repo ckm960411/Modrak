@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export interface RoomState {
   value: any[]
-  roomData: any | null
+  roomData: AccommodationWithId | null
 }
 const initialState: RoomState = {
   value: [],
