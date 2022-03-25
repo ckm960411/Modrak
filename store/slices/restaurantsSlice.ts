@@ -7,7 +7,7 @@ export interface RestaurantState {
   divisionFilter: QueryConstraint[]
   categoryFilter: QueryConstraint[]
   tagFilter: QueryConstraint[]
-  reviews: ReviewWithUserInfo[]
+  reviews: RestaurantReviewWithUserInfo[]
   loading: boolean
   error: any | null
 }
@@ -41,20 +41,20 @@ export const restaurantsSlice = createSlice({
       state.value = []
     },
     // 리뷰 작성시 기존 리뷰 제일 위에 추가 (action.payload 로 리뷰객체가 1개씩 들어옴)
-    addReview: (state, action) => {
+    addRestaurantReview: (state, action) => {
       state.reviews.unshift(action.payload)
     },
     // 서버에서 가져온 리뷰들을 저장 (action.payload 로 리뷰객체가 1개씩 들어옴)
-    setReviews: (state, action) => {
+    setRestaurantReviews: (state, action) => {
       state.reviews = [ ...state.reviews, action.payload ]
     },
     // 모든 리뷰 상태들을 지움
-    clearReviews: (state) => {
+    clearRestaurantReviews: (state) => {
       state.reviews = []
     },
     // 수정하려는 리뷰를 찾아 해당 리뷰를 수정함
     // (action.payload 에는 reviewId, reviewText, reviewImages, modifiedAt 이 객체로 들어옴)
-    updateReview: (state, action) => {
+    updateRestaurantReview: (state, action) => {
       const finded = state.reviews.find(review => review.reviewId === action.payload.reviewId)
       if (!finded) return
       finded.reviewText = action.payload.reviewText
@@ -64,7 +64,7 @@ export const restaurantsSlice = createSlice({
     },
     // 삭제하려는 리뷰를 찾아 해당 리뷰를 삭제함
     // (action.payload 에는 reviewId 를 담은 객체가 들어옴)
-    deleteReview: (state, action) => {
+    deleteRestaurantReview: (state, action) => {
       state.reviews = state.reviews.filter(review => review.reviewId !== action.payload.reviewId)
     },
     // 위치별 맛집 필터 적용
@@ -165,11 +165,11 @@ export const {
   setIsInitialLoad,
   setRestaurantsData,
   clearRestaurantsData,
-  addReview,
-  setReviews, 
-  clearReviews,
-  updateReview,
-  deleteReview,
+  addRestaurantReview,
+  setRestaurantReviews, 
+  clearRestaurantReviews,
+  updateRestaurantReview,
+  deleteRestaurantReview,
   setDivisionFilter,
   setCategoryFilter,
   setTagFilter,

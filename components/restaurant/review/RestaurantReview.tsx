@@ -6,7 +6,7 @@ import defaultImg from "public/imgs/profileImg.png"
 import { format } from "date-fns";
 import { updateDoc } from "firebase/firestore";
 import { useAppDispatch } from "store/hooks";
-import { deleteReview } from "store/slices/restaurantsSlice";
+import { deleteRestaurantReview } from "store/slices/restaurantsSlice";
 import formatDistanceToNowKo from "utils/functions/formatDistanceToNowKo";
 import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import EditMenu from "components/parts/EditMenu";
@@ -27,7 +27,7 @@ const NicknameTypo = styled(Typography)`
   color: #353535;
 `
 
-const RestaurantReview: FC<{reviewData: ReviewWithUserInfo}> = ({ reviewData }) => {
+const RestaurantReview: FC<{reviewData: RestaurantReviewWithUserInfo}> = ({ reviewData }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const [timeAgo, setTimeAgo] = useState<string>("0");
   const [date, setDate] = useState<string>('')
@@ -50,10 +50,10 @@ const RestaurantReview: FC<{reviewData: ReviewWithUserInfo}> = ({ reviewData }) 
 
     const { searchedDocRef: reviewDocRef, searchedData: reviewData } = await searchFirestoreDoc(`reviews/${restaurantId}`)
     const reviewsArray = reviewData!.reviews
-    const filteredReviews = reviewsArray.filter((review: ReviewType) => review.reviewId !== reviewId)
+    const filteredReviews = reviewsArray.filter((review: RestaurantReviewType) => review.reviewId !== reviewId)
 
     await updateDoc(reviewDocRef, { reviews: filteredReviews })
-    dispatch(deleteReview({ reviewId }))
+    dispatch(deleteRestaurantReview({ reviewId }))
 
     handleClose()
   }

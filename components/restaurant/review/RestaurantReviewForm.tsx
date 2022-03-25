@@ -3,7 +3,7 @@ import { CardContent, CardHeader, Divider, Input, Rating, Stack, Typography } fr
 import { v4 as uuid_v4 } from "uuid";
 import { updateDoc } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { addReview } from "store/slices/restaurantsSlice";
+import { addRestaurantReview } from "store/slices/restaurantsSlice";
 import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import uploadImagesDB from "utils/functions/uploadImagesDB";
 import TextInput from "components/parts/TextInput";
@@ -46,7 +46,7 @@ const RestaurantReviewForm: FC<{restaurantId: string}> = ({ restaurantId }) => {
     await updateDoc(reviewDocRef, {
       reviews: [ ...reviewData!.reviews, myReviewData ]
     }).then(() => alert('리뷰 작성이 완료됐습니다!'))
-    dispatch(addReview({
+    dispatch(addRestaurantReview({
       ...myReviewData,
       nickname: myInfo.nickname,
       profileImg: myInfo.profileImg,

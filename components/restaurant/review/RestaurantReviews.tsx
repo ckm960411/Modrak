@@ -1,10 +1,10 @@
 import { FC } from "react";
 import { Button, CardContent } from "@mui/material";
-import useLoadingReviews from "utils/hooks/useLoadingReviews";
+import useLoadingRestaurantReviews from "utils/hooks/useLoadingRestaurantReviews";
 import RestaurantReview from "components/restaurant/review/RestaurantReview";
 
 const RestaurantReviews: FC<{restaurantId: string}> = ({ restaurantId }) => {
-  const { reviews, setLoadMore, hasMore } = useLoadingReviews(restaurantId)
+  const { reviews, setLoadMore, hasMore } = useLoadingRestaurantReviews(restaurantId)
 
   // 리뷰 3개 더 불러오기
   const onLoadMoreReviews = () => {

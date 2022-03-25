@@ -2,7 +2,7 @@ import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { Alert, CardContent, Dialog, Rating, Stack } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { updateDoc } from "firebase/firestore";
-import { updateReview } from "store/slices/restaurantsSlice";
+import { updateRestaurantReview } from "store/slices/restaurantsSlice";
 import uploadImagesDB from "utils/functions/uploadImagesDB";
 import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import TextInput from "components/parts/TextInput";
@@ -12,7 +12,7 @@ import MainButton from "components/parts/MainButton";
 import PreviewImagesTab from "components/feeds/PreviewImagesTab";
 
 type RestaurantEditReviewFormProps = {
-  reviewData: ReviewWithUserInfo
+  reviewData: RestaurantReviewWithUserInfo
   editing: boolean
   setEditing: Dispatch<SetStateAction<boolean>>
 }
@@ -61,14 +61,14 @@ const RestaurantEditReviewForm: FC<RestaurantEditReviewFormProps> = ({ reviewDat
     }
     const { searchedDocRef: reviewDocRef, searchedData: reviewData } = await searchFirestoreDoc(`reviews/${restaurantId}`)
     const reviewsArray = reviewData!.reviews
-    const reviewIndex = reviewsArray.findIndex((review: ReviewType) => review.reviewId === reviewId)
+    const reviewIndex = reviewsArray.findIndex((review: RestaurantReviewType) => review.reviewId === reviewId)
     reviewsArray[reviewIndex].reviewText = data.reviewText
     reviewsArray[reviewIndex].modifiedAt = data.modifiedAt
     reviewsArray[reviewIndex].reviewImages = data.reviewImages
     reviewsArray[reviewIndex].rating = data.rating
 
     await updateDoc(reviewDocRef, { reviews: reviewsArray })
-    dispatch(updateReview(data))
+    dispatch(updateRestaurantReview(data))
     alert('리뷰 수정이 완료되었습니다!')
     setEditReviewLoading(false)
     setEditing(false)

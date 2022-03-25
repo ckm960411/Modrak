@@ -28,7 +28,7 @@ declare interface RestaurantWithId extends RestaurantType {
   id: string
 }
 
-declare interface ReviewType {
+declare interface RestaurantReviewType {
   reviewId: string
   restaurantId: string
   userUid: string
@@ -38,7 +38,7 @@ declare interface ReviewType {
   createdAt: number
   modifiedAt: number
 }
-declare interface ReviewWithUserInfo extends ReviewType {
+declare interface RestaurantReviewWithUserInfo extends RestaurantReviewType {
   nickname: string
   profileImg: string
 }
