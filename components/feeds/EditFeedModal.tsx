@@ -5,7 +5,7 @@ import InputFileForm from "components/parts/InputFileForm";
 import MainButton from "components/parts/MainButton";
 import PreviewImagesTab from "./PreviewImagesTab";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import uploadImagesDB from "utils/uploadImagesDB";
+import uploadImagesDB from "utils/functions/uploadImagesDB";
 import { doc, updateDoc } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
 import { updateFeed } from "store/slices/feedsSlice";

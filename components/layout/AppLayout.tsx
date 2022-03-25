@@ -7,7 +7,7 @@ import { loadMyInfoData } from "store/slices/usersSlice";
 import { Box, Container, useMediaQuery, useTheme } from "@mui/material";
 import Navbar from "components/layout/Navbar";
 import Sidebar from "components/layout/Sidebar";
-import searchFirestoreDoc from "utils/searchFirestoreDoc";
+import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 
 export const drawerWidth = 240;
 

@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { GetStaticPaths } from "next";
 import { Stack } from "@mui/material";
-import { getRestaurantDataById } from "utils/getRestaurantDataById";
-import { getAllRestaurantsId } from "utils/getAllRestaurantsId";
+import { getRestaurantDataById } from "utils/SSRFunctions/getRestaurantDataById";
+import { getAllRestaurantsId } from "utils/SSRFunctions/getAllRestaurantsId";
 import RestaurantInfo from "components/restaurant/RestaurantInfo";
 import RestaurantReviewContainer from "components/restaurant/review/RestaurantReviewContainer";
 

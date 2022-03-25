@@ -6,7 +6,7 @@ import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import { mainColor } from "styles/GlobalStyles";
-import useLoadingRestaurants from "utils/useLoadingRestaurants";
+import useLoadingRestaurants from "utils/hooks/useLoadingRestaurants";
 import { useAppSelector } from "store/hooks";
 import styled from "@emotion/styled";
 

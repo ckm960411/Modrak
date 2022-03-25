@@ -3,7 +3,7 @@ import { Button, CardContent } from "@mui/material";
 import TextInput from "components/parts/TextInput";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import searchFirestoreDoc from "utils/searchFirestoreDoc";
+import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import { updateDoc } from "firebase/firestore";
 import { updateComment } from "store/slices/feedsSlice";
 

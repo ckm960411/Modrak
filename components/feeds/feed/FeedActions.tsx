@@ -9,7 +9,7 @@ import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import styled from "@emotion/styled";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { updateDoc } from "firebase/firestore";
-import searchFirestoreDoc from "utils/searchFirestoreDoc";
+import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import { addFeedBookmarkUserUid, addFeedLikeUserUid, removeFeedBookmarkUserUid, removeFeedLikeUserUid } from "store/slices/feedsSlice";
 import { addBookmarkFeedRef, addLikeFeedRef, removeBookmarkFeedRef, removeLikeFeedRef } from "store/slices/usersSlice";
 import { mainColor } from "styles/GlobalStyles";

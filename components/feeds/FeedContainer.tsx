@@ -1,7 +1,7 @@
 import { FC, useRef } from "react";
 import { Card, CardContent, CardMedia, Stack, Typography } from "@mui/material";
 import Feed from "components/feeds/feed/Feed";
-import useLoadingFeeds from "utils/useLoadingFeeds";
+import useLoadingFeeds from "utils/hooks/useLoadingFeeds";
 import styled from "@emotion/styled";
 import Image from "next/image";
 

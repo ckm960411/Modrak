@@ -6,11 +6,11 @@ import TextInput from "components/parts/TextInput";
 import InputFileForm from "components/parts/InputFileForm";
 import PreviewImagesTab from "components/feeds/PreviewImagesTab";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import uploadImagesDB from "utils/uploadImagesDB";
+import uploadImagesDB from "utils/functions/uploadImagesDB";
 import { addFeeds } from "store/slices/feedsSlice";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 import { addFeedInfo } from "store/slices/usersSlice";
-import searchFirestoreDoc from "utils/searchFirestoreDoc";
+import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import TagInput from "components/parts/TagInput";
 
 const FeedForm: FC = () => {

@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { updateDoc } from "firebase/firestore";
-import searchFirestoreDoc from "utils/searchFirestoreDoc";
+import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import { addFollowings, removeFollowings } from "store/slices/usersSlice";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 import { mainColor } from "styles/GlobalStyles";

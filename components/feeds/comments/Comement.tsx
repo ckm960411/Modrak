@@ -5,8 +5,8 @@ import { format } from "date-fns";
 import { updateDoc } from "firebase/firestore";
 import { useAppDispatch } from "store/hooks";
 import { deleteComment } from "store/slices/feedsSlice";
-import formatDistanceToNowKo from "utils/formatDistanceToNowKo";
-import searchFirestoreDoc from "utils/searchFirestoreDoc";
+import formatDistanceToNowKo from "utils/functions/formatDistanceToNowKo";
+import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import defaultImg from "public/imgs/profileImg.png"
 import EditMenu from "components/parts/EditMenu";
 import CommentEditForm from "components/feeds/comments/CommentEditForm";

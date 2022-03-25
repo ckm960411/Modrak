@@ -1,6 +1,6 @@
 import { Button, Divider } from "@mui/material";
 import { FC } from "react";
-import useLoadingComments from "utils/useLoadingComments";
+import useLoadingComments from "utils/hooks/useLoadingComments";
 import Comment from "./Comement";
 
 const Comments: FC<{feedId: string}> = ({ feedId }) => {

@@ -3,7 +3,7 @@ import { collection, DocumentData, getDocs, limit, orderBy, query, QueryDocument
 import { dbService } from "fireBaseApp/fBase";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { clearFeeds, setFeeds, setIsInitialLoad } from "store/slices/feedsSlice";
-import searchFirestoreDoc from "utils/searchFirestoreDoc";
+import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 
 const useLoadingFeeds: UseLoadingFeedsType = (reference) => {
   const dispatch = useAppDispatch()

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import searchFirestoreDoc from "utils/searchFirestoreDoc";
+import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { setComments, clearComments } from "store/slices/feedsSlice";
 

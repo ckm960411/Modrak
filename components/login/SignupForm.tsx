@@ -7,7 +7,7 @@ import { authService, dbService } from "fireBaseApp/fBase"
 import { Button, DialogActions, DialogContent, Stack } from "@mui/material";
 import styled from "@emotion/styled";
 import { red } from "@mui/material/colors";
-import onCheckDuplicate from "utils/onCheckDuplicate";
+import onCheckDuplicate from "utils/functions/onCheckDuplicate";
 import HookFormInput from "components/login/HookFormInput";
 import SideAlert from "components/parts/SideAlert";
 import SubmitFormButton from "components/parts/SubmitFormButton";

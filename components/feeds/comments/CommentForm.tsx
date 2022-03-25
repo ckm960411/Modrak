@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import { Button, CardContent } from "@mui/material";
 import { v4 as uuid_v4 } from "uuid";
 import { updateDoc } from "firebase/firestore";
-import searchFirestoreDoc from "utils/searchFirestoreDoc";
+import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { addComment } from "store/slices/feedsSlice";
 import TextInput from "components/parts/TextInput";

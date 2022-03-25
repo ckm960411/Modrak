@@ -5,11 +5,11 @@ import { Avatar, CardHeader, Stack, Typography } from "@mui/material";
 import FollowButton from "components/feeds/FollowButton";
 import styled from "@emotion/styled";
 import { format } from "date-fns";
-import formatDistanceToNowKo from "utils/formatDistanceToNowKo";
+import formatDistanceToNowKo from "utils/functions/formatDistanceToNowKo";
 import { deleteDoc, updateDoc } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { deleteFeed } from "store/slices/feedsSlice";
-import searchFirestoreDoc from "utils/searchFirestoreDoc";
+import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import { deleteFeedInfo } from "store/slices/usersSlice";
 
 const NicknameTypo = styled(Typography)`

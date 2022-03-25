@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "store/hooks"
 import { clearReviews, setReviews } from "store/slices/restaurantsSlice"
-import searchFirestoreDoc from "./searchFirestoreDoc"
+import searchFirestoreDoc from "utils/functions/searchFirestoreDoc"
 
 const LoadMoreReviewsLength = 3 // 한번에 가져올 리뷰들의 개수
 
