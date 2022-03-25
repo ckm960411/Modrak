@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Divider, Grid } from "@mui/material";
 import AccommodationReviewForm from "components/accommodations/review/AccommodationReviewForm";
+import AccommodationReviews from "components/accommodations/review/AccommodationReviews";
 
 const RoomReviews: FC = () => {
   return (
@@ -10,7 +11,7 @@ const RoomReviews: FC = () => {
       </Grid>
       <Grid item xs={12} sx={{ width: "300px", maxWidth: "720px" }}>
         <Divider />
-        리뷰 조회
+        <AccommodationReviews />
       </Grid>
     </Grid>
   );

@@ -39,12 +39,12 @@ const RestaurantReview: FC<{reviewData: ReviewWithUserInfo}> = ({ reviewData }) 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () =>  setAnchorEl(null);
 
-  const onEditComment = () => {
+  const onEditReview = () => {
     setEditing(true)
     handleClose()
   }
 
-  const onDeleteComment = async () => {
+  const onDeleteReview = async () => {
     const ok = window.confirm('이 리뷰를 정말 삭제하시겠습니까?')
     if (!ok) return handleClose()
 
@@ -83,8 +83,8 @@ const RestaurantReview: FC<{reviewData: ReviewWithUserInfo}> = ({ reviewData }) 
               anchorEl={anchorEl}
               handleClick={handleClick}
               handleClose={handleClose}
-              onEditContent={onEditComment}
-              onDeleteContent={onDeleteComment}
+              onEditContent={onEditReview}
+              onDeleteContent={onDeleteReview}
             />
           }
         />
