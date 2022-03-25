@@ -53,7 +53,17 @@ export const roomsSlice = createSlice({
     // 모든 리뷰 상태들을 지움
     clearRoomReviews: (state) => {
       state.reviews = []
-        },
+    },
+    // 수정하려는 리뷰를 찾아 해당 리뷰를 수정함
+    // (action.payload 에는 reviewId, reviewText, reviewImages, modifiedAt 이 객체로 들어옴)
+    updateRoomReview: (state, action) => {
+      const finded = state.reviews.find(review => review.reviewId === action.payload.reviewId)
+      if (!finded) return
+      finded.reviewText = action.payload.reviewText
+      finded.reviewImages = action.payload.reviewImages
+      finded.modifiedAt = action.payload.modifiedAt
+      finded.rating = action.payload.rating
+    },
     // 위치별 숙소 필터 적용
     setDivisionFilter: (state, action) => {
       state.isInitialLoad = true // 바뀐 필터로 첫 몇개부터 로드하기 위함
@@ -156,6 +166,7 @@ export const {
   addRoomReview,
   setRoomReviews,
   clearRoomReviews,
+  updateRoomReview,
   setDivisionFilter,
   setCategoryFilter,
   setTagFilter,

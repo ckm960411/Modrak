@@ -6,20 +6,27 @@ import { format } from "date-fns";
 import formatDistanceToNowKo from "utils/functions/formatDistanceToNowKo";
 import defaultImg from "public/imgs/profileImg.png"
 import EditMenu from "components/parts/EditMenu";
+import AccommodationEditReviewForm from "./AccommodationEditReviewForm";
 
 const AccommodationReview: FC<{reviewData: RoomReviewWithUserInfo}> = ({ reviewData }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const [timeAgo, setTimeAgo] = useState<string>("0");
   const [date, setDate] = useState<string>('')
+  const [editing, setEditing] = useState(false)
 
   const { reviewText, reviewImages, rating, createdAt, modifiedAt, userUid, nickname, profileImg } = reviewData
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () =>  setAnchorEl(null);
 
-  const onEditReview = () => {}
+  const onEditReview = () => {
+    setEditing(true)
+    handleClose()
+  }
 
-  const onDeleteReview = async () => {}
+  const onDeleteReview = async () => {
+    handleClose()
+  }
 
   useEffect(() => {
     if (createdAt === modifiedAt) {
@@ -33,6 +40,7 @@ const AccommodationReview: FC<{reviewData: RoomReviewWithUserInfo}> = ({ reviewD
 
   return (
     <ReviewCard>
+      {editing && <AccommodationEditReviewForm reviewData={reviewData} editing={editing} setEditing={setEditing} />}
       <CardHeader 
         id="accommodation-review-header"
         avatar={<Avatar alt={nickname} src={profileImg ? profileImg : defaultImg.src} />}

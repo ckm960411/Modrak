@@ -1,22 +1,22 @@
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { FC, Dispatch, SetStateAction, useState, useEffect } from "react";
 import { Alert, CardContent, Dialog, Rating, Stack } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { updateDoc } from "firebase/firestore";
-import { updateReview } from "store/slices/restaurantsSlice";
-import uploadImagesDB from "utils/functions/uploadImagesDB";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import TextInput from "components/parts/TextInput";
 import InputFileForm from "components/parts/InputFileForm";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 import MainButton from "components/parts/MainButton";
 import PreviewImagesTab from "components/feeds/PreviewImagesTab";
+import uploadImagesDB from "utils/functions/uploadImagesDB";
+import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
+import { updateDoc } from "firebase/firestore";
+import { updateRoomReview } from "store/slices/roomsSlice";
 
-type RestaurantEditReviewFormProps = {
-  reviewData: ReviewWithUserInfo
+type AccommodationEditReviewFormProps = {
+  reviewData: RoomReviewWithUserInfo
   editing: boolean
   setEditing: Dispatch<SetStateAction<boolean>>
 }
-const RestaurantEditReviewForm: FC<RestaurantEditReviewFormProps> = ({ reviewData, editing, setEditing }) => {
+const AccommodationEditReviewForm: FC<AccommodationEditReviewFormProps> = ({ reviewData, editing, setEditing }) => {
   const [editText, setEditText] = useState<string>('')
   const [newImages, setNewImages] = useState<string[]>([])
   const [newRating, setNewRating] = useState<number | null>(null)
@@ -26,7 +26,7 @@ const RestaurantEditReviewForm: FC<RestaurantEditReviewFormProps> = ({ reviewDat
   const dispatch = useAppDispatch()
   const myInfo = useAppSelector(state => state.users.myInfo)
 
-  const { reviewId, reviewText, reviewImages, rating, restaurantId, userUid } = reviewData
+  const { reviewId, reviewText, reviewImages, rating, roomId, userUid } = reviewData
 
   useEffect(() => {
     setNewImages(reviewImages)
@@ -59,16 +59,16 @@ const RestaurantEditReviewForm: FC<RestaurantEditReviewFormProps> = ({ reviewDat
       reviewId,
       modifiedAt: Date.now(),
     }
-    const { searchedDocRef: reviewDocRef, searchedData: reviewData } = await searchFirestoreDoc(`reviews/${restaurantId}`)
+    const { searchedDocRef: reviewDocRef, searchedData: reviewData } = await searchFirestoreDoc(`reviews/${roomId}`)
     const reviewsArray = reviewData!.reviews
-    const reviewIndex = reviewsArray.findIndex((review: ReviewType) => review.reviewId === reviewId)
+    const reviewIndex = reviewsArray.findIndex((review: RoomReviewType) => review.reviewId === reviewId)
     reviewsArray[reviewIndex].reviewText = data.reviewText
     reviewsArray[reviewIndex].modifiedAt = data.modifiedAt
     reviewsArray[reviewIndex].reviewImages = data.reviewImages
     reviewsArray[reviewIndex].rating = data.rating
 
     await updateDoc(reviewDocRef, { reviews: reviewsArray })
-    dispatch(updateReview(data))
+    dispatch(updateRoomReview(data))
     alert('리뷰 수정이 완료되었습니다!')
     setEditReviewLoading(false)
     setEditing(false)
@@ -90,7 +90,7 @@ const RestaurantEditReviewForm: FC<RestaurantEditReviewFormProps> = ({ reviewDat
           onChange={onChangeEditText}
         />
         <div>
-          <InputFileForm label="edit-review-file" images={newImages} setImages={setNewImages} />
+          <InputFileForm label="edit-room-review-file" images={newImages} setImages={setNewImages} />
           <SubmitFormButton onClick={onSubmit} sx={{ float: 'right', mt: 1 }} loading={editReviewLoading}>
             Edit Feed
           </SubmitFormButton>
@@ -113,4 +113,4 @@ const RestaurantEditReviewForm: FC<RestaurantEditReviewFormProps> = ({ reviewDat
   )
 }
 
-export default RestaurantEditReviewForm
+export default AccommodationEditReviewForm
