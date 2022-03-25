@@ -4,6 +4,8 @@ import { Card, CardContent, Collapse, Divider, MenuItem, Select, SelectChangeEve
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { mainColor } from "styles/GlobalStyles";
+import { useAppDispatch } from "store/hooks";
+import { setCategoryFilter, setDivisionFilter } from "store/slices/roomsSlice";
 
 const divisions: DivisionType[] = [ "전체 지역", "제주시", "애월", "한경/한림", "대정/안덕", "서귀포", "남원", "표선/성산", "구좌", "조천" ]
 type AccommodationCategories = "전체" | "호텔" | "모텔" | "펜션" | "게스트하우스"
@@ -32,11 +34,19 @@ const CategoryBar: FC = () => {
   const theme = useTheme()
   const downSm = useMediaQuery(theme.breakpoints.down('sm'))
 
+  const dispatch = useAppDispatch()
+
   const handleExpandClick = () => setExpanded(!expanded);
-  const handleChangeDivision = (e: SelectChangeEvent) => setDivisionSelect(e.target.value as DivisionType)
+  // 지역 변경시 해당 지역으로 리스트 새로 로드
+  const handleChangeDivision = (e: SelectChangeEvent) => {
+    setDivisionSelect(e.target.value as DivisionType)
+    dispatch(setDivisionFilter({ division: e.target.value as DivisionType }))
+  }
+  // 카테고리 변경시 해당 카테고리로 리스트 새로 로드
   const handleCategory = (e: React.MouseEvent<HTMLElement>) => {
     const { innerText } = e.target as HTMLElement
     setAccommodationCategory(innerText as AccommodationCategories)
+    dispatch(setCategoryFilter({ category: innerText }))
   }
 
   useEffect(() => {

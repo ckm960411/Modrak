@@ -31,19 +31,18 @@ const CategoryBar: FC = () => {
   const [divisionSelect, setDivisionSelect] = useState<DivisionType>("전체 지역")
   const [restaurantCategory, setRestaurantCategory] = useState<RestaurantCategories>('전체')
   const [expanded, setExpanded] = useState(true);
+  const theme = useTheme()
+  const downSm = useMediaQuery(theme.breakpoints.down('sm'))
   
   const dispatch = useAppDispatch()
 
-  const theme = useTheme()
-  const downSm = useMediaQuery(theme.breakpoints.down('sm'))
-
   const handleExpandClick = () => setExpanded(!expanded);
-
-  const handleChange = (e: SelectChangeEvent) => {
+  // 지역 변경시 해당 지역으로 리스트 새로 로드
+  const handleChangeDivision = (e: SelectChangeEvent) => {
     setDivisionSelect(e.target.value as DivisionType)
     dispatch(setDivisionFilter({ division: e.target.value as DivisionType }))
   };
-
+  // 카테고리 변경시 해당 카테고리로 리스트 새로 로드
   const handleCategory = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { innerText } = e.target as HTMLElement
     setRestaurantCategory(innerText as RestaurantCategories)
@@ -68,7 +67,7 @@ const CategoryBar: FC = () => {
               id="division-select"
               size="small"
               value={divisionSelect}
-              onChange={handleChange}
+              onChange={handleChangeDivision}
               sx={{ flexGrow: 1, maxWidth: '160px', fontFamily: 'Katuri' }}
             >
               {divisions.map(division => <MenuItem key={division} value={division}>{division}</MenuItem>)}

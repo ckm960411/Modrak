@@ -1,12 +1,16 @@
 import { FC, useState } from "react";
 import { Chip, Stack, Typography } from "@mui/material";
+import { useAppDispatch } from "store/hooks";
+import { setTagFilter } from "store/slices/roomsSlice";
 
 const AccommodationTagbar: FC = () => {
   const [accommodationTag, setAccommodationTag] = useState<AccommodationTags>('전체')
+  const dispatch = useAppDispatch()
 
   const handleTags = (e: React.MouseEvent<HTMLElement>) => {
     const { innerText } = e.target as HTMLElement
     setAccommodationTag(innerText as AccommodationTags)
+    dispatch(setTagFilter({ tag: innerText }))
   }
 
   return (
