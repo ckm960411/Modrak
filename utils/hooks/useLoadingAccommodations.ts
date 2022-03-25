@@ -1,22 +1,22 @@
-import { RefObject, useEffect, useState } from "react"
-import { dbService } from "fireBaseApp/fBase"
-import { collection, DocumentData, getDocs, limit, orderBy, query, QueryDocumentSnapshot, startAfter } from "firebase/firestore"
-import { useAppDispatch, useAppSelector } from "store/hooks"
-import { clearRestaurantsData, setIsInitialLoad, setRestaurantsData } from "store/slices/restaurantsSlice"
+import { collection, DocumentData, getDocs, limit, orderBy, query, QueryDocumentSnapshot, startAfter } from "firebase/firestore";
+import { dbService } from "fireBaseApp/fBase";
+import { RefObject, useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { clearAccommodationsData, setAccommodationsData, setIsInitialLoad } from "store/slices/roomsSlice";
 
-const useLoadingRestaurants = (reference: RefObject<HTMLDivElement>) => {
+const useLoadingAccommodations = (reference: RefObject<HTMLDivElement>) => {
   const dispatch = useAppDispatch()
-  // 이전 불러온 맛집정보들의 스냅샷을 보관하여 다음 데이터 요청시 해당 데이터 이후부터 불러옴
+  // 이전 불러온 숙소정보들의 스냅샷을 보관하여 다음 데이터 요청시 해당 데이터 이후부터 불러옴
   const [last, setLast] = useState<QueryDocumentSnapshot<DocumentData> | string>('initialLoad')
   const [hasMore, setHasMore] = useState(true)
-  const { divisionFilter, categoryFilter, tagFilter, value: restaurants, isInitialLoad } = useAppSelector(state => state.restaurants)
+  const { divisionFilter, categoryFilter, tagFilter, value: accommodations, isInitialLoad } = useAppSelector(state => state.rooms)
 
-  const loadRestaurantsList = async () => {
-    const restaurantsRef = collection(dbService, "restaurants")
+  const loadAccommodationsList = async () => {
+    const accommodationsRef = collection(dbService, "accommodations")
     let queryInstance
     if (isInitialLoad) {
       queryInstance = query(
-        restaurantsRef, 
+        accommodationsRef, 
         ...divisionFilter,
         ...categoryFilter,
         ...tagFilter,
@@ -25,7 +25,7 @@ const useLoadingRestaurants = (reference: RefObject<HTMLDivElement>) => {
       ) 
     } else {
       queryInstance = query(
-        restaurantsRef, 
+        accommodationsRef, 
         ...divisionFilter, 
         ...categoryFilter,
         ...tagFilter,
@@ -42,11 +42,11 @@ const useLoadingRestaurants = (reference: RefObject<HTMLDivElement>) => {
     }
 
     setLast(documentSnapshots.docs[documentSnapshots.docs.length -1]) // 리스트를 불러온 후 가장 마지막 문서 스냅샷을 상태에 저장
-    documentSnapshots.docs.map(doc => dispatch(setRestaurantsData({ id: doc.id, ...doc.data() })))
+    documentSnapshots.docs.map(doc => dispatch(setAccommodationsData({ id: doc.id, ...doc.data() })))
   }
 
-  const loadMoreRestaurantsList = () => {
-    loadRestaurantsList()
+  const loadMoreAccommodationsList = () => {
+    loadAccommodationsList()
   }
 
   useEffect(() => {
@@ -54,18 +54,18 @@ const useLoadingRestaurants = (reference: RefObject<HTMLDivElement>) => {
     if (reference.current && !isInitialLoad) {
       observer = new IntersectionObserver(([entry]) => {
         if (entry.isIntersecting && hasMore) {
-          loadMoreRestaurantsList()
+          loadMoreAccommodationsList()
         }
       }, {})
       observer.observe(reference.current)
     }
     return () => observer && observer.disconnect()
-  }, [loadMoreRestaurantsList])
+  }, [loadMoreAccommodationsList])
 
   useEffect(() => {
     if (isInitialLoad) { // isInitialLoad 가 true 일 때만 요청
-      dispatch(clearRestaurantsData())
-      loadRestaurantsList()
+      dispatch(clearAccommodationsData())
+      loadAccommodationsList()
       dispatch(setIsInitialLoad(false))
       setHasMore(true)
       setLast('initialLoad')
@@ -73,8 +73,8 @@ const useLoadingRestaurants = (reference: RefObject<HTMLDivElement>) => {
   }, [dispatch, isInitialLoad])
 
   return {
-    restaurants
+    accommodations
   }
 }
 
-export default useLoadingRestaurants
+export default useLoadingAccommodations

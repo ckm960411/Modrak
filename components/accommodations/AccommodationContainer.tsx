@@ -1,48 +1,53 @@
-import { FC } from "react";
+import { FC, useRef } from "react";
+import Link from "next/link";
 import { CardContent, Rating, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import styled from "@emotion/styled";
 import { mainColor } from "styles/GlobalStyles";
-import Link from "next/link";
-import { accommodations } from "dummyData/accommodation";
+import useLoadingAccommodations from "utils/hooks/useLoadingAccommodations";
 
 const AccommodationContainer: FC = () => {
   const theme = useTheme()
   const downSm = useMediaQuery(theme.breakpoints.down('sm'))
 
+  const targetRef = useRef<HTMLDivElement>(null)
+  const { accommodations } = useLoadingAccommodations(targetRef)
+
   return (
-    <Stack spacing={2}>
-      {accommodations.map(acc => (
-        <Link key={acc.id} href={`/accommodation/${acc.id}`}>
-          <a>
-            <AccommodationCard downSm={downSm}>
-              <img 
-                alt={acc.name} 
-                src={acc.images[0]}
-              />
-              <CardContent id="accommodation-card">
-                <div>
-                  <Typography sx={{ fontFamily: 'Katuri', fontSize: '18px', color: mainColor }}>{acc.name}</Typography>
-                  <Typography variant="subtitle2" sx={{ mt: 1, color: '#555' }}>{acc.address}</Typography>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <Rating defaultValue={acc.rating} />
-                    <span>({acc.rating})</span>
+    <>
+      <Stack spacing={2}>
+        {accommodations.map(acc => (
+          <Link key={acc.id} href={`/accommodation/${acc.id}`}>
+            <a>
+              <AccommodationCard downSm={downSm}>
+                <img 
+                  alt={acc.name} 
+                  src={acc.images[0]}
+                />
+                <CardContent id="accommodation-card">
+                  <div>
+                    <Typography sx={{ fontFamily: 'Katuri', fontSize: '18px', color: mainColor }}>{acc.name}</Typography>
+                    <Typography variant="subtitle2" sx={{ mt: 1, color: '#555' }}>{acc.address}</Typography>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <Rating defaultValue={acc.rating} />
+                      <span>({acc.rating})</span>
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <Typography variant="caption">
-                    1박 기준
-                  </Typography>
-                  <Typography>
-                    {acc.rooms[acc.rooms.length-1].price}
-                  </Typography>
-                </div>
-              </CardContent>
-            </AccommodationCard>
-          </a>
-        </Link>
-      ))}
-      
-    </Stack>
+                  <div>
+                    <Typography variant="caption">
+                      1박 기준
+                    </Typography>
+                    <Typography>
+                      {acc.rooms[acc.rooms.length-1].price}
+                    </Typography>
+                  </div>
+                </CardContent>
+              </AccommodationCard>
+            </a>
+          </Link>
+        ))}
+      </Stack>
+      <div ref={targetRef} style={{ width: '100%', height: '30px', backgroundColor: 'transparent' }}></div>
+    </>
   )
 }
 

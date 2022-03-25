@@ -20,6 +20,8 @@ declare interface AccommodationWithId extends AccommodationType {
 
 declare type AccommodationCategories  = "전체" | "호텔" | "모텔" | "펜션" | "게스트하우스"
 
+declare type AccommodationTags = '전체' | '오션뷰' | '5성급' | '독채' | '아이와함께' | '가성비숙소'
+
 declare interface RoomType {
   roomName: string
   price: string 

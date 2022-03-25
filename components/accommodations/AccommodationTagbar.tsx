@@ -1,8 +1,6 @@
 import { FC, useState } from "react";
 import { Chip, Stack, Typography } from "@mui/material";
 
-type AccommodationTags = '전체' | '오션뷰' | '5성급' | '독채' | '아이와함께' | '가성비숙소'
-
 const AccommodationTagbar: FC = () => {
   const [accommodationTag, setAccommodationTag] = useState<AccommodationTags>('전체')
 
