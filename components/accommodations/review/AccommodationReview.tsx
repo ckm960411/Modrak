@@ -4,9 +4,13 @@ import { Avatar, CardContent, CardHeader, Divider, Rating, Stack, Typography } f
 import styled from "@emotion/styled";
 import { format } from "date-fns";
 import formatDistanceToNowKo from "utils/functions/formatDistanceToNowKo";
+import { updateDoc } from "firebase/firestore";
+import { useAppDispatch } from "store/hooks";
+import { deleteRoomReview } from "store/slices/roomsSlice";
 import defaultImg from "public/imgs/profileImg.png"
 import EditMenu from "components/parts/EditMenu";
-import AccommodationEditReviewForm from "./AccommodationEditReviewForm";
+import AccommodationEditReviewForm from "components/accommodations/review/AccommodationEditReviewForm";
+import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 
 const AccommodationReview: FC<{reviewData: RoomReviewWithUserInfo}> = ({ reviewData }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
@@ -14,7 +18,8 @@ const AccommodationReview: FC<{reviewData: RoomReviewWithUserInfo}> = ({ reviewD
   const [date, setDate] = useState<string>('')
   const [editing, setEditing] = useState(false)
 
-  const { reviewText, reviewImages, rating, createdAt, modifiedAt, userUid, nickname, profileImg } = reviewData
+  const dispatch = useAppDispatch()
+  const { roomId, reviewId, reviewText, reviewImages, rating, createdAt, modifiedAt, userUid, nickname, profileImg } = reviewData
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () =>  setAnchorEl(null);
@@ -25,6 +30,16 @@ const AccommodationReview: FC<{reviewData: RoomReviewWithUserInfo}> = ({ reviewD
   }
 
   const onDeleteReview = async () => {
+    const ok = window.confirm('이 리뷰를 정말 삭제하시겠습니까?')
+    if (!ok) return handleClose()
+
+    const { searchedDocRef: reviewDocRef, searchedData: reviewData } = await searchFirestoreDoc(`reviews/${roomId}`)
+    const reviewsArray = reviewData!.reviews
+    const filteredReviews = reviewsArray.filter((review: RoomReviewType) => review.reviewId !== reviewId)
+
+    await updateDoc(reviewDocRef, { reviews: filteredReviews })
+    dispatch(deleteRoomReview({ reviewId }))
+
     handleClose()
   }
 
