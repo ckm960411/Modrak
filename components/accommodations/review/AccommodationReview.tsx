@@ -19,7 +19,7 @@ const AccommodationReview: FC<{reviewData: RoomReviewWithUserInfo}> = ({ reviewD
   const [editing, setEditing] = useState(false)
 
   const dispatch = useAppDispatch()
-  const { roomId, reviewId, reviewText, reviewImages, rating, createdAt, modifiedAt, userUid, nickname, profileImg } = reviewData
+  const { accommodationId, reviewId, reviewText, reviewImages, rating, createdAt, modifiedAt, userUid, nickname, profileImg } = reviewData
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () =>  setAnchorEl(null);
@@ -33,7 +33,7 @@ const AccommodationReview: FC<{reviewData: RoomReviewWithUserInfo}> = ({ reviewD
     const ok = window.confirm('이 리뷰를 정말 삭제하시겠습니까?')
     if (!ok) return handleClose()
 
-    const { searchedDocRef: reviewDocRef, searchedData: reviewData } = await searchFirestoreDoc(`reviews/${roomId}`)
+    const { searchedDocRef: reviewDocRef, searchedData: reviewData } = await searchFirestoreDoc(`reviews/${accommodationId}`)
     const reviewsArray = reviewData!.reviews
     const filteredReviews = reviewsArray.filter((review: RoomReviewType) => review.reviewId !== reviewId)
 

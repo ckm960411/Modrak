@@ -12,6 +12,7 @@ type ReserveModalProps = {
 const ReserveModal: FC<ReserveModalProps> = ({ open, setIsReserving, cardId }) => {
   const [data, setData] = useState<RoomType | null>(null)
   const { rooms } = useAppSelector(state => state.rooms.roomData!)
+  const { rooms, id: accommodationId } = useAppSelector(state => state.rooms.roomData!)
 
   useEffect(() => {
     const findedData = rooms.find(room => room.roomName === cardId)
@@ -29,6 +30,7 @@ const ReserveModal: FC<ReserveModalProps> = ({ open, setIsReserving, cardId }) =
   )
 
   const { roomName } = data
+    const { searchedDocRef: accDocRef, searchedData: accData } = await searchFirestoreDoc(`accommodations/${accommodationId}`)
 
   return (
     <Dialog

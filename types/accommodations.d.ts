@@ -34,7 +34,7 @@ declare interface RoomType {
 
 declare interface RoomReviewType {
   reviewId: string
-  roomId: string
+  accommodationId: string
   userUid: string
   reviewText: string
   reviewImages: string[]

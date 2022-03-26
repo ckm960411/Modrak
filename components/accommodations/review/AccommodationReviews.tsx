@@ -6,8 +6,8 @@ import { Button } from "@mui/material";
 
 const AccommodationReviews: FC = () => {
   const roomData = useAppSelector(state => state.rooms.roomData)
-  const roomId = roomData!.id
-  const { reviews, setLoadMore, hasMore } = useLoadingRoomReviews(roomId)
+  const accommodationId = roomData!.id
+  const { reviews, setLoadMore, hasMore } = useLoadingRoomReviews(accommodationId)
   
   // 리뷰 3개 더 불러오기
   const onLoadMoreReviews = () => {

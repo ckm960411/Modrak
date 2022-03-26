@@ -23,7 +23,7 @@ const AccommodationReviewForm: FC = () => {
   const roomData = useAppSelector(state => state.rooms.roomData)
   
   if (!roomData) return <div>Loading...</div>
-  const { id: roomId } = roomData
+  const { id: accommodationId } = roomData
 
   const onChangeReview = (e: React.ChangeEvent<HTMLInputElement>) => {
     setReviewText(e.target.value)
@@ -39,7 +39,7 @@ const AccommodationReviewForm: FC = () => {
     const myReviewData = {
       reviewId: uuid_v4(),
       userUid: myInfo.uid,
-      roomId,
+      accommodationId,
       reviewText,
       reviewImages: imagesURLs,
       rating,
@@ -47,7 +47,7 @@ const AccommodationReviewForm: FC = () => {
       modifiedAt: Date.now(),
     }
     // review 컬렉션에 리뷰를 다려는 숙소id 로 된 문서에 해당 리뷰 데이터를 저장
-    const { searchedDocRef: reviewDocRef, searchedData: reviewData } = await searchFirestoreDoc(`reviews/${roomId}`)
+    const { searchedDocRef: reviewDocRef, searchedData: reviewData } = await searchFirestoreDoc(`reviews/${accommodationId}`)
     await updateDoc(reviewDocRef, {
       reviews: [ ...reviewData!.reviews, myReviewData ]
     }).then(() => alert('리뷰 작성이 완료됐습니다!'))

@@ -26,7 +26,7 @@ const AccommodationEditReviewForm: FC<AccommodationEditReviewFormProps> = ({ rev
   const dispatch = useAppDispatch()
   const myInfo = useAppSelector(state => state.users.myInfo)
 
-  const { reviewId, reviewText, reviewImages, rating, roomId, userUid } = reviewData
+  const { reviewId, reviewText, reviewImages, rating, accommodationId, userUid } = reviewData
 
   useEffect(() => {
     setNewImages(reviewImages)
@@ -59,7 +59,7 @@ const AccommodationEditReviewForm: FC<AccommodationEditReviewFormProps> = ({ rev
       reviewId,
       modifiedAt: Date.now(),
     }
-    const { searchedDocRef: reviewDocRef, searchedData: reviewData } = await searchFirestoreDoc(`reviews/${roomId}`)
+    const { searchedDocRef: reviewDocRef, searchedData: reviewData } = await searchFirestoreDoc(`reviews/${accommodationId}`)
     const reviewsArray = reviewData!.reviews
     const reviewIndex = reviewsArray.findIndex((review: RoomReviewType) => review.reviewId === reviewId)
     reviewsArray[reviewIndex].reviewText = data.reviewText
