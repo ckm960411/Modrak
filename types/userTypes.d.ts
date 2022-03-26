@@ -14,6 +14,12 @@ declare interface UserType {
   bookmarkFeeds: string[]
   recommendRestaurants: string[]
   bookmarkRestaurants: string[]
+  roomReserved: RoomReserved[]
+}
+declare interface RoomReserved {
+  accommodationId: string
+  roomId: string
+  reservedDates: string[]
 }
 
 // 회원가입 시 입력할 값들 타입

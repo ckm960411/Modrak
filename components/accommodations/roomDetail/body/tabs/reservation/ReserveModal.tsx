@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { addRoomReservation } from "store/slices/roomsSlice";
 import searchFirestoreDoc from "utils/functions/searchFirestoreDoc"
 import ReserveTimePicker from "@reservation/ReserveTimePicker";
+import { addRoomInfoReserved } from "store/slices/usersSlice";
 
 const removeDetailTime = (date: Date) => {
   return date.toString().split(' ').slice(0, 4).join(' ')
@@ -22,6 +23,7 @@ type ReserveModalProps = {
   setIsReserving: Dispatch<SetStateAction<boolean>>
   cardId: string
 }
+
 const ReserveModal: FC<ReserveModalProps> = ({ open, setIsReserving, cardId }) => {
   const [data, setData] = useState<RoomType | null>(null)
   const [date, setDate] = useState<DateRangeType>({
@@ -30,6 +32,7 @@ const ReserveModal: FC<ReserveModalProps> = ({ open, setIsReserving, cardId }) =
     key: 'selection'
   })
   const dispatch = useAppDispatch()
+  const myInfo = useAppSelector(state => state.users.myInfo)
   const { rooms, id: accommodationId } = useAppSelector(state => state.rooms.roomData!)
 
   useEffect(() => {
@@ -50,6 +53,7 @@ const ReserveModal: FC<ReserveModalProps> = ({ open, setIsReserving, cardId }) =
   const { roomName, reservedDates, roomId } = data
 
   const onReserveRoom = async () => {
+    if (!myInfo) return alert('로그인 이후에 예약할 수 있습니다!')
     const { startDate, endDate } = date
     if (startDate.toString() === endDate.toString()) return alert('체크인 날짜와 체크아웃 날짜를 확인해주세요!')
     if (reservedDates.includes(removeDetailTime(startDate))) return alert('예약할 수 없는 날짜입니다!')
@@ -57,20 +61,23 @@ const ReserveModal: FC<ReserveModalProps> = ({ open, setIsReserving, cardId }) =
     const ok = window.confirm('이 날짜로 예약하시겠습니까?')
     if (!ok) return
     const diffDays = differenceInDays(endDate, startDate) // 두 날짜간의 차이를 계산
+    // 체크인날짜와 체크아웃날짜 사이의 날짜들을 모두 문자열로 바꿔 배열로 담음
     let datesArray = [removeDetailTime(startDate)]
     for (let i = 0; i < diffDays; i++) {
       let newArray = [...datesArray, removeDetailTime(addDays(startDate, i+1))]
       datesArray = newArray
     }
-    console.log(datesArray)
     // 해당 숙소 DB 의 객실에 예약 날짜들을 추가
     const { searchedDocRef: accDocRef, searchedData: accData } = await searchFirestoreDoc(`accommodations/${accommodationId}`)
     const findedRoom = accData!.rooms.find((room: RoomType) => room.roomId === roomId)
     findedRoom.reservedDates = [ ...findedRoom.reservedDates, ...datesArray]
-    await updateDoc(accDocRef, {
-      rooms: accData!.rooms
-    })
+    await updateDoc(accDocRef, { rooms: accData!.rooms })
     dispatch(addRoomReservation({ roomId, newReservedDates: datesArray }))
+    // 예약한 정보를 유저정보에도 저장함
+    const newRoomInfoReserved = { accommodationId, roomId, reservedDates: datesArray }
+    const { searchedDocRef: userDocRef, searchedData: userData } = await searchFirestoreDoc(`users/${myInfo.uid}`)
+    await updateDoc(userDocRef, { roomReserved: [ ...userData!.roomReserved, newRoomInfoReserved ] })
+    dispatch(addRoomInfoReserved(newRoomInfoReserved))
     
     onClose()
   }

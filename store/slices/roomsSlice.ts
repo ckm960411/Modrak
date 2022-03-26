@@ -43,6 +43,7 @@ export const roomsSlice = createSlice({
       state.roomData = action.payload
     },
     // 숙소 예약시 예약된 날짜를 저장해 예약이 안 되도록 막음
+    // action.payload 로 예약할 객실의 id 인 roomId 와 예약한 날짜들이 담긴 newReservedDates 배열이 옴
     addRoomReservation: (state, action) => {
       const findedRoom = state.roomData?.rooms.find(room => room.roomId === action.payload.roomId)
       if (!findedRoom) return

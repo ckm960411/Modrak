@@ -73,6 +73,11 @@ export const usersSlice = createSlice({
     removeBookmarkRestaurant: (state, action) => {
       state.myInfo!.bookmarkRestaurants = state.myInfo!.bookmarkRestaurants.filter(restId => restId !== action.payload.restaurantId)
     },
+    // 예약한 객실 데이터를 유저 정보에 저장
+    // action.payload 로 { accommodationId, roomId, reservedDates } 가 옴
+    addRoomInfoReserved: (state, action) => {
+      state.myInfo!.roomReserved.push(action.payload)
+    },
   },
   extraReducers: {},
 })
@@ -92,6 +97,7 @@ export const {
   removeRecommendRestaurant,
   addBookmarkRestaurant,
   removeBookmarkRestaurant,
+  addRoomInfoReserved,
 } = usersSlice.actions
 
 
