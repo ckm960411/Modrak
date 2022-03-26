@@ -16,14 +16,14 @@ const RoomReservation: FC = () => {
   const theme = useTheme()
   const downMd = useMediaQuery(theme.breakpoints.down('sm'))
 
-  const onOpenCard = (e: React.MouseEvent<HTMLDivElement>) => {
+  const onOpenCard = (roomId: string) => () => {
     setCardOpened(true)
-    setCardId(e.currentTarget.id)
+    setCardId(roomId)
   }
 
-  const handleReserve = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleReserve = (roomId: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
-    setCardId(e.currentTarget.id)
+    setCardId(roomId)
     setIsReserving(true)
   }
 
@@ -31,7 +31,7 @@ const RoomReservation: FC = () => {
     <>
       <Stack spacing={2} sx={{ mt: 2 }}>
         {rooms.map((room, i) => (
-          <RoomCard key={i} id={room.roomName} downMd={downMd} onClick={onOpenCard}>
+          <RoomCard key={i} downMd={downMd} onClick={onOpenCard(room.roomId)}>
             <img alt={room.roomName} src={room.images[0]} />
             <CardContent>
               <div>
@@ -47,7 +47,7 @@ const RoomReservation: FC = () => {
                   <Typography variant="caption">1박 기준</Typography>
                   <Typography>{room.price}</Typography>
                 </div>
-                <Button id={room.roomName} variant="contained" onClick={handleReserve}>예약하기</Button>
+                <Button variant="contained" onClick={handleReserve(room.roomId)}>예약하기</Button>
               </div>
             </CardContent>
           </RoomCard>

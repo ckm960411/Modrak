@@ -1,28 +1,26 @@
-import { FC, useState } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
 import { DateRange } from "react-date-range"
-import { addDays, addMonths } from "date-fns";
+import { addMonths } from "date-fns";
 import ko from "date-fns/locale/ko"
+import { useAppSelector } from "store/hooks";
 import { mainColor } from "styles/GlobalStyles";
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+import { DateRangeType } from "@reservation/ReserveModal";
 
-type DateRangeType = {
-  startDate: Date
-  endDate: Date
-  key: string
+type ReserveTimeProps = {
+  date: DateRangeType
+  setDate: Dispatch<SetStateAction<DateRangeType>>
+  roomId: string
 }
-const ReserveTimePicker: FC = () => {
-  const [date, setDate] = useState<DateRangeType>({
-    startDate: new Date(),
-    endDate: addDays(new Date(), 1),
-    key: 'selection'
-  })
+const ReserveTimePicker: FC<ReserveTimeProps> = ({ date, setDate, roomId }) => {
+  const { rooms } = useAppSelector(state => state.rooms.roomData!)
+  const findedRoom = rooms.find((room: RoomType) => room.roomId === roomId)
 
   const onRangeChange = (ranges: any) => {
-    console.log(ranges)
     setDate({
       startDate: ranges['selection'].startDate,
-      endDate: ranges['selection'].endDate.toString() === ranges['selection'].startDate.toString() ? addDays(ranges['selection'].startDate, 1) : ranges['selection'].endDate,
+      endDate: ranges['selection'].endDate,
       key: ranges['selection'].key
     })
   }
@@ -37,7 +35,7 @@ const ReserveTimePicker: FC = () => {
       minDate={new Date()}
       maxDate={addMonths(new Date(), 1)}
       rangeColors={[mainColor]}
-      disabledDates={[ new Date('Sat Mar 28 2022 00:00:00 GMT+0900 (한국 표준시)') ]}
+      disabledDates={findedRoom!.reservedDates.map(date => new Date(date))}
       dateDisplayFormat="yyyy년 MM월 dd일"
     />
   )

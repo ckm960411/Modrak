@@ -15,7 +15,7 @@ const RoomCardDetail: FC<RoomCardDetailProps> = ({ open, setCardOpened, cardId }
   const { rooms } = useAppSelector(state => state.rooms.roomData!)
 
   useEffect(() => {
-    const findedData = rooms.find(room => room.roomName === cardId)
+    const findedData = rooms.find(room => room.roomId === cardId)
     setData(findedData!)
   }, [rooms, cardId])
 

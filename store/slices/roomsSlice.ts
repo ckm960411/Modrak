@@ -42,6 +42,12 @@ export const roomsSlice = createSlice({
     addRoomInfo: (state, action) => {
       state.roomData = action.payload
     },
+    // 숙소 예약시 예약된 날짜를 저장해 예약이 안 되도록 막음
+    addRoomReservation: (state, action) => {
+      const findedRoom = state.roomData?.rooms.find(room => room.roomId === action.payload.roomId)
+      if (!findedRoom) return
+      findedRoom.reservedDates = [ ...findedRoom.reservedDates, ...action.payload.newReservedDates ]
+    },
     // 리뷰 작성시 기존 리뷰 제일 위에 추가 (action.payload 로 리뷰객체가 1개씩 들어옴)
     addRoomReview: (state, action) => {
       state.reviews.unshift(action.payload)
@@ -168,6 +174,7 @@ export const {
   setAccommodationsData,
   clearAccommodationsData,
   addRoomInfo,
+  addRoomReservation,
   addRoomReview,
   setRoomReviews,
   clearRoomReviews,

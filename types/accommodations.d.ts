@@ -23,6 +23,7 @@ declare type AccommodationCategories  = "전체" | "호텔" | "모텔" | "펜션
 declare type AccommodationTags = '전체' | '오션뷰' | '5성급' | '독채' | '아이와함께' | '가성비숙소'
 
 declare interface RoomType {
+  roomId: string
   roomName: string
   price: string 
   people: string
@@ -30,6 +31,7 @@ declare interface RoomType {
   equipment: string[]
   images: string[]
   description: string[]
+  reservedDates: string[]
 }
 
 declare interface RoomReviewType {
