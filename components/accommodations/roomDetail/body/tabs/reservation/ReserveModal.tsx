@@ -1,13 +1,14 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { Button, Card, CardContent, CardHeader, Dialog, IconButton, Stack, Typography } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
+import { v4 as uuid_v4 } from "uuid";
 import { updateDoc } from "firebase/firestore";
-import { addDays, differenceInDays } from "date-fns";
+import { addDays, differenceInDays, format } from "date-fns";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { addRoomReservation } from "store/slices/roomsSlice";
 import searchFirestoreDoc from "utils/functions/searchFirestoreDoc"
 import ReserveTimePicker from "@reservation/ReserveTimePicker";
-import { addRoomInfoReserved } from "store/slices/usersSlice";
+import { addNewPush, addRoomInfoReserved } from "store/slices/usersSlice";
 
 const removeDetailTime = (date: Date) => {
   return date.toString().split(' ').slice(0, 4).join(' ')
@@ -33,7 +34,7 @@ const ReserveModal: FC<ReserveModalProps> = ({ open, setIsReserving, cardId }) =
   })
   const dispatch = useAppDispatch()
   const myInfo = useAppSelector(state => state.users.myInfo)
-  const { rooms, id: accommodationId } = useAppSelector(state => state.rooms.roomData!)
+  const { name, checkin, rooms, id: accommodationId } = useAppSelector(state => state.rooms.roomData!)
 
   useEffect(() => {
     const findedData = rooms.find(room => room.roomId === cardId)
@@ -73,12 +74,23 @@ const ReserveModal: FC<ReserveModalProps> = ({ open, setIsReserving, cardId }) =
     findedRoom.reservedDates = [ ...findedRoom.reservedDates, ...datesArray]
     await updateDoc(accDocRef, { rooms: accData!.rooms })
     dispatch(addRoomReservation({ roomId, newReservedDates: datesArray }))
-    // 예약한 정보를 유저정보에도 저장함
+    // 예약한 정보를 유저정보에 저장하고, 알림을 보냄
     const newRoomInfoReserved = { accommodationId, roomId, reservedDates: datesArray }
     const { searchedDocRef: userDocRef, searchedData: userData } = await searchFirestoreDoc(`users/${myInfo.uid}`)
     await updateDoc(userDocRef, { roomReserved: [ ...userData!.roomReserved, newRoomInfoReserved ] })
     dispatch(addRoomInfoReserved(newRoomInfoReserved))
-    
+    // 예약시 사용자에게 알림 보냄
+    const newPush = {
+      pushId: uuid_v4(),
+      isChecked: false,
+      message: `${name} ${roomName} 객실 예약이 완료되었습니다! 체크인은 ${format(new Date(startDate), 'yyyy년 MM월 dd일')} ${checkin} 입니다.`
+    }
+    await updateDoc(userDocRef, { pushUnchecked: [ ...userData!.pushUnchecked, newPush ] })
+    dispatch(addNewPush(newPush))
+    // pushes 컬렉션의 사용자 uid 로 된 push 문서에도 알림을 저장 (전체 알림)
+    const { searchedDocRef: pushDocRef, searchedData: pushData } = await searchFirestoreDoc(`pushes/${myInfo.uid}`)
+    await updateDoc(pushDocRef, { pushes: [ ...pushData!.pushes, newPush ] })
+
     onClose()
   }
 

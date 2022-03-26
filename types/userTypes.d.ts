@@ -15,11 +15,17 @@ declare interface UserType {
   recommendRestaurants: string[]
   bookmarkRestaurants: string[]
   roomReserved: RoomReserved[]
+  pushUnchecked: PushType[]
 }
 declare interface RoomReserved {
   accommodationId: string
   roomId: string
   reservedDates: string[]
+}
+declare interface PushType {
+  pushId: string
+  isChecked: boolean
+  message: string
 }
 
 // 회원가입 시 입력할 값들 타입

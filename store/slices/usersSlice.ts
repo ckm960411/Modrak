@@ -78,6 +78,10 @@ export const usersSlice = createSlice({
     addRoomInfoReserved: (state, action) => {
       state.myInfo!.roomReserved.push(action.payload)
     },
+    // 객실을 예약하면 알림을 저장함 (확인안한 알람) (action.payload 로 알림객체가 옴)
+    addNewPush: (state, action) => {
+      state.myInfo!.pushUnchecked.push(action.payload)
+    },
   },
   extraReducers: {},
 })
@@ -98,6 +102,7 @@ export const {
   addBookmarkRestaurant,
   removeBookmarkRestaurant,
   addRoomInfoReserved,
+  addNewPush,
 } = usersSlice.actions
 
 
