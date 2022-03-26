@@ -3,6 +3,7 @@
     "baseUrl": ".",
     "paths": {
       "@roomDetail/*": ["components/accommodations/roomDetail/*"],
+      "@reservation/*": ["components/accommodations/roomDetail/body/tabs/reservation/*"]
     },
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],

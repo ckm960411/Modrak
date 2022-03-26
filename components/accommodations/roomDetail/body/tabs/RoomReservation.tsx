@@ -2,13 +2,14 @@ import { FC, useState } from "react";
 import { Button, CardContent, Chip, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import styled from "@emotion/styled";
 import { useAppSelector } from "store/hooks";
-import RoomCardDetail from "@roomDetail/body/tabs/reservation/RoomCardDetail";
-import ReserveModal from "@roomDetail/body/tabs/reservation/ReserveModal";
+import RoomCardDetail from "@reservation/RoomCardDetail";
+import ReserveModal from "@reservation/ReserveModal";
 
 const RoomReservation: FC = () => {
   const [cardOpened, setCardOpened] = useState(false)
   const [cardId, setCardId] = useState('')
-  const [date, setDate] = useState<Date | null>(new Date())
+  const [isReserving, setIsReserving] = useState(false)
+
   const roomData = useAppSelector(state => state.rooms.roomData)
   const { rooms, checkin } = roomData!
 
@@ -22,11 +23,12 @@ const RoomReservation: FC = () => {
 
   const handleReserve = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
+    setCardId(e.currentTarget.id)
+    setIsReserving(true)
   }
 
   return (
     <>
-      <ReserveTimePicker date={date} setDate={setDate} />
       <Stack spacing={2} sx={{ mt: 2 }}>
         {rooms.map((room, i) => (
           <RoomCard key={i} id={room.roomName} downMd={downMd} onClick={onOpenCard}>
@@ -45,19 +47,14 @@ const RoomReservation: FC = () => {
                   <Typography variant="caption">1박 기준</Typography>
                   <Typography>{room.price}</Typography>
                 </div>
-                <Button variant="contained" onClick={handleReserve}>예약하기</Button>
+                <Button id={room.roomName} variant="contained" onClick={handleReserve}>예약하기</Button>
               </div>
             </CardContent>
           </RoomCard>
         ))}
       </Stack>
-      {cardOpened && (
-        <RoomCardDetail 
-          open={cardOpened} 
-          setCardOpened={setCardOpened} 
-          cardId={cardId} 
-        />
-      )}
+      {isReserving && <ReserveModal open={isReserving} setIsReserving={setIsReserving} cardId={cardId} />}
+      {cardOpened && <RoomCardDetail open={cardOpened} setCardOpened={setCardOpened} cardId={cardId} />}
     </>
   )
 }

@@ -1,28 +1,45 @@
-import { Dispatch, FC, SetStateAction, useState } from "react";
-import { DesktopDatePicker, LocalizationProvider } from "@mui/lab";
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import { TextField } from "@mui/material";
-import { format } from "date-fns";
+import { FC, useState } from "react";
+import { DateRange } from "react-date-range"
+import { addDays, addMonths } from "date-fns";
+import ko from "date-fns/locale/ko"
+import { mainColor } from "styles/GlobalStyles";
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
 
-type ReserveTimePickerProps = {
-  date: Date | null
-  setDate: Dispatch<SetStateAction<Date | null>>
+type DateRangeType = {
+  startDate: Date
+  endDate: Date
+  key: string
 }
-const ReserveTimePicker: FC<ReserveTimePickerProps> = ({ date, setDate }) => {
+const ReserveTimePicker: FC = () => {
+  const [date, setDate] = useState<DateRangeType>({
+    startDate: new Date(),
+    endDate: addDays(new Date(), 1),
+    key: 'selection'
+  })
+
+  const onRangeChange = (ranges: any) => {
+    console.log(ranges)
+    setDate({
+      startDate: ranges['selection'].startDate,
+      endDate: ranges['selection'].endDate.toString() === ranges['selection'].startDate.toString() ? addDays(ranges['selection'].startDate, 1) : ranges['selection'].endDate,
+      key: ranges['selection'].key
+    })
+  }
+
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <DesktopDatePicker 
-        label="날짜 선택"
-        disablePast
-        value={date}
-        onChange={(newValue) => setDate(newValue)}
-        onAccept={() => {
-          if (!date) return
-          console.log('date: ',  format(Date.parse(`${date}`), 'yyyy년 MM월 dd일'))
-        }}
-        renderInput={params => <TextField {...params} />}
-      />
-    </LocalizationProvider>
+    <DateRange
+      locale={ko}
+      editableDateInputs={true}
+      onChange={onRangeChange}
+      moveRangeOnFirstSelection={false}
+      ranges={[date]}
+      minDate={new Date()}
+      maxDate={addMonths(new Date(), 1)}
+      rangeColors={[mainColor]}
+      disabledDates={[ new Date('Sat Mar 28 2022 00:00:00 GMT+0900 (한국 표준시)') ]}
+      dateDisplayFormat="yyyy년 MM월 dd일"
+    />
   )
 }
 
