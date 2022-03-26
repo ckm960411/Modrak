@@ -28,7 +28,7 @@ const AccommodationContainer: FC = () => {
                     <Typography sx={{ fontFamily: 'Katuri', fontSize: '18px', color: mainColor }}>{acc.name}</Typography>
                     <Typography variant="subtitle2" sx={{ mt: 1, color: '#555' }}>{acc.address}</Typography>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <Rating defaultValue={acc.rating} />
+                      <Rating defaultValue={acc.rating} readOnly />
                       <span>({acc.rating})</span>
                     </div>
                   </div>

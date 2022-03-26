@@ -83,7 +83,7 @@ const DescContainer = styled(Stack)`
 const DescHeader = styled(Typography)`
   font-weight: 600;
 `
-const Description = styled(Typography)`
+const Description = styled.div`
   font-size: 14px;
 `
 
