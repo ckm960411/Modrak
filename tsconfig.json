@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "roomDetail/*": ["components/accommodations/roomDetail/*"],
+      "@roomDetail/*": ["components/accommodations/roomDetail/*"],
     },
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],

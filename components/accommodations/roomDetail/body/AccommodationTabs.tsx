@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
-import RoomInfo from "roomDetail/body/tabs/RoomInfo";
-import RoomReservation from "roomDetail/body/tabs/RoomReservation";
-import RoomReviews from "roomDetail/body/tabs/RoomReviews";
+import RoomInfo from "@roomDetail/body/tabs/RoomInfo";
+import RoomReservation from "@roomDetail/body/tabs/RoomReservation";
+import RoomReviews from "@roomDetail/body/tabs/RoomReviews";
 
 interface TabPanelProps {
   children?: React.ReactNode;

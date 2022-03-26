@@ -2,8 +2,8 @@ import { FC, useState } from "react";
 import { Button, CardContent, Chip, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import styled from "@emotion/styled";
 import { useAppSelector } from "store/hooks";
-import ReserveTimePicker from "roomDetail/body/tabs/reservation/ReserveTimePicker";
-import RoomCardDetail from "roomDetail/body/tabs/reservation/RoomCardDetail";
+import RoomCardDetail from "@roomDetail/body/tabs/reservation/RoomCardDetail";
+import ReserveModal from "@roomDetail/body/tabs/reservation/ReserveModal";
 
 const RoomReservation: FC = () => {
   const [cardOpened, setCardOpened] = useState(false)

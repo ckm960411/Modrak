@@ -3,8 +3,8 @@ import { useAppDispatch } from "store/hooks";
 import { addRoomInfo } from "store/slices/roomsSlice";
 import { getAccommodationById } from "utils/SSRFunctions/getAccommodationById";
 import { getAllAccommodationsId } from "utils/SSRFunctions/getAllAccommodationsId";
-import RoomInfoHeader from "roomDetail/header/RoomInfoHeader";
-import AccommodationTabs from "roomDetail/body/AccommodationTabs";
+import RoomInfoHeader from "@roomDetail/header/RoomInfoHeader";
+import AccommodationTabs from "@roomDetail/body/AccommodationTabs";
 import wrapper from "store/configureStore";
 
 const AccommodationDetail: FC<{data: AccommodationWithId}> = ({ data }) => {
