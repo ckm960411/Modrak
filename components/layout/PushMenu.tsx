@@ -23,13 +23,22 @@ const PushMenu: FC<PushMenuProps> = ({ open, anchorEl, setAnchorEl, pushes }) =>
     setAnchorEl(null);
   }
   const onCheckPush = (pushId: string) => async () => {
+    // 알림 클릭시 확인안된 알림에서 제거
     const { searchedDocRef: userRef, searchedData: userData } = await searchFirestoreDoc(`users/${myInfo!.uid}`)
     const removedPushes = userData!.pushUnchecked.filter((push: PushType) => push.pushId !== pushId)
     await updateDoc(userRef, { pushUnchecked: removedPushes })
     dispatch(removeCheckedPush({ pushId }))
+    // 알림 클릭시 전체 알림에서 확인 상태로 변경
+    const { searchedDocRef: pushDocRef, searchedData: pushData } = await searchFirestoreDoc(`pushes/${myInfo!.uid}`)
+    const checkedPush = pushData!.pushes.find((push: PushType) => push.pushId === pushId)
+    checkedPush.isChecked = true
+    await updateDoc(pushDocRef, {
+      pushes: pushData!.pushes
+    })
   }
   const onLoadMorePushes = () => {
     router.push(`/user/push/${myInfo!.uid}`)
+    handleClose()
   }
 
   return (
