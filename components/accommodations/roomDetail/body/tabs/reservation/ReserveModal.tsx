@@ -83,6 +83,7 @@ const ReserveModal: FC<ReserveModalProps> = ({ open, setIsReserving, cardId }) =
     const newPush = {
       pushId: uuid_v4(),
       isChecked: false,
+      createdAt: Date.now(),
       message: `${name} ${roomName} 객실 예약이 완료되었습니다! 체크인은 ${format(new Date(startDate), 'yyyy년 MM월 dd일')} ${checkin} 입니다.`
     }
     await updateDoc(userDocRef, { pushUnchecked: [ ...userData!.pushUnchecked, newPush ] })

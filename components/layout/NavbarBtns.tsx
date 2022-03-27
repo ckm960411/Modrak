@@ -1,11 +1,11 @@
 import { FC, useState } from "react";
 import { authService } from "fireBaseApp/fBase";
 import MailIcon from "@mui/icons-material/Mail";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { Badge, Button, IconButton, Stack, Tooltip } from "@mui/material";
+import { Badge, Button, IconButton, Stack } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { removeMyInfoData } from "store/slices/usersSlice";
 import CertificationModal from "components/login/CertificationModal";
+import PushMenu from "components/layout/PushMenu";
 
 export type CertificationType = "로그인" | "회원가입"
 
@@ -13,6 +13,11 @@ const NavbarBtns: FC = () => {
   const dispatch = useAppDispatch()
   const [modalOpened, setModalOpened] = useState<boolean>(false)
   const [certificationType, setCertificationType] = useState<CertificationType>("로그인")
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   const myInfo = useAppSelector(state => state.users.myInfo)
 
@@ -36,22 +41,25 @@ const NavbarBtns: FC = () => {
     <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
       {myInfo ? (
         <>
-          <Stack direction="row" spacing={1}>
-            <Tooltip title="알림" arrow>
-              <IconButton>
-                <Badge color="primary" variant="dot" sx={{ cursor: "pointer" }}>
-                  <MailIcon sx={{ color: "#858585" }} />
-                </Badge>
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="장바구니" arrow>
-              <IconButton>
-                <Badge color="primary" variant="dot" sx={{ cursor: "pointer" }}>
-                  <ShoppingCartIcon sx={{ color: "#858585" }} />
-                </Badge>
-              </IconButton>
-            </Tooltip>
-          </Stack>
+          <IconButton>
+            <Badge 
+              color="primary" 
+              badgeContent={myInfo.pushUnchecked[0] ? myInfo.pushUnchecked.length : undefined} 
+              aria-controls={open ? 'basic-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClick}
+              sx={{ cursor: "pointer" }}
+            >
+              <MailIcon sx={{ color: "#858585" }} />
+            </Badge>
+            <PushMenu 
+              pushes={myInfo.pushUnchecked && myInfo.pushUnchecked} 
+              open={open} 
+              anchorEl={anchorEl} 
+              setAnchorEl={setAnchorEl} 
+              />
+          </IconButton>
           <Button variant="contained" size="small" onClick={onLogoutClick}>
             로그아웃
           </Button>

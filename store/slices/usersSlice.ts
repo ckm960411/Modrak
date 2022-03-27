@@ -82,6 +82,10 @@ export const usersSlice = createSlice({
     addNewPush: (state, action) => {
       state.myInfo!.pushUnchecked.push(action.payload)
     },
+    // 상단 네비바에서 알림 확인시 myInfo.pushUnchecked 에서 제거
+    removeCheckedPush: (state, action) => {
+      state.myInfo!.pushUnchecked = state.myInfo!.pushUnchecked.filter(push => push.pushId !== action.payload.pushId)
+    },
   },
   extraReducers: {},
 })
@@ -103,6 +107,7 @@ export const {
   removeBookmarkRestaurant,
   addRoomInfoReserved,
   addNewPush,
+  removeCheckedPush,
 } = usersSlice.actions
 
 

@@ -26,6 +26,7 @@ declare interface PushType {
   pushId: string
   isChecked: boolean
   message: string
+  createdAt: number
 }
 
 // 회원가입 시 입력할 값들 타입
