@@ -70,11 +70,16 @@ const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
           followingsCount: 0,
           feeds: [],
           likeFeeds: [],
-          bookmarkFeeds: []
+          bookmarkFeeds: [],
+          pushUnchecked: [],
+          roomReserved: [],
         }
         // 사용자 정보를 "users" 컬렉션에 uid 로 생성
         const usersCollection = collection(dbService, "users")
-        await setDoc(doc(usersCollection, `${newUserObj.uid}`), newUserObj).then(() => alert('회원가입이 완료됐습니다!'))
+        await setDoc(doc(usersCollection, `${newUserObj.uid}`), newUserObj)
+        // pushes 컬렉션에 사용자 uid 로 된 문서를 생성
+        const pushesCollection = collection(dbService, "pushes")
+        await setDoc(doc(pushesCollection, `${newUserObj.uid}`), { pushes: [] }).then(() => alert('회원가입이 완료됐습니다!'))
       })
       .catch(err => console.log(err.resultMessage))
       .finally(() => {
