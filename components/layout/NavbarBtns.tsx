@@ -41,14 +41,13 @@ const NavbarBtns: FC = () => {
     <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
       {myInfo ? (
         <>
-          <IconButton>
+          <IconButton onClick={handleClick}>
             <Badge 
               color="primary" 
               badgeContent={myInfo.pushUnchecked[0] ? myInfo.pushUnchecked.length : undefined} 
               aria-controls={open ? 'basic-menu' : undefined}
               aria-haspopup="true"
               aria-expanded={open ? 'true' : undefined}
-              onClick={handleClick}
               sx={{ cursor: "pointer" }}
             >
               <MailIcon sx={{ color: "#858585" }} />
@@ -58,7 +57,7 @@ const NavbarBtns: FC = () => {
               open={open} 
               anchorEl={anchorEl} 
               setAnchorEl={setAnchorEl} 
-              />
+            />
           </IconButton>
           <Button variant="contained" size="small" onClick={onLogoutClick}>
             로그아웃

@@ -53,15 +53,15 @@ const PushMenu: FC<PushMenuProps> = ({ open, anchorEl, setAnchorEl, pushes }) =>
         }}
       >
         {pushes[0] ? pushes.map(push => (
-          <>
-            <MenuItem key={push.pushId} onClick={onCheckPush(push.pushId)}>
+          <div key={push.pushId}>
+            <MenuItem onClick={onCheckPush(push.pushId)}>
               <PushCard>
                 <Typography variant="subtitle2">{push.message}</Typography>
                 <Typography variant="caption">{format(push.createdAt, 'yyyy년 MM월 d일')}</Typography>
               </PushCard>
             </MenuItem>
             <Divider />
-          </>
+          </div>
         )) : (
           <CardContent sx={{ width: '360px', textAlign: 'center' }}>새로운 알림이 없습니다!</CardContent>
         )}
