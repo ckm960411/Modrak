@@ -35,6 +35,7 @@ const PushMenu: FC<PushMenuProps> = ({ open, anchorEl, setAnchorEl, pushes }) =>
     await updateDoc(pushDocRef, {
       pushes: pushData!.pushes
     })
+    handleClose()
   }
   const onLoadMorePushes = () => {
     router.push(`/user/push/${myInfo!.uid}`)
@@ -52,19 +53,21 @@ const PushMenu: FC<PushMenuProps> = ({ open, anchorEl, setAnchorEl, pushes }) =>
           'aria-labelledby': 'basic-button',
         }}
       >
-        {pushes[0] ? pushes.map(push => (
-          <div key={push.pushId}>
-            <MenuItem onClick={onCheckPush(push.pushId)}>
-              <PushCard>
-                <Typography variant="subtitle2">{push.message}</Typography>
-                <Typography variant="caption">{format(push.createdAt, 'yyyy년 MM월 d일')}</Typography>
-              </PushCard>
-            </MenuItem>
-            <Divider />
-          </div>
-        )) : (
-          <CardContent sx={{ width: '360px', textAlign: 'center' }}>새로운 알림이 없습니다!</CardContent>
-        )}
+        <div>
+          {pushes[0] ? pushes.map(push => (
+            <div key={push.pushId}>
+              <MenuItem onClick={onCheckPush(push.pushId)}>
+                <PushCard>
+                  <Typography variant="subtitle2">{push.message}</Typography>
+                  <Typography variant="caption">{format(push.createdAt, 'yyyy년 MM월 d일')}</Typography>
+                </PushCard>
+              </MenuItem>
+              <Divider />
+            </div>
+          )) : (
+            <CardContent sx={{ width: '360px', textAlign: 'center' }}>새로운 알림이 없습니다!</CardContent>
+          )}
+        </div>
         <Button sx={{ width: '100%' }} onClick={onLoadMorePushes}>알림 더보기</Button>
       </Menu>
     </div>

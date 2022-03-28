@@ -1,38 +1,36 @@
 import { FC, useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, Collapse, Divider, Stack, Typography } from "@mui/material";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
+import { useRouter } from "next/router";
+import { doc, onSnapshot } from "firebase/firestore";
+import { dbService } from "fireBaseApp/fBase";
+import { Stack, Typography } from "@mui/material";
+import { useAppSelector } from "store/hooks";
 import getAllUsersId from "utils/SSRFunctions/getAllUsersId";
 import getUserInfoById from "utils/SSRFunctions/getUserInfoById";
+import PushCard from "components/parts/PushCard";
 
 const Pushes: FC<{userData: UserType}> = ({ userData }) => {
   const [pushes, setPushes] = useState<PushType[]>([])
-  const [expanded, setExpanded] = useState(false);
+  const router = useRouter()
+  const myInfo = useAppSelector(state => state.users.myInfo)
 
-  const handleExpandClick = () => setExpanded(!expanded);
+  useEffect(() => { // 로그인한 상태가 아니거나 자신의 알림페이지가 아닌 경우 진입 불가
+    if (!myInfo || myInfo.uid !== userData.uid) router.push('/')
+  }, [myInfo, router, userData.uid])
   
-  useEffect(() => {
-    (async () => {
-      const { searchedData: pushData } = await searchFirestoreDoc(`pushes/${userData.uid}`)
-      setPushes(pushData!.pushes as PushType[])
-    })()
+  useEffect(() => { // 실시간으로 알림들을 받아옴
+    const pushDocRef = doc(dbService, `pushes/${userData.uid}`)
+    let unsub = onSnapshot(pushDocRef, (doc) => {
+      setPushes(doc.data()!.pushes.sort((a: any, b: any) => {
+        return b.createdAt - a.createdAt
+      }))
+    })
+    return () => unsub()
   }, [userData.uid])
 
   return (
     <Stack spacing={2} sx={{ maxWidth: '720px', m: '0 auto' }}>
-      <Card raised>
-        <CardHeader 
-          title={<Typography sx={{ fontSize: '18px', fontFamily: 'Katuri' }}>서머셋 제주신화월드</Typography>}
-          subheader={<Typography variant="caption">2022년 3월 28일 20:00</Typography>}
-          onClick={handleExpandClick}
-          sx={{ cursor: 'pointer' }}
-        />
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <Divider />
-          <CardContent>
-            킹짱황버츠
-          </CardContent>
-        </Collapse>
-      </Card>
+      <Typography sx={{ fontFamily: 'Katuri', fontSize: '22px' }}>전체 알림 확인</Typography>
+      {pushes.map(push => <PushCard key={push.pushId} push={push} userUid={userData.uid} />)}
     </Stack>
   )
 }
