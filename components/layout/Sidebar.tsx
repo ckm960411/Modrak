@@ -39,7 +39,7 @@ const Sidebar: FC<SidebarProps> = ({ open, handleDrawerClose }) => {
           <MenuIcon />
         </IconButton>
       </DrawerHeader>
-      {myInfo && <SidebarProfile />}
+      {myInfo && <SidebarProfile myInfo={myInfo} />}
       <SidebarList handleDrawerClose={handleDrawerClose} />
     </Drawer>
   );

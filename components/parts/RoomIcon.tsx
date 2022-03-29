@@ -31,6 +31,7 @@ const icons: {
   '사우나': 'https://dffoxz5he03rp.cloudfront.net/icons/ic_sauna_28x28_gray_700.svg',
   '공용스파': 'https://dffoxz5he03rp.cloudfront.net/icons/ic_bathroom_28x28_gray_700.svg',
   '공항 셔틀': 'https://dffoxz5he03rp.cloudfront.net/icons/ic_pickup_28x28_gray_700.svg',
+  '스파/월풀': 'https://dffoxz5he03rp.cloudfront.net/icons/ic_bathroom_28x28_gray_700.svg',
 }
 
 const RoomIcon: FC<{icon: string}> = ({ icon }) => {
