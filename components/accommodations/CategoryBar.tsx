@@ -8,7 +8,7 @@ import { useAppDispatch } from "store/hooks";
 import { setCategoryFilter, setDivisionFilter } from "store/slices/roomsSlice";
 
 const divisions: DivisionType[] = [ "전체 지역", "제주시", "애월", "한경/한림", "대정/안덕", "서귀포", "남원", "표선/성산", "구좌", "조천" ]
-type AccommodationCategories = "전체" | "호텔" | "모텔" | "펜션" | "게스트하우스"
+type AccommodationCategories = "전체" | "호텔" | "캠핑" | "펜션" | "게스트하우스"
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -88,8 +88,8 @@ const CategoryBar: FC = () => {
           <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', justifyContent: 'center' }}>
             <Button variant={accommodationCategory === '전체' ? "contained" : "outlined"} onClick={handleCategory}>전체</Button>
             <Button variant={accommodationCategory === '호텔' ? "contained" : "outlined"} onClick={handleCategory}>호텔</Button>
-            <Button variant={accommodationCategory === '모텔' ? "contained" : "outlined"} onClick={handleCategory}>모텔</Button>
             <Button variant={accommodationCategory === '펜션' ? "contained" : "outlined"} onClick={handleCategory}>펜션</Button>
+            <Button variant={accommodationCategory === '캠핑' ? "contained" : "outlined"} onClick={handleCategory}>캠핑</Button>
             <Button variant={accommodationCategory === '게스트하우스' ? "contained" : "outlined"} onClick={handleCategory}>게스트하우스</Button>
           </Stack>
         </CardContent>

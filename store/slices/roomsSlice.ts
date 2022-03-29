@@ -125,7 +125,7 @@ export const roomsSlice = createSlice({
         case '호텔': 
           state.categoryFilter = [ where("category", "==", "호텔") ]
           break
-        case '모텔':
+        case '캠핑':
           state.categoryFilter = [ where("category", "==", "모텔") ]
           break
         case '펜션':

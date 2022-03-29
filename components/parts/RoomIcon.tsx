@@ -26,6 +26,11 @@ const icons: {
   '취사가능': "https://dffoxz5he03rp.cloudfront.net/icons/ic_kitchen_28x28_gray_700.svg",
   '비즈니스센터': "https://dffoxz5he03rp.cloudfront.net/icons/ic_businessbag_28x28_gray_700.svg",
   '세미나실': "https://dffoxz5he03rp.cloudfront.net/icons/ic_seminar_28x28_gray_700.svg",
+  '바베큐장': "https://dffoxz5he03rp.cloudfront.net/icons/ic_bbq_28x28_gray_700.svg",
+  '마사지': 'https://dffoxz5he03rp.cloudfront.net/icons/ic_massage_28x28_gray_700.svg',
+  '사우나': 'https://dffoxz5he03rp.cloudfront.net/icons/ic_sauna_28x28_gray_700.svg',
+  '공용스파': 'https://dffoxz5he03rp.cloudfront.net/icons/ic_bathroom_28x28_gray_700.svg',
+  '공항 셔틀': 'https://dffoxz5he03rp.cloudfront.net/icons/ic_pickup_28x28_gray_700.svg',
 }
 
 const RoomIcon: FC<{icon: string}> = ({ icon }) => {
