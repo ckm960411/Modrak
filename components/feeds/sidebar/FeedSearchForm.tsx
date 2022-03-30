@@ -7,8 +7,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
 import { useAppDispatch } from "store/hooks";
-import { setSearchNicknameFilter, setSearchTagFilter } from "store/slices/filterSlice";
-import { setIsInitialLoad } from "store/slices/feedsSlice";
+import { setSearchNicknameFilter, setSearchTagFilter } from "store/slices/feedFilterSlice";
 
 type SearchFilterType = "nickname" | "tag"
 
@@ -37,13 +36,11 @@ const FeedSearchForm: FC = () => {
         } else {
           const userData = res.docs[0].data()
           dispatch(setSearchNicknameFilter({ userUid: userData.uid! }))
-          dispatch(setIsInitialLoad(true))
         }
       })
     // 태그로 검색할 경우
     } else if (searchFilter === "tag") {
       dispatch(setSearchTagFilter({ tag: keyword }))
-      dispatch(setIsInitialLoad(true))
     }
   }
 

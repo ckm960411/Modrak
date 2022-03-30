@@ -1,15 +1,13 @@
 import { FC } from "react";
 import { CardContent, Chip, Stack, Typography } from "@mui/material";
 import { useAppDispatch } from "store/hooks";
-import { setSearchTagFilter } from "store/slices/filterSlice";
-import { setIsInitialLoad } from "store/slices/feedsSlice";
+import { setSearchTagFilter } from "store/slices/feedFilterSlice";
 
 const FeedContent: FC<{ text: string; tags: string[] }> = ({ text, tags }) => {
   const dispatch = useAppDispatch()
   
   const onClickTag = (tag: string) => () => {
     dispatch(setSearchTagFilter({ tag }))
-    dispatch(setIsInitialLoad(true))
   }
 
   return (

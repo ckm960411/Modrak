@@ -2,24 +2,42 @@ import { useEffect, useState } from "react";
 import { collection, DocumentData, getDocs, limit, orderBy, query, QueryDocumentSnapshot, startAfter } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { clearFeeds, setFeeds, setIsInitialLoad } from "store/slices/feedsSlice";
+import { clearFeeds, setFeeds } from "store/slices/feedsSlice";
 import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
+import { setIsInitialLoad } from "store/slices/feedFilterSlice";
 
 const useLoadingFeeds: UseLoadingFeedsType = (reference) => {
   const dispatch = useAppDispatch()
   // 이전 불러온 게시물의 스냅샷을 보관하여 다음 데이터 요청시 해당 데이터 이후부터 불러옴
   const [last, setLast] = useState<QueryDocumentSnapshot<DocumentData> | string>('hello')
   const [hasMore, setHasMore] = useState(true)
-  const filter = useAppSelector(state => state.filter.value)
-  const { value: feeds, isInitialLoad } = useAppSelector(state => state.feeds)
+  const { isInitialLoad, searchFilter, orderFilter, showFilter, tagFilter } = useAppSelector(state => state.feedFilter)
+  const { value: feeds } = useAppSelector(state => state.feeds)
   
   const loadFeeds = async () => {
     const feedDocsRef = collection(dbService, "feeds")
     let queryInstance
     if (isInitialLoad) {
-      queryInstance = query(feedDocsRef, ...filter, orderBy("createdAt", "desc"), limit(6)) // 처음 6개 로드
+      queryInstance = query(
+        feedDocsRef, 
+        ...searchFilter,
+        ...orderFilter,
+        ...showFilter,
+        ...tagFilter,
+        orderBy("createdAt", "desc"), 
+        limit(6)
+      ) // 처음 6개 로드
     } else {
-      queryInstance = query(feedDocsRef, ...filter, orderBy("createdAt", "desc"), startAfter(last), limit(5)) // 이전 로드한 게시물 이후 5개 로드
+      queryInstance = query(
+        feedDocsRef, 
+        ...searchFilter,
+        ...orderFilter,
+        ...showFilter,
+        ...tagFilter,
+        orderBy("createdAt", "desc"), 
+        startAfter(last), 
+        limit(5)
+      ) // 이전 로드한 게시물 이후 5개 로드
     } 
     const documentSnapshots = await getDocs(queryInstance)
 

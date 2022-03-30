@@ -1,8 +1,7 @@
 import { FC, useState } from "react";
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { initializeFilter, setFilter } from "store/slices/filterSlice";
-import { setIsInitialLoad } from "store/slices/feedsSlice";
+import { initializeFilter, setOrderFilter, setShowFilter, setTagFilter } from "store/slices/feedFilterSlice";
 
 type FeedFilterSidebarProps = {
   filterOpened: boolean
@@ -28,16 +27,13 @@ const FeedFilterSidebar: FC<FeedFilterSidebarProps> = ({ filterOpened, onClose }
     setShow("allShow")
     setTag("allTag")
     dispatch(initializeFilter())
-    dispatch(setIsInitialLoad(true))
-    console.log('initialize filter ✅')
     if (onClose) onClose()
   }
 
   const onSetFilter = () => {
-    const filterData = { order, show, tag, userUid: myInfo?.uid, followings: myInfo?.followings }
-    dispatch(setIsInitialLoad(true))
-    dispatch(setFilter(filterData))
-    console.log('set filter ✅')
+    dispatch(setOrderFilter(order))
+    dispatch(setShowFilter({ show, userUid: myInfo?.uid, followings: myInfo?.followings }))
+    dispatch(setTagFilter(tag))
     if (onClose) onClose()
   }
 

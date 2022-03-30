@@ -2,13 +2,11 @@ import { createSlice } from '@reduxjs/toolkit'
 
 export interface FeedState {
   value: FeedWithUserInfoType[]
-  isInitialLoad: boolean
   error: any | null
 }
 
 const initialState: FeedState = {
   value: [],
-  isInitialLoad: true,
   error: null
 }
 
@@ -16,11 +14,6 @@ export const feedsSlice = createSlice({
   name: 'feeds',
   initialState,
   reducers: {
-    // 피드를 처음 로드하는지 아닌지 isInitialLoad 상태를 변경
-    // true 가 들어오면 첫 게시물 몇개를 새로 로드함 (action.payload 로 boolean 이 들어옴)
-    setIsInitialLoad: (state, action) => {
-      state.isInitialLoad = action.payload
-    },
     // 로드한 피드들을 전역 상태 value 에 저장 (action.payload 로 FeedWithUserInfoType 객체가 들어옴)
     setFeeds: (state, action) => {
       if (state.value.findIndex(v => v.id === action.payload.id) !== -1) return
@@ -116,7 +109,6 @@ export const feedsSlice = createSlice({
 })
 
 export const { 
-  setIsInitialLoad,
   setFeeds, 
   addFeeds, 
   clearFeeds,
