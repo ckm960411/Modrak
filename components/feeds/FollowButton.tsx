@@ -6,7 +6,7 @@ import { addFollowings, removeFollowings } from "store/slices/usersSlice";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 import { mainColor } from "styles/GlobalStyles";
 
-const FollowButton: FC<{userUid: string}> = ({ userUid }) => {
+const FollowButton: FC<{userUid: string, [key: string]: any}> = ({ userUid, ...props }) => {
   const [followLoading, setFollowLoading] = useState(false)
   const dispatch = useAppDispatch()
   const myInfo = useAppSelector(state => state.users.myInfo)
@@ -59,6 +59,7 @@ const FollowButton: FC<{userUid: string}> = ({ userUid }) => {
       loading={followLoading}
       onClick={onToggleFollow}
       sx={{ border: `1px solid ${mainColor}`, mr: 1 }}
+      {...props}
     >
       {followings.includes(userUid) ? '언팔로우' : '팔로우'}
     </SubmitFormButton>

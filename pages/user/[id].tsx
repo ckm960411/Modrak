@@ -1,14 +1,29 @@
-import { FC } from "react";
+import { FC, useState } from "react";
+import styled from "@emotion/styled";
+import { useAppSelector } from "store/hooks";
 import getAllUsersId from "utils/SSRFunctions/getAllUsersId";
 import getUserInfoById from "utils/SSRFunctions/getUserInfoById";
+import ProfileCard from "components/profile/ProfileCard";
+import ProfileTabs from "components/profile/ProfileTabs";
 
 const Profile: FC<{userData: UserType}> = ({ userData }) => {
+  const [isMyProfile, setIsMyProfile] = useState(false)
+  const myInfo = useAppSelector(state => state.users.myInfo)
+  const { uid, email, name, nickname, profileImg, feeds } = userData
+
   return (
-    <>
-      {userData.nickname}
-    </>
+    <Section>
+      <ProfileCard myInfo={myInfo} userData={userData} isMyProfile={isMyProfile} setIsMyProfile={setIsMyProfile} />
+      <ProfileTabs />
+    </Section>
   )
 }
+
+const Section = styled.section`
+  max-width: 920px;
+  min-width: 340px;
+  margin: 0 auto;
+`
 
 export const getStaticPaths = async () => {
   const paths = await getAllUsersId()
