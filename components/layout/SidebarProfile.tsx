@@ -1,14 +1,37 @@
 import { FC, useState } from "react";
+import { useRouter } from "next/router";
+import { authService } from "fireBaseApp/fBase";
 import styled from "@emotion/styled";
-import { Avatar, Card, CardContent, CardHeader, IconButton, Stack, Typography } from "@mui/material";
+import { Avatar, Card, CardContent, CardHeader, Divider, IconButton, Menu, MenuItem, Stack, Typography } from "@mui/material";
 import MoreIcon from '@mui/icons-material/MoreVert';
+import { removeMyInfoData } from "store/slices/usersSlice";
+import { useAppDispatch } from "store/hooks";
 import defaultImg from "public/imgs/profileImg.png"
-import FollowList from "./FollowList";
+import FollowList from "components/layout/FollowList";
 
 const SidebarProfile: FC<{myInfo: UserType}> = ({ myInfo }) => {
   const [followOpened, setFollowOpened] = useState(false)
   const [followType, setFollowType] = useState<"followers" | "followings">("followers")
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const router = useRouter()
+  const dispatch = useAppDispatch()
   const { email, nickname, profileImg, followersCount, followingsCount } = myInfo
+  const open = Boolean(anchorEl);
+
+  const handleClickMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (open) return setAnchorEl(null)
+    setAnchorEl(event.currentTarget);
+  }
+  const handleCloseMenu = () => setAnchorEl(null);
+
+  const onLogoutClick = () => {
+    const ok = confirm('정말 로그아웃 하시겠습니까?')
+    if (!ok) return
+    authService.signOut()
+    alert('로그아웃이 완료됐습니다!')
+    dispatch(removeMyInfoData())
+  }
 
   const onClickFollowList = (e: React.MouseEvent<HTMLDivElement>) => {
     if ((e.currentTarget.firstElementChild as HTMLElement).innerText === '팔로워') {
@@ -30,8 +53,17 @@ const SidebarProfile: FC<{myInfo: UserType}> = ({ myInfo }) => {
           />
         }
         action={
-          <IconButton>
+          <IconButton onClick={handleClickMenu}>
             <MoreIcon />
+            <Menu anchorEl={anchorEl} open={open} onClose={handleCloseMenu}>
+              <MenuItem sx={{ fontSize: '14px' }} onClick={() => router.push(`/user/${myInfo.uid}`)}>
+                프로필로 이동하기
+              </MenuItem>
+              <Divider />
+              <MenuItem sx={{ fontSize: '14px' }} onClick={onLogoutClick}>
+                로그아웃
+              </MenuItem>
+            </Menu>
           </IconButton>
         }
         sx={{ p: 1 }}
