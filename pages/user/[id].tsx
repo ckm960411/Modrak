@@ -1,19 +1,40 @@
-import { FC, useState } from "react";
+import { FC, useEffect } from "react";
 import styled from "@emotion/styled";
-import { useAppSelector } from "store/hooks";
+import { browserSessionPersistence, onAuthStateChanged, setPersistence } from "firebase/auth";
+import { authService } from "fireBaseApp/fBase";
+import { useAppDispatch } from "store/hooks";
+import wrapper from "store/configureStore";
+import { setUserData } from "store/slices/profileSlice";
+import { loadMyInfoData } from "store/slices/usersSlice";
+import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import getAllUsersId from "utils/SSRFunctions/getAllUsersId";
 import getUserInfoById from "utils/SSRFunctions/getUserInfoById";
 import ProfileCard from "components/profile/ProfileCard";
 import ProfileTabs from "components/profile/ProfileTabs";
 
 const Profile: FC<{userData: UserType}> = ({ userData }) => {
-  const [isMyProfile, setIsMyProfile] = useState(false)
-  const myInfo = useAppSelector(state => state.users.myInfo)
-  const { uid, email, name, nickname, profileImg, feeds } = userData
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(setUserData(userData))
+  }, [dispatch, userData])
+
+  const onLoadUserData = async (uid: string) => {
+    const { searchedData: userData } = await searchFirestoreDoc(`users/${uid}`)
+    dispatch(loadMyInfoData(userData))
+  }
+
+  useEffect(() => {
+    setPersistence(authService, browserSessionPersistence)
+    onAuthStateChanged(authService, user => {
+      if (user) return onLoadUserData(user.uid)
+      else return
+    })
+  }, [])
 
   return (
     <Section>
-      <ProfileCard myInfo={myInfo} userData={userData} isMyProfile={isMyProfile} setIsMyProfile={setIsMyProfile} />
+      <ProfileCard />
       <ProfileTabs />
     </Section>
   )
@@ -33,13 +54,12 @@ export const getStaticPaths = async () => {
   }
 }
 
-export const getStaticProps = async ({ params }: { params: { id: string } }) => {
-  const userData = await getUserInfoById(params.id)
+export const getStaticProps = wrapper.getStaticProps((store) => async ({ params }) => {
+  const userData = await getUserInfoById(params!.id as string)
+  store.dispatch(setUserData(userData))
   return {
-    props: {
-      userData
-    }
+    props: { userData }
   }
-}
+})
 
 export default Profile

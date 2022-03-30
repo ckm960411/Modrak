@@ -6,6 +6,7 @@ import feedReducer, { FeedState } from "store/slices/feedsSlice";
 import filterReducer, { FilterState } from "store/slices//filterSlice";
 import restaurantReducer, { RestaurantState } from "store/slices/restaurantsSlice";
 import roomsReducer, { RoomState } from "store/slices/roomsSlice";
+import profileReducer, { UserDataState } from "store/slices/profileSlice"
 
 export interface IState {
   users: UserState,
@@ -13,6 +14,7 @@ export interface IState {
   filter: FilterState
   restaurants: RestaurantState
   rooms: RoomState
+  profile: UserDataState
 }
 
 const rootReducer = (state: IState, action: AnyAction): CombinedState<IState> => {
@@ -26,6 +28,7 @@ const rootReducer = (state: IState, action: AnyAction): CombinedState<IState> =>
         filter: filterReducer,
         restaurants: restaurantReducer,
         rooms: roomsReducer,
+        profile: profileReducer,
       })
       return combinedReducer(state, action)
     }

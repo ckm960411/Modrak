@@ -1,28 +1,31 @@
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { Avatar, CardContent, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { doc, onSnapshot } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { setIsMyProfile } from "store/slices/profileSlice";
 import defaultImg from "public/imgs/profileImg.png"
 import FollowButton from "components/feeds/FollowButton";
 
-interface ProfileCardProps {
-  myInfo: UserType | null
-  userData: UserType
-  isMyProfile: boolean
-  setIsMyProfile: Dispatch<SetStateAction<boolean>>
-}
-const ProfileCard: FC<ProfileCardProps> = ({ myInfo, userData, isMyProfile, setIsMyProfile }) => {
+const ProfileCard: FC = () => {
   const [followersCount, setFollowersCount] = useState(0)
   const [followingsCount, setFollowingsCount] = useState(0)
+  
   const theme = useTheme()
   const downMd = useMediaQuery(theme.breakpoints.down('md'))
-  const { uid, email, name, nickname, profileImg, feeds } = userData
+  const dispatch = useAppDispatch()
+  const myInfo = useAppSelector(state => state.users.myInfo)
+  const { userData, isMyProfile } = useAppSelector(state => state.profile)
+
+  const { uid, email, name, nickname, profileImg, feeds } = userData!
 
   useEffect(() => {
-    if (!myInfo || myInfo.uid !== userData.uid) return setIsMyProfile(false)
-    setIsMyProfile(true)
-  }, [myInfo, userData, setIsMyProfile])
+    if (myInfo && myInfo.uid === uid) // 내 정보와 프로필 유저가 같다면 isMyProfile 을 true
+      dispatch(setIsMyProfile(true))
+    else 
+      dispatch(setIsMyProfile(false)) // 내 정보와 프로필 유저가 다르다면 isMyProfile 을 false
+  }, [dispatch, myInfo, uid])
 
   useEffect(() => { // 실시간으로 사용자 정보를 받아옴
     const userDocRef = doc(dbService, `users/${uid}`)
