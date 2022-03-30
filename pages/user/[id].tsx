@@ -1,36 +1,21 @@
 import { FC, useEffect } from "react";
 import styled from "@emotion/styled";
-import { browserSessionPersistence, onAuthStateChanged, setPersistence } from "firebase/auth";
-import { authService } from "fireBaseApp/fBase";
 import { useAppDispatch } from "store/hooks";
 import wrapper from "store/configureStore";
 import { setUserData } from "store/slices/profileSlice";
-import { loadMyInfoData } from "store/slices/usersSlice";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import getAllUsersId from "utils/SSRFunctions/getAllUsersId";
 import getUserInfoById from "utils/SSRFunctions/getUserInfoById";
+import useLoadingUserInfo from "utils/hooks/useLoadingUserInfo";
 import ProfileCard from "components/profile/ProfileCard";
 import ProfileTabs from "components/profile/ProfileTabs";
 
 const Profile: FC<{userData: UserType}> = ({ userData }) => {
   const dispatch = useAppDispatch()
+  useLoadingUserInfo() // 로그인시 로그인상태 유지
 
   useEffect(() => {
     dispatch(setUserData(userData))
   }, [dispatch, userData])
-
-  const onLoadUserData = async (uid: string) => {
-    const { searchedData: userData } = await searchFirestoreDoc(`users/${uid}`)
-    dispatch(loadMyInfoData(userData))
-  }
-
-  useEffect(() => {
-    setPersistence(authService, browserSessionPersistence)
-    onAuthStateChanged(authService, user => {
-      if (user) return onLoadUserData(user.uid)
-      else return
-    })
-  }, [])
 
   return (
     <Section>

@@ -1,13 +1,9 @@
 import { FC, useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
-import { authService } from "fireBaseApp/fBase";
-import { browserSessionPersistence, onAuthStateChanged, setPersistence } from "firebase/auth";
-import { useAppDispatch } from "store/hooks";
-import { loadMyInfoData } from "store/slices/usersSlice";
 import { Box, Container, useMediaQuery, useTheme } from "@mui/material";
+import useLoadingUserInfo from "utils/hooks/useLoadingUserInfo";
 import Navbar from "components/layout/Navbar";
 import Sidebar from "components/layout/Sidebar";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 
 export const drawerWidth = 240;
 
@@ -42,23 +38,10 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
 }));
 
 const AppLayout: FC = ({ children }) => {
-  const dispatch = useAppDispatch()
   const [open, setOpen] = useState(true);
   const theme = useTheme()
   const downMd = useMediaQuery(theme.breakpoints.down("md"))
-  
-  const onLoadUserData = async (uid: string) => {
-    const { searchedData: userData } = await searchFirestoreDoc(`users/${uid}`)
-    dispatch(loadMyInfoData(userData))
-  }
-
-  useEffect(() => {
-    setPersistence(authService, browserSessionPersistence)
-    onAuthStateChanged(authService, user => {
-      if (user) return onLoadUserData(user.uid)
-      else return
-    })
-  }, [])
+  useLoadingUserInfo() // 로그인시 로그인상태 유지
 
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
