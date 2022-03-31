@@ -4,6 +4,7 @@ import ProfileFeeds from "components/profile/tabs/ProfileFeeds";
 import LikedFeeds from "components/profile/tabs/LikedFeeds";
 import BookmarkFeeds from "components/profile/tabs/BookmarkFeeds";
 import BookmarkRestaurants from "components/profile/tabs/BookmarkRestaurants";
+import BookmarkAccommodation from "components/profile/tabs/BookmarkAccommodation";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -52,7 +53,7 @@ const ProfileTabs: FC = () => {
         <BookmarkRestaurants />
       </TabPanel>
       <TabPanel value={tab} index={4}>
-        탭5
+        <BookmarkAccommodation />
       </TabPanel>
     </Box>
   )
