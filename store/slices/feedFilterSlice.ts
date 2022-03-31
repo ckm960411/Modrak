@@ -26,6 +26,7 @@ export const feedFilterSlice = createSlice({
     setIsInitialLoad: (state, action) => {
       state.isInitialLoad = action.payload
     },
+    // 모든 필터 초기화
     initializeFilter: (state) => {
       state.isInitialLoad = true
       state.searchFilter = []
@@ -33,6 +34,7 @@ export const feedFilterSlice = createSlice({
       state.showFilter = []
       state.tagFilter = []
     },
+    // 최신순(기본), 좋아요순, 찜(북마크)순으로 정렬
     setOrderFilter: (state, action) => {
       state.isInitialLoad = true // 바뀐 필터로 처음부터 불러오기 위함
       state.searchFilter = []
@@ -50,6 +52,7 @@ export const feedFilterSlice = createSlice({
           break
       }
     },
+    // 전체(기본), 팔로잉 글만, 내 글만 필터링
     setShowFilter: (state, action) => {
       state.isInitialLoad = true
       state.searchFilter = []
@@ -73,6 +76,7 @@ export const feedFilterSlice = createSlice({
           break
       }
     },
+    // 모든태그(기본), 숙소태그만, 맛집태그만 필터링
     setTagFilter: (state, action) => {
       state.isInitialLoad = true
       state.searchFilter = []
@@ -90,6 +94,7 @@ export const feedFilterSlice = createSlice({
           break
       }
     },
+    // 검색된 닉네임의 유저의 글만 필터링
     setSearchNicknameFilter: (state, action) => {
       state.isInitialLoad = true
       state.orderFilter = []
@@ -97,6 +102,7 @@ export const feedFilterSlice = createSlice({
       state.tagFilter = []
       state.searchFilter = [ where("userUid", "==", action.payload.userUid) ]
     },
+    // 검색된 태그의 글만 필터링
     setSearchTagFilter: (state, action) => {
       state.isInitialLoad = true
       state.orderFilter = []

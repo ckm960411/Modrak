@@ -5,6 +5,9 @@ import rootReducer, { IState } from 'store/reducer'
 const createStore = () => {
   const store = configureStore({
     reducer: rootReducer as Reducer<IState, AnyAction>,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+      serializableCheck: false,
+    }),
   })
   return store
 }

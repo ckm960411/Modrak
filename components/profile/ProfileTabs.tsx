@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
+import ProfileFeeds from "components/profile/tabs/ProfileFeeds";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -22,9 +23,7 @@ const TabPanel = (props: TabPanelProps) => {
 const ProfileTabs: FC = () => {
   const [tab, setTab] = useState(0)
 
-  const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
-    setTab(newValue);
-  };
+  const handleChangeTab = (e: React.SyntheticEvent, newValue: number) => setTab(newValue);
 
   return (
     <Box sx={{ width: "100%", mt: 2 }}>
@@ -37,7 +36,7 @@ const ProfileTabs: FC = () => {
         </Tabs>
       </Box>
       <TabPanel value={tab} index={0}>
-        탭1
+        <ProfileFeeds />
       </TabPanel>
       <TabPanel value={tab} index={1}>
         탭2
