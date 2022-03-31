@@ -1,12 +1,21 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import Link from "next/link";
 import styled from "@emotion/styled";
 import { CardContent, Rating, Typography, useMediaQuery, useTheme } from "@mui/material";
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
+import { useAppSelector } from "store/hooks";
 import { mainColor } from "styles/GlobalStyles";
 
 const AccommodationCard: FC<{accommodation: AccommodationWithId}> = ({ accommodation }) => {
+  const myInfo = useAppSelector(state => state.users.myInfo)
+
   const theme = useTheme()
   const downSm = useMediaQuery(theme.breakpoints.down('sm'))
+
+  const isBookmarked = useMemo(() => {
+    return myInfo && myInfo.bookmarkAccommodations.includes(accommodation.id)
+  }, [myInfo, accommodation.id])
 
   return (
     <Link key={accommodation.id} href={`/accommodation/${accommodation.id}`}>
@@ -33,6 +42,12 @@ const AccommodationCard: FC<{accommodation: AccommodationWithId}> = ({ accommoda
                 {accommodation.rooms[accommodation.rooms.length-1].price}
               </Typography>
             </div>
+            <Icon>
+              {isBookmarked
+                ? <BookmarkIcon color="primary" fontSize="large" />
+                : <BookmarkBorderOutlinedIcon color="primary" fontSize="large" />
+              }
+            </Icon>
           </CardContent>
         </AccommodationLink>
       </a>
@@ -59,6 +74,7 @@ const AccommodationLink = styled.div<{downSm: boolean}>`
     object-fit: cover;
   }
   & > div#accommodation-card {
+    position: relative;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -67,6 +83,11 @@ const AccommodationLink = styled.div<{downSm: boolean}>`
       margin-top: 10px;
     }
   }
+`
+const Icon = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
 `
 
 export default AccommodationCard

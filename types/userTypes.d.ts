@@ -14,6 +14,7 @@ declare interface UserType {
   bookmarkFeeds: string[]
   recommendRestaurants: string[]
   bookmarkRestaurants: string[]
+  bookmarkAccommodations: string[]
   roomReserved: RoomReserved[]
   pushUnchecked: PushType[]
 }

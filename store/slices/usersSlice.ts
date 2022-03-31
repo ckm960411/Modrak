@@ -73,6 +73,14 @@ export const usersSlice = createSlice({
     removeBookmarkRestaurant: (state, action) => {
       state.myInfo!.bookmarkRestaurants = state.myInfo!.bookmarkRestaurants.filter(restId => restId !== action.payload.restaurantId)
     },
+    // 숙소 찜(북마크) id 등록
+    addBookmarkAccommodation: (state, action) => {
+      state.myInfo!.bookmarkAccommodations.push(action.payload.accommodationId)
+    },
+    // 숙소 찜(북마크) id 취소
+    removeBookmarkAccommodation: (state, action) => {
+      state.myInfo!.bookmarkAccommodations = state.myInfo!.bookmarkAccommodations.filter(accId => accId !== action.payload.accommodationId)
+    },
     // 예약한 객실 데이터를 유저 정보에 저장
     // action.payload 로 { accommodationId, roomId, reservedDates } 가 옴
     addRoomInfoReserved: (state, action) => {
@@ -105,6 +113,8 @@ export const {
   removeRecommendRestaurant,
   addBookmarkRestaurant,
   removeBookmarkRestaurant,
+  addBookmarkAccommodation,
+  removeBookmarkAccommodation,
   addRoomInfoReserved,
   addNewPush,
   removeCheckedPush,

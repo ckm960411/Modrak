@@ -71,6 +71,8 @@ const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
           feeds: [],
           likeFeeds: [],
           bookmarkFeeds: [],
+          bookmarkRestaurants: [],
+          bookmarkAccommodations: [],
           pushUnchecked: [],
           roomReserved: [],
         }
