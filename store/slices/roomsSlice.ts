@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { QueryConstraint, where } from "firebase/firestore";
 
 export interface RoomState {
-  value: any[]
+  value: AccommodationWithId[]
   roomData: AccommodationWithId | null
   isInitialLoad: boolean
   divisionFilter: QueryConstraint[]
