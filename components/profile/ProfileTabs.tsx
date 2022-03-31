@@ -3,6 +3,7 @@ import { Box, Tab, Tabs, Typography } from "@mui/material";
 import ProfileFeeds from "components/profile/tabs/ProfileFeeds";
 import LikedFeeds from "components/profile/tabs/LikedFeeds";
 import BookmarkFeeds from "components/profile/tabs/BookmarkFeeds";
+import BookmarkRestaurants from "components/profile/tabs/BookmarkRestaurants";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -48,7 +49,7 @@ const ProfileTabs: FC = () => {
         <BookmarkFeeds />
       </TabPanel>
       <TabPanel value={tab} index={3}>
-        탭4
+        <BookmarkRestaurants />
       </TabPanel>
       <TabPanel value={tab} index={4}>
         탭5
