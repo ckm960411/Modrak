@@ -94,8 +94,8 @@ export const feedFilterSlice = createSlice({
           break
       }
     },
-    // 검색된 닉네임의 유저의 글만 필터링
-    setSearchNicknameFilter: (state, action) => {
+    // 입력받은 uid 의 유저의 글만 필터링
+    setSearchByUidFilter: (state, action) => {
       state.isInitialLoad = true
       state.orderFilter = []
       state.showFilter = []
@@ -120,7 +120,7 @@ export const {
   setShowFilter,
   setTagFilter,
   initializeFilter, 
-  setSearchNicknameFilter,
+  setSearchByUidFilter,
   setSearchTagFilter
 } = feedFilterSlice.actions
 

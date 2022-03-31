@@ -7,12 +7,12 @@ import { clearFeeds } from "store/slices/feedsSlice";
 import useLoadingFeeds from "utils/hooks/useLoadingFeeds";
 import Feed from "components/feeds/feed/Feed";
 
-const ProfileFeeds: FC = () => {
+const BookmarkFeeds: FC = () => {
   const targetRef = useRef<HTMLDivElement>(null)
   const userData = useAppSelector(state => state.profile.userData!)
   const dispatch = useAppDispatch()
 
-  const { feeds } = useLoadingFeeds(targetRef, [ where("userUid", "==", userData.uid) ])
+  const { feeds } = useLoadingFeeds(targetRef, [ where("bookmarks", "array-contains", userData.uid) ])
 
   useEffect(() => {
     dispatch(clearFeeds())
@@ -32,4 +32,4 @@ const TargetDiv = styled.div`
   height: 100px;
 `
 
-export default ProfileFeeds
+export default BookmarkFeeds

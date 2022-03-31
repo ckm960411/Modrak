@@ -1,6 +1,8 @@
 import { FC, useState } from "react";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import ProfileFeeds from "components/profile/tabs/ProfileFeeds";
+import LikedFeeds from "components/profile/tabs/LikedFeeds";
+import BookmarkFeeds from "components/profile/tabs/BookmarkFeeds";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -31,6 +33,7 @@ const ProfileTabs: FC = () => {
         <Tabs value={tab} onChange={handleChangeTab}>
           <Tab label="게시글" />
           <Tab label="좋아요한 글" />
+          <Tab label="북마크한 글" />
           <Tab label="찜한 맛집" />
           <Tab label="찜한 숙소" />
         </Tabs>
@@ -39,13 +42,16 @@ const ProfileTabs: FC = () => {
         <ProfileFeeds />
       </TabPanel>
       <TabPanel value={tab} index={1}>
-        탭2
+        <LikedFeeds />
       </TabPanel>
       <TabPanel value={tab} index={2}>
-        탭3
+        <BookmarkFeeds />
       </TabPanel>
       <TabPanel value={tab} index={3}>
         탭4
+      </TabPanel>
+      <TabPanel value={tab} index={4}>
+        탭5
       </TabPanel>
     </Box>
   )

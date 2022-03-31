@@ -7,7 +7,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
 import { useAppDispatch } from "store/hooks";
-import { setSearchNicknameFilter, setSearchTagFilter } from "store/slices/feedFilterSlice";
+import { setSearchByUidFilter, setSearchTagFilter } from "store/slices/feedFilterSlice";
 
 type SearchFilterType = "nickname" | "tag"
 
@@ -35,7 +35,7 @@ const FeedSearchForm: FC = () => {
           return alert('해당하는 닉네임의 사용자가 없습니다!')
         } else {
           const userData = res.docs[0].data()
-          dispatch(setSearchNicknameFilter({ userUid: userData.uid! }))
+          dispatch(setSearchByUidFilter({ userUid: userData.uid! }))
         }
       })
     // 태그로 검색할 경우
