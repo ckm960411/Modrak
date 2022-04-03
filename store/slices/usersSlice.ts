@@ -94,6 +94,14 @@ export const usersSlice = createSlice({
     removeCheckedPush: (state, action) => {
       state.myInfo!.pushUnchecked = state.myInfo!.pushUnchecked.filter(push => push.pushId !== action.payload.pushId)
     },
+    // 프로필 이미지 변경
+    updateProfileImg: (state, action) => {
+      state.myInfo!.profileImg = action.payload.newProfileImg
+    },
+    // 프로필 닉네임 변경
+    updateNickname: (state, action) => {
+      state.myInfo!.nickname = action.payload.newNickname
+    },
   },
   extraReducers: {},
 })
@@ -118,6 +126,8 @@ export const {
   addRoomInfoReserved,
   addNewPush,
   removeCheckedPush,
+  updateProfileImg,
+  updateNickname,
 } = usersSlice.actions
 
 

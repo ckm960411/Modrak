@@ -15,12 +15,22 @@ export const profileSlice = createSlice({
     setUserData: (state, action) => {
       state.userData = action.payload
     },
+    // 프로필 이미지 변경
+    updateUserProfileImg: (state, action) => {
+      state.userData!.profileImg = action.payload.newProfileImg
+    },
+    // 프로필 닉네임 변경
+    updateUserNickname: (state, action) => {
+      state.userData!.nickname = action.payload.newNickname
+    },
   },
   extraReducers: {},
 })
 
 export const {
   setUserData,
+  updateUserProfileImg,
+  updateUserNickname,
 } = profileSlice.actions
 
 export default profileSlice.reducer
