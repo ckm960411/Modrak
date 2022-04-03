@@ -7,10 +7,13 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { setIsMyProfile } from "store/slices/profileSlice";
 import defaultImg from "public/imgs/profileImg.png"
 import FollowButton from "components/feeds/FollowButton";
+import FollowList from "components/layout/FollowList";
 
 const ProfileCard: FC = () => {
   const [followersCount, setFollowersCount] = useState(0)
   const [followingsCount, setFollowingsCount] = useState(0)
+  const [followOpened, setFollowOpened] = useState(false)
+  const [followType, setFollowType] = useState<"followers" | "followings">("followers")
   
   const theme = useTheme()
   const downMd = useMediaQuery(theme.breakpoints.down('md'))
@@ -19,6 +22,15 @@ const ProfileCard: FC = () => {
   const { userData, isMyProfile } = useAppSelector(state => state.profile)
 
   const { uid, email, name, nickname, profileImg, feeds } = userData!
+
+  const onClickFollowList = (e: React.MouseEvent<HTMLDivElement>) => {
+    if ((e.currentTarget.firstElementChild as HTMLElement).innerText === '팔로워') {
+      setFollowType('followers')
+    } else {
+      setFollowType('followings')
+    }
+    setFollowOpened(true)
+  }
 
   useEffect(() => {
     if (myInfo && myInfo.uid === uid) // 내 정보와 프로필 유저가 같다면 isMyProfile 을 true
@@ -58,15 +70,16 @@ const ProfileCard: FC = () => {
             <Typography>게시글</Typography>
             <Typography>{feeds.length}</Typography>
           </div>
-          <div>
+          <div onClick={onClickFollowList}>
             <Typography>팔로워</Typography>
             <Typography>{isMyProfile ? myInfo?.followersCount : followersCount}</Typography>
           </div>
-          <div>
+          <div onClick={onClickFollowList}>
             <Typography>팔로잉</Typography>
             <Typography>{isMyProfile ? myInfo?.followingsCount : followingsCount}</Typography>
           </div>
         </CountContainer>
+        {followOpened &&  <FollowList open={followOpened} setFollowOpened={setFollowOpened} followType={followType} />}
       </ProfileContent>
     </Stack>
   )
