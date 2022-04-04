@@ -30,8 +30,8 @@ const BookmarkAccommodation: FC = () => {
     <div>
       <Stack spacing={2}>
         {accommodations.map(accommodation => (
-        <AccommodationCard key={accommodation.id} accommodation={accommodation} />
-        ))}
+          <AccommodationCard key={accommodation.id} accommodation={accommodation} />
+          ))}
       </Stack>
     </div>
   )

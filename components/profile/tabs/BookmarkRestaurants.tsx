@@ -32,10 +32,10 @@ const BookmarkRestaurants: FC = () => {
 
   return (
     <ImageList cols={downSm ? 1 : downMd ? 2 : 3} gap={16} sx={{ overflow: 'visible' }}>
-    {restaurants.map((item: RestaurantWithId) => (
-      <RestaurantCard key={item.id} item={item} />
-    ))}
-  </ImageList>
+      {restaurants.map((item: RestaurantWithId) => (
+        <RestaurantCard key={item.id} item={item} />
+      ))}
+    </ImageList>
   )
 }
 
