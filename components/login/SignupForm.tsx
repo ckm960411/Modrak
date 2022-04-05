@@ -75,6 +75,7 @@ const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
           bookmarkAccommodations: [],
           pushUnchecked: [],
           roomReserved: [],
+          recommendRestaurants: [],
         }
         // 사용자 정보를 "users" 컬렉션에 uid 로 생성
         const usersCollection = collection(dbService, "users")
