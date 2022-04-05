@@ -69,10 +69,10 @@ const Section = styled.section`
     padding: 16px 0;
     border-right: 1px solid #e5e5e5;
   }
-  & > div:first-child {
+  & > div:first-of-type {
     cursor: auto;
   }
-  & > div:last-child {
+  & > div:last-of-type {
     border-right: none;
   }
 `
