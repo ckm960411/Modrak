@@ -19,6 +19,7 @@ const HookFormInput: FC<HookFormInputPropTypes> = ({
       <FormControl fullWidth>
         <Stack direction="row">
           <TextField
+            id="hook-form-input"
             type={type}
             placeholder={placeholder}
             error={errors[`${type}`] && true}

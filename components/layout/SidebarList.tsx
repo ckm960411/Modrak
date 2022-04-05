@@ -41,11 +41,12 @@ const SidebarList: FC<{handleDrawerClose: () => void}> = ({ handleDrawerClose })
         <Link href={item.route} key={i}>
           <a>
             <ListItemButton 
+              id="sidebar-listitem-button"
               selected={item.route === route}
               onClick={downMd ? handleDrawerClose : undefined}
             >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.primary} />
+              <ListItemIcon id="sidebar-listitem-icon">{item.icon}</ListItemIcon>
+              <ListItemText id="sidebar-listitem-text" primary={item.primary} />
             </ListItemButton>
           </a>
         </Link>

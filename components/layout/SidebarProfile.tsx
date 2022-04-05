@@ -43,7 +43,7 @@ const SidebarProfile: FC<{myInfo: UserType}> = ({ myInfo }) => {
   }
 
   return (
-    <Card sx={{ margin: 1, padding: "6px", boxShadow: "none" }}>
+    <Card sx={{ margin: 1, padding: "6px", boxShadow: "none !important" }}>
       <CardHeader 
         avatar={
           <Avatar 

@@ -33,7 +33,7 @@ const RoomReservation: FC = () => {
         {rooms.map((room, i) => (
           <RoomCard key={i} downMd={downMd} onClick={onOpenCard(room.roomId)}>
             <img alt={room.roomName} src={room.images[0]} />
-            <CardContent>
+            <CardContent id="roomcard-desc">
               <div>
                 <Typography sx={{ fontSize: '18px', fontWeight: 600 }}>{`[${checkin} 체크인] ${room.roomName}`}</Typography>
                 <Typography variant="subtitle2" sx={{ color: '#555' }}>{room.people}</Typography>
@@ -79,7 +79,7 @@ const RoomCard = styled.div<{downMd: boolean}>`
     object-fit: cover;
     height: ${props => props.downMd && '240px'}
   }
-  & > div.css-46bh2p-MuiCardContent-root {
+  & > div#roomcard-desc {
     display: flex;
     flex-direction: column;
     justify-content: space-between;

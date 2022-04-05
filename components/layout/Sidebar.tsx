@@ -15,6 +15,7 @@ const Sidebar: FC<SidebarProps> = ({ open, handleDrawerClose }) => {
   const myInfo = useAppSelector(state => state.users.myInfo)
   return (
     <Drawer
+      id="sidebar-drawer"
       sx={{
         width: drawerWidth,
         flexShrink: 0,
