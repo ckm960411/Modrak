@@ -1,4 +1,5 @@
 import { Dispatch, FC, SetStateAction, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/router";
 import { Avatar, Card, CardHeader, Dialog, IconButton, Stack, Typography } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { useAppSelector } from "store/hooks";
@@ -20,9 +21,16 @@ type FollowListProps = {
 }
 const FollowList: FC<FollowListProps> = ({ userInfo, open, setFollowOpened, followType }) => {
   const [followList, setFollowList] = useState<FollowList[]>([])
+  const router = useRouter()
+  const myInfo = useAppSelector(state => state.users.myInfo)
 
   const onClose = () => {
     setFollowOpened(false)
+  }
+
+  const onMoveUserProfile = (userUid: string) => () => {
+    router.push(`/user/${userUid}`)
+    onClose()
   }
 
   useEffect(() => {
@@ -53,9 +61,9 @@ const FollowList: FC<FollowListProps> = ({ userInfo, open, setFollowOpened, foll
             <Card key={follow.uid} sx={{ boxShadow: 'none' }}>
               <CardHeader 
                 avatar={<Avatar alt={follow.nickname} src={follow.profileImg ? follow.profileImg : defaultImg.src} />}
-                title={<Typography sx={{ fontFamily: 'Katuri' }}>{follow.nickname}</Typography>}
+                title={<Typography sx={{ fontFamily: 'Katuri', cursor: 'pointer' }} onClick={onMoveUserProfile(follow.uid)}>{follow.nickname}</Typography>}
                 subheader={<Typography>{follow.email}</Typography>}
-                action={<FollowButton userUid={follow.uid} />}
+                action={follow.uid !== myInfo?.uid && <FollowButton userUid={follow.uid} />}
               />
             </Card>
           ))}

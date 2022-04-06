@@ -1,4 +1,5 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import EditMenu from "components/parts/EditMenu"
 import defaultImg from "public/imgs/profileImg.png"
 import { Avatar, CardHeader, Stack, Typography } from "@mui/material";
@@ -12,20 +13,12 @@ import { deleteFeed } from "store/slices/feedsSlice";
 import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import { deleteFeedInfo } from "store/slices/usersSlice";
 
-const NicknameTypo = styled(Typography)`
-  font-family: 'Katuri';
-  color: #353535;
-`
-type FeedHeaderProps = {
-  feedData: FeedWithUserInfoType
-  setEditing: Dispatch<SetStateAction<boolean>>
-}
-
 const FeedHeader: FC<FeedHeaderProps> = ({ feedData, setEditing }) => {
   const [timeAgo, setTimeAgo] = useState<string>("0");
   const [date, setDate] = useState<string>('')
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const myInfo = useAppSelector(state => state.users.myInfo)
 
@@ -40,6 +33,10 @@ const FeedHeader: FC<FeedHeaderProps> = ({ feedData, setEditing }) => {
       setDate(format(modifiedAt, 'yyyy년 MM월 d일 H시 m분'))
     }
   }, [createdAt, modifiedAt, setTimeAgo]);
+
+  const onMoveUserProfile = (userUid: string) => () => {
+    router.push(`/user/${userUid}`)
+  }
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () =>  setAnchorEl(null);
@@ -84,7 +81,7 @@ const FeedHeader: FC<FeedHeaderProps> = ({ feedData, setEditing }) => {
       avatar={<Avatar alt={nickname} src={profileImg ? profileImg : defaultImg.src} />}
       title={
         <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "center", height: "30.75px" }}>
-          <NicknameTypo>{nickname}</NicknameTypo>
+          <NicknameTypo onClick={onMoveUserProfile(userUid)}>{nickname}</NicknameTypo>
           {myInfo && myInfo.uid !== userUid &&  <FollowButton userUid={userUid} />}
         </Stack>
       }
@@ -102,5 +99,15 @@ const FeedHeader: FC<FeedHeaderProps> = ({ feedData, setEditing }) => {
     />
   );
 };
+
+const NicknameTypo = styled(Typography)`
+  font-family: 'Katuri';
+  color: #353535;
+  cursor: pointer;
+`
+type FeedHeaderProps = {
+  feedData: FeedWithUserInfoType
+  setEditing: Dispatch<SetStateAction<boolean>>
+}
 
 export default FeedHeader;

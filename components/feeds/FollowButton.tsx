@@ -11,9 +11,9 @@ const FollowButton: FC<{userUid: string, [key: string]: any}> = ({ userUid, ...p
   const dispatch = useAppDispatch()
   const myInfo = useAppSelector(state => state.users.myInfo)
   
-  const { uid, followings } = myInfo!
-
   const onToggleFollow = async () => {
+    if (!myInfo) return
+    const { uid, followings } = myInfo
     setFollowLoading(true)
     const { searchedDocRef: myInfoRef, searchedData: myInfoData } = await searchFirestoreDoc(`users/${uid}`)
     const { searchedDocRef: userDocRef, searchedData: userData } = await searchFirestoreDoc(`users/${userUid}`)
@@ -61,7 +61,7 @@ const FollowButton: FC<{userUid: string, [key: string]: any}> = ({ userUid, ...p
       sx={{ border: `1px solid ${mainColor}`, mr: 1 }}
       {...props}
     >
-      {followings.includes(userUid) ? '언팔로우' : '팔로우'}
+      {myInfo?.followings.includes(userUid) ? '언팔로우' : '팔로우'}
     </SubmitFormButton>
   )
 }
