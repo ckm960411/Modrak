@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, FC, SetStateAction, useEffect, useMemo, useState } from "react";
 import { Avatar, Card, CardHeader, Dialog, IconButton, Stack, Typography } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { useAppSelector } from "store/hooks";
@@ -13,12 +13,12 @@ type FollowList = {
   email: string
 }
 type FollowListProps = {
+  userInfo: UserType
   open: boolean
   setFollowOpened: Dispatch<SetStateAction<boolean>>
   followType: "followers" | "followings"
 }
-const FollowList: FC<FollowListProps> = ({ open, setFollowOpened, followType }) => {
-  const myInfo = useAppSelector(state => state.users.myInfo!)
+const FollowList: FC<FollowListProps> = ({ userInfo, open, setFollowOpened, followType }) => {
   const [followList, setFollowList] = useState<FollowList[]>([])
 
   const onClose = () => {
@@ -26,7 +26,7 @@ const FollowList: FC<FollowListProps> = ({ open, setFollowOpened, followType }) 
   }
 
   useEffect(() => {
-    myInfo[followType].map( async (follow) => {
+    userInfo[followType].map( async (follow) => {
       const { searchedData: userData } = await searchFirestoreDoc(`users/${follow}`)
       const userInfo: FollowList = {
         uid: userData!.uid,
@@ -36,7 +36,7 @@ const FollowList: FC<FollowListProps> = ({ open, setFollowOpened, followType }) 
       }
       setFollowList(prev => [ ...prev, userInfo ])
     })
-  }, [])
+  }, [followType, userInfo])
 
   return (
     <Dialog

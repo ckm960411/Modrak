@@ -53,7 +53,14 @@ const CountContainer: FC = () => {
         <Typography>팔로잉</Typography>
         <Typography>{isMyProfile ? myInfo?.followingsCount : followingsCount}</Typography>
       </div>
-      {followOpened &&  <FollowList open={followOpened} setFollowOpened={setFollowOpened} followType={followType} />}
+      {followOpened && (
+        <FollowList 
+          userInfo={userData!}
+          open={followOpened} 
+          setFollowOpened={setFollowOpened} 
+          followType={followType} 
+        />
+      )}
     </Section>
   )
 }

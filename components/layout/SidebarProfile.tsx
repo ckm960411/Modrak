@@ -91,7 +91,12 @@ const SidebarProfile: FC<{myInfo: UserType}> = ({ myInfo }) => {
         </FollowerBox>
       </ProfileContent>
       {followOpened && (
-        <FollowList open={followOpened} setFollowOpened={setFollowOpened} followType={followType} />
+        <FollowList 
+          userInfo={myInfo}
+          open={followOpened} 
+          setFollowOpened={setFollowOpened} 
+          followType={followType} 
+        />
       )}
     </Card>
   );
