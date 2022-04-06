@@ -88,7 +88,7 @@ const GlobalStyles = () => {
           }
         },
         // 피드 페이지 각 Card 컴포넌트의 raised 그림자 밝기 조절
-        '.MuiCard-root': {
+        'div#feed-card.MuiCard-root': {
           boxShadow: '0px 5px 5px -3px rgb(0 0 0 / 20%), 0px 8px 10px 1px rgb(0 0 0 / 5%), 0px 3px 14px 2px rgb(0 0 0 / 5%) !important'
         },
         // 피드 페이지 검색 필터 선택창 스타일링

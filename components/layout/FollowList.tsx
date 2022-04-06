@@ -1,5 +1,6 @@
 import { Dispatch, FC, SetStateAction, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
+import styled from "@emotion/styled";
 import { Avatar, Card, CardHeader, Dialog, IconButton, Stack, Typography } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { useAppSelector } from "store/hooks";
@@ -44,7 +45,7 @@ const FollowList: FC<FollowListProps> = ({ userInfo, open, setFollowOpened, foll
       }
       setFollowList(prev => [ ...prev, userInfo ])
     })
-  }, [followType, userInfo])
+  }, [])
 
   return (
     <Dialog
@@ -56,21 +57,29 @@ const FollowList: FC<FollowListProps> = ({ userInfo, open, setFollowOpened, foll
           title={<Typography sx={{ fontFamily: 'Katuri' }}>{followType === 'followers' ? '팔로워' : '팔로우'} 목록</Typography>}
           action={<IconButton onClick={onClose}><Close /></IconButton>}
         />
-        <Stack spacing={2}>
+        <Stack>
           {followList.map(follow => (
-            <Card key={follow.uid} sx={{ boxShadow: 'none' }}>
+            <FollowCard key={follow.uid}>
               <CardHeader 
                 avatar={<Avatar alt={follow.nickname} src={follow.profileImg ? follow.profileImg : defaultImg.src} />}
-                title={<Typography sx={{ fontFamily: 'Katuri', cursor: 'pointer' }} onClick={onMoveUserProfile(follow.uid)}>{follow.nickname}</Typography>}
+                title={<FollowTitle onClick={onMoveUserProfile(follow.uid)}>{follow.nickname}</FollowTitle>}
                 subheader={<Typography>{follow.email}</Typography>}
                 action={follow.uid !== myInfo?.uid && <FollowButton userUid={follow.uid} />}
               />
-            </Card>
+            </FollowCard>
           ))}
         </Stack>
       </Card>
     </Dialog>
   )
 }
+
+const FollowCard = styled(Card)`
+  box-shadow: none;
+`
+const FollowTitle = styled(Typography)`
+  font-family: Katuri;
+  cursor: pointer;
+`
 
 export default FollowList
