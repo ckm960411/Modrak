@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { Button, Stack, Typography } from "@mui/material";
+import styled from "@emotion/styled";
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
 import AccommodationCard from "components/accommodations/AccommodationCard";
-import styled from "@emotion/styled";
-import { useRouter } from "next/router";
 
 const HomeAccommodationCards: FC = () => {
   const [accommodations, setAccommodations] = useState<AccommodationWithId[]>([])

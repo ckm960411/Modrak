@@ -1,12 +1,12 @@
 import { FC } from "react";
-import { useAppSelector } from "store/hooks";
 import { Drawer, Typography, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useAppSelector } from "store/hooks";
 import { drawerWidth, DrawerHeader } from "components/layout/AppLayout";
 import SidebarProfile from "components/layout/SidebarProfile";
 import SidebarList from "components/layout/SidebarList";
 
-type SidebarProps = {
+interface SidebarProps {
   open: boolean;
   handleDrawerClose: () => void;
 };

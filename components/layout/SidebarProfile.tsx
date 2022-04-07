@@ -1,13 +1,13 @@
 import { FC, useState } from "react";
 import { useRouter } from "next/router";
-import { authService } from "fireBaseApp/fBase";
 import styled from "@emotion/styled";
 import { Avatar, Card, CardContent, CardHeader, Divider, IconButton, Menu, MenuItem, Stack, Typography } from "@mui/material";
 import MoreIcon from '@mui/icons-material/MoreVert';
+import { authService } from "fireBaseApp/fBase";
 import { removeMyInfoData } from "store/slices/usersSlice";
 import { useAppDispatch } from "store/hooks";
-import defaultImg from "public/imgs/profileImg.png"
 import FollowList from "components/layout/FollowList";
+import defaultImg from "public/imgs/profileImg.png"
 
 const SidebarProfile: FC<{myInfo: UserType}> = ({ myInfo }) => {
   const [followOpened, setFollowOpened] = useState(false)

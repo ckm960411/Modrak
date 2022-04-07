@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
-import { authService } from "fireBaseApp/fBase";
 import MailIcon from "@mui/icons-material/Mail";
 import { Badge, Button, IconButton, Stack } from "@mui/material";
+import { authService } from "fireBaseApp/fBase";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { removeMyInfoData } from "store/slices/usersSlice";
 import CertificationModal from "components/login/CertificationModal";
@@ -16,9 +16,7 @@ const NavbarBtns: FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    if (open) {
-      return setAnchorEl(null)
-    }
+    if (open) return setAnchorEl(null)
     setAnchorEl(event.currentTarget);
   };
 

@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { Button, ImageList, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
-import RestaurantCard from "components/restaurant/RestaurantCard";
-import { useRouter } from "next/router";
 import styled from "@emotion/styled";
+import RestaurantCard from "components/restaurant/RestaurantCard";
 
 const HomeAccommodationCards: FC = () => {
   const [restaurants, setRestaurants] = useState<RestaurantWithId[]>([])

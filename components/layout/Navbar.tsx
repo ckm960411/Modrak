@@ -1,39 +1,17 @@
-import React, { FC, useState } from "react";
+import { FC } from "react";
+import { useRouter } from "next/router";
 import { IconButton, Stack, Toolbar, Typography, useMediaQuery, useTheme } from "@mui/material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import { styled } from "@mui/material/styles";
 import { drawerWidth } from "components/layout/AppLayout";
-import { useRouter } from "next/router";
 import NavbarBtns from "components/layout/NavbarBtns";
 import { mainColor } from "styles/GlobalStyles";
 
-interface AppBarProps extends MuiAppBarProps {
-  open?: boolean;
-}
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
-})<AppBarProps>(({ theme, open }) => ({
-  transition: theme.transitions.create(["margin", "width"], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
-type NavbarProps = {
+interface NavbarProps {
   open: boolean;
   handleDrawerOpen: () => void;
 };
-
 const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen }) => {
   const router = useRouter()
   const theme = useTheme()
@@ -70,5 +48,25 @@ const Navbar: FC<NavbarProps> = ({ open, handleDrawerOpen }) => {
     </AppBar>
   );
 };
+
+interface AppBarProps extends MuiAppBarProps {
+  open?: boolean;
+}
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== "open",
+})<AppBarProps>(({ theme, open }) => ({
+  transition: theme.transitions.create(["margin", "width"], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: `${drawerWidth}px`,
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));
 
 export default Navbar;

@@ -1,14 +1,14 @@
 import { Dispatch, FC, SetStateAction } from "react";
+import { useRouter } from "next/router";
 import styled from "@emotion/styled";
 import { Button, CardContent, Divider, Menu, MenuItem, Typography } from "@mui/material";
 import { format } from "date-fns";
-import { useRouter } from "next/router";
-import { useAppDispatch, useAppSelector } from "store/hooks";
 import { updateDoc } from "firebase/firestore";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import { removeCheckedPush } from "store/slices/usersSlice";
+import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 
-type PushMenuProps = {
+interface PushMenuProps {
   open: boolean
   anchorEl: HTMLElement | null
   setAnchorEl: Dispatch<SetStateAction<HTMLElement | null>>
@@ -19,9 +19,8 @@ const PushMenu: FC<PushMenuProps> = ({ open, anchorEl, setAnchorEl, pushes }) =>
   const dispatch = useAppDispatch()
   const myInfo = useAppSelector(state => state.users.myInfo)
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  }
+  const handleClose = () => setAnchorEl(null);
+  
   const onCheckPush = (pushId: string) => async () => {
     // 알림 클릭시 확인안된 알림에서 제거
     const { searchedDocRef: userRef, searchedData: userData } = await searchFirestoreDoc(`users/${myInfo!.uid}`)
