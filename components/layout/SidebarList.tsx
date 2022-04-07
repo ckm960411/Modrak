@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { List, ListItemButton, ListItemIcon, ListItemText, useTheme, useMediaQuery } from "@mui/material";
@@ -12,21 +12,25 @@ const SidebarIcons = [
     icon: <HomeIcon />,
     primary: "홈",
     route: "/",
+    className: "home",
   },
   {
     icon: <AodIcon />,
     primary: "피드",
     route: "/feed",
+    className: "feed",
   },
   {
     icon: <DinnerDiningIcon />,
     primary: "맛집",
     route: "/restaurant",
+    className: "restaurant",
   },
   {
     icon: <HotelIcon />,
     primary: "숙박",
     route: "/accommodation",
+    className: "accommodation",
   },
 ];
 
@@ -35,6 +39,21 @@ const SidebarList: FC<{handleDrawerClose: () => void}> = ({ handleDrawerClose })
   const theme = useTheme()
   const downMd = useMediaQuery(theme.breakpoints.down("md"))
 
+  useEffect(() => {
+    const restaurantList = document.querySelector('.restaurant')
+    const accommodationList = document.querySelector('.accommodation')
+    if (route === "/restaurant" || route === "/restaurant/[id]") {
+      restaurantList?.classList.add("Mui-selected")
+    } else {
+      restaurantList?.classList.remove("Mui-selected")
+    } 
+    if (route === "/accommodation" || route === "/accommodation/[id]") {
+      accommodationList?.classList.add("Mui-selected")
+    } else {
+      accommodationList?.classList.remove("Mui-selected")
+    }
+  }, [route])
+
   return (
     <List>
       {SidebarIcons.map((item, i) => (
@@ -42,6 +61,7 @@ const SidebarList: FC<{handleDrawerClose: () => void}> = ({ handleDrawerClose })
           <a>
             <ListItemButton 
               id="sidebar-listitem-button"
+              className={item.className}
               selected={item.route === route}
               onClick={downMd ? handleDrawerClose : undefined}
             >
