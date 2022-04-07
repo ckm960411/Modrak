@@ -1,8 +1,8 @@
-import { Autocomplete, Chip, TextField } from "@mui/material";
 import { FC } from "react";
+import { Autocomplete, Chip, TextField } from "@mui/material";
 import { mainColor } from "styles/GlobalStyles";
 
-type TagInputProps = {
+interface TagInputProps {
   value: string[]
   onChange: (e: React.SyntheticEvent<Element, Event>, value: string[]) => void
 }

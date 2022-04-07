@@ -2,7 +2,7 @@ import { FC } from "react";
 import { FieldErrors, UseFormRegisterReturn } from "react-hook-form";
 import { Button, FormControl, FormHelperText, Stack, TextField } from "@mui/material";
 
-type HookFormInputPropTypes = {
+interface HookFormInputPropTypes {
   type: string
   placeholder: string
   errors: FieldErrors

@@ -2,10 +2,9 @@ import { FC } from "react";
 import Carousel from "react-material-ui-carousel";
 import { mainColor } from "styles/GlobalStyles";
 
-type CustomCarouselProps = {
+interface CustomCarouselProps {
   [key: string]: any
 }
-
 const CustomCarousel: FC<CustomCarouselProps> = ({ children, ...props }) => {
   return (
     <Carousel

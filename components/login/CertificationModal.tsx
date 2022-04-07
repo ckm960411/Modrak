@@ -4,7 +4,7 @@ import { CertificationType } from "components/layout/NavbarBtns";
 import SignupForm from "components/login/SignupForm";
 import LoginForm from "components/login/LoginForm";
 
-type CertificationModalType = {
+interface CertificationModalType {
   open: boolean;
   handleClose: () => void;
   certificationType: CertificationType;

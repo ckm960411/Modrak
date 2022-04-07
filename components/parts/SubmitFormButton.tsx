@@ -3,7 +3,7 @@ import { CircularProgress } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import SendIcon from "@mui/icons-material/Send";
 
-type SubmitFormButtonProps = {
+interface SubmitFormButtonProps {
   loading: boolean
   icon?: boolean
   spinColor?: string

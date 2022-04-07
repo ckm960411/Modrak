@@ -2,14 +2,11 @@ import { Dispatch, FC, SetStateAction } from "react";
 import { Button, styled } from "@mui/material";
 import { PhotoCamera } from "@mui/icons-material";
 
-const Input = styled('input')({ display: 'none' })
-
-type InputFileFormProps = {
+interface InputFileFormProps {
   images: string[];
   setImages: Dispatch<SetStateAction<string[]>>;
   label: string;
 }
-
 const InputFileForm: FC<InputFileFormProps> = ({ label, images, setImages }) => {
   
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,5 +47,7 @@ const InputFileForm: FC<InputFileFormProps> = ({ label, images, setImages }) => 
     </label>
   );
 };
+
+const Input = styled('input')({ display: 'none' })
 
 export default InputFileForm;

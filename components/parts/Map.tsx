@@ -1,9 +1,6 @@
-import styled from "@emotion/styled";
 import { FC, useEffect } from "react";
+import styled from "@emotion/styled";
 
-const MapContainer = styled.div`
-  aspect-ratio: 16 / 9;
-`
 declare global {
   interface Window {
     kakao: any;
@@ -49,9 +46,11 @@ const Map: FC<{address: string}> = ({ address }) => {
     onLoadKakaoMap()
   }, [address])
 
-  return (
-    <MapContainer id="map" />
-  )
+  return <MapContainer id="map" />
 }
+
+const MapContainer = styled.div`
+  aspect-ratio: 16 / 9;
+`
 
 export default Map
