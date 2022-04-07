@@ -1,11 +1,11 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { Button, CardContent } from "@mui/material";
+import { updateDoc } from "firebase/firestore";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { updateComment } from "store/slices/feedsSlice";
+import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import TextInput from "components/parts/TextInput";
 import SubmitFormButton from "components/parts/SubmitFormButton";
-import { useAppDispatch, useAppSelector } from "store/hooks";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
-import { updateDoc } from "firebase/firestore";
-import { updateComment } from "store/slices/feedsSlice";
 
 type CommentEditFormProps = {
   setEditing: Dispatch<SetStateAction<boolean>>
@@ -19,7 +19,6 @@ const CommentEditForm: FC<CommentEditFormProps> = ({ setEditing, comment }) => {
 
   const dispatch = useAppDispatch()
   const myInfo = useAppSelector(state => state.users.myInfo)
-
 
   useEffect(() => {
     setEditText(commentText)

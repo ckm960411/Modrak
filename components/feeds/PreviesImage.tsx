@@ -4,6 +4,32 @@ import CloseIcon from '@mui/icons-material/Close';
 import { IconButton } from "@mui/material";
 import styled from "@emotion/styled";
 
+interface PreviewImageProps {
+  image: string;
+  setImages: Dispatch<SetStateAction<string[]>>;
+  order: number;
+}
+const PreviewImage: FC<PreviewImageProps> = ({ image, setImages, order }) => {
+
+  const clearImage = useCallback(() => {
+    setImages(prev => prev.filter(v => v !== image))
+  }, [setImages, image])
+
+  return (
+    <ImageWrapper>
+      <Image
+        src={image} alt="image" 
+        layout="fill"
+        objectFit="contain"
+      />
+      <IconButton onClick={clearImage}>
+        <CloseIcon />
+      </IconButton>
+      <div>{order + 1}</div>
+    </ImageWrapper>
+  );
+};
+
 const ImageWrapper = styled.div`
   height: 150px;
   width: 150px;
@@ -35,30 +61,5 @@ const ImageWrapper = styled.div`
     text-align: center;
   }
 `
-type PreviewImageProps = {
-  image: string;
-  setImages: Dispatch<SetStateAction<string[]>>;
-  order: number;
-}
-const PreviewImage: FC<PreviewImageProps> = ({ image, setImages, order }) => {
-
-  const clearImage = useCallback(() => {
-    setImages(prev => prev.filter(v => v !== image))
-  }, [setImages, image])
-
-  return (
-    <ImageWrapper>
-      <Image
-        src={image} alt="image" 
-        layout="fill"
-        objectFit="contain"
-      />
-      <IconButton onClick={clearImage}>
-        <CloseIcon />
-      </IconButton>
-      <div>{order + 1}</div>
-    </ImageWrapper>
-  );
-};
 
 export default PreviewImage;

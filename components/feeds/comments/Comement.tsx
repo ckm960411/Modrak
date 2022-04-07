@@ -21,7 +21,6 @@ const Comment: FC<{comment: CommentWithUserInfoType}> = ({ comment }) => {
 
   const dispatch = useAppDispatch()
   const { id, feedId, userUid, commentText, createdAt, modifiedAt, nickname, profileImg } = comment
-
   const { date, timeAgo } = useSetTimeDistance(createdAt, modifiedAt)
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
@@ -49,7 +48,7 @@ const Comment: FC<{comment: CommentWithUserInfoType}> = ({ comment }) => {
       <Divider sx={{ ml: 2, mr: 2 }} />
       {editing ? (
         <CommentEditForm setEditing={setEditing} comment={comment} />
-      ): (
+      ) : (
         <CardHeader
           id="comment-header"
           avatar={<Avatar alt={nickname} src={profileImg ? profileImg : defaultImg.src} />}

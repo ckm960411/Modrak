@@ -4,11 +4,10 @@ import { Card, CardContent, CardHeader, IconButton, Stack, Typography } from "@m
 import CloseIcon from '@mui/icons-material/Close';
 import PreviewImage from "components/feeds/PreviesImage";
 
-type PreviewImagesTabProps = {
+interface PreviewImagesTabProps {
   images: string[];
   setImages: Dispatch<SetStateAction<string[]>>;
 }
-
 const PreviewImagesTab: FC<PreviewImagesTabProps> = ({ images, setImages }) => {
 
   const clearAttachments = useCallback(() => {

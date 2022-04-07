@@ -1,16 +1,16 @@
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { dbService } from "fireBaseApp/fBase";
 import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
 import { Card, CardContent } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { addFeeds } from "store/slices/feedsSlice";
+import { addFeedInfo } from "store/slices/usersSlice";
+import uploadImagesDB from "utils/functions/uploadImagesDB";
+import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
+import PreviewImagesTab from "components/feeds/PreviewImagesTab";
+import SubmitFormButton from "components/parts/SubmitFormButton";
 import TextInput from "components/parts/TextInput";
 import InputFileForm from "components/parts/InputFileForm";
-import PreviewImagesTab from "components/feeds/PreviewImagesTab";
-import { useAppDispatch, useAppSelector } from "store/hooks";
-import uploadImagesDB from "utils/functions/uploadImagesDB";
-import { addFeeds } from "store/slices/feedsSlice";
-import SubmitFormButton from "components/parts/SubmitFormButton";
-import { addFeedInfo } from "store/slices/usersSlice";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import TagInput from "components/parts/TagInput";
 
 const FeedForm: FC = () => {
@@ -26,9 +26,7 @@ const FeedForm: FC = () => {
     setFeedText(e.target.value)
   }
 
-  const onChangeTags = (e: React.SyntheticEvent<Element, Event>, value: string[]) => {
-    setTags(value)
-  }
+  const onChangeTags = (e: React.SyntheticEvent<Element, Event>, value: string[]) => setTags(value)
 
   // 게시글 작성
   const onSubmitFeed = async (e: React.FormEvent) => {

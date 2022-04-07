@@ -1,16 +1,16 @@
 import { Dispatch, FC, SetStateAction, useState } from "react";
 import { useRouter } from "next/router";
-import EditMenu from "components/parts/EditMenu"
-import defaultImg from "public/imgs/profileImg.png"
 import { Avatar, CardHeader, Stack, Typography } from "@mui/material";
-import FollowButton from "components/feeds/FollowButton";
 import styled from "@emotion/styled";
 import { deleteDoc, updateDoc } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { deleteFeed } from "store/slices/feedsSlice";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import { deleteFeedInfo } from "store/slices/usersSlice";
+import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import useSetTimeDistance from "utils/hooks/useSetTimeDistance";
+import FollowButton from "components/feeds/FollowButton";
+import EditMenu from "components/parts/EditMenu"
+import defaultImg from "public/imgs/profileImg.png"
 
 const FeedHeader: FC<FeedHeaderProps> = ({ feedData, setEditing }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
@@ -22,9 +22,7 @@ const FeedHeader: FC<FeedHeaderProps> = ({ feedData, setEditing }) => {
   const { id, userUid, userRef, createdAt, modifiedAt, nickname, profileImg } = feedData
   const { date, timeAgo } = useSetTimeDistance(createdAt, modifiedAt)
 
-  const onMoveUserProfile = (userUid: string) => () => {
-    router.push(`/user/${userUid}`)
-  }
+  const onMoveUserProfile = (userUid: string) => () => router.push(`/user/${userUid}`)
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () =>  setAnchorEl(null);

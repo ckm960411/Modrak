@@ -1,23 +1,22 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { Alert, CardContent, Dialog } from "@mui/material";
-import TextInput from "components/parts/TextInput";
-import InputFileForm from "components/parts/InputFileForm";
-import MainButton from "components/parts/MainButton";
-import PreviewImagesTab from "./PreviewImagesTab";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import uploadImagesDB from "utils/functions/uploadImagesDB";
 import { doc, updateDoc } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
 import { updateFeed } from "store/slices/feedsSlice";
+import uploadImagesDB from "utils/functions/uploadImagesDB";
+import TextInput from "components/parts/TextInput";
+import InputFileForm from "components/parts/InputFileForm";
+import MainButton from "components/parts/MainButton";
+import PreviewImagesTab from "components/feeds/PreviewImagesTab";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 import TagInput from "components/parts/TagInput";
 
-type EditFeedModalProps = {
+interface EditFeedModalProps {
   feedData: FeedWithUserInfoType
   editing: boolean
   setEditing: Dispatch<SetStateAction<boolean>>
 }
-
 const EditFeedModal: FC<EditFeedModalProps> = ({ feedData, editing, setEditing }) => {
   const [editText, setEditText] = useState<string>('')
   const [newImages, setNewImages] = useState<string[]>([])

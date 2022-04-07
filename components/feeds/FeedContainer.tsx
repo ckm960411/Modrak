@@ -1,21 +1,10 @@
 import { FC, useRef } from "react";
-import { Card, CardContent, CardMedia, Stack, Typography } from "@mui/material";
-import Feed from "components/feeds/feed/Feed";
-import useLoadingFeeds from "utils/hooks/useLoadingFeeds";
-import styled from "@emotion/styled";
 import Image from "next/image";
+import { Card, CardContent, CardMedia, Stack, Typography } from "@mui/material";
+import styled from "@emotion/styled";
+import useLoadingFeeds from "utils/hooks/useLoadingFeeds";
+import Feed from "components/feeds/feed/Feed";
 
-const ImageWrapper = styled.div`
-  max-height: 500px;
-  min-height: 400px;
-  height: 100%;
-  width: 100%;
-  position: relative;
-  & span {
-    height: inherit !important;
-  }
-`
-  
 const FeedContainer: FC = () => {
   const targetRef = useRef<HTMLDivElement>(null)
   const { feeds } = useLoadingFeeds(targetRef)
@@ -51,5 +40,16 @@ const FeedContainer: FC = () => {
     </Stack>
   )
 }
+
+const ImageWrapper = styled.div`
+  max-height: 500px;
+  min-height: 400px;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  & span {
+    height: inherit !important;
+  }
+`
 
 export default FeedContainer
