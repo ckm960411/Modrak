@@ -6,9 +6,9 @@ import { updateDoc } from "firebase/firestore";
 import { addDays, differenceInDays, format } from "date-fns";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { addRoomReservation } from "store/slices/roomsSlice";
+import { addNewPush, addRoomInfoReserved } from "store/slices/usersSlice";
 import searchFirestoreDoc from "utils/functions/searchFirestoreDoc"
 import ReserveTimePicker from "@reservation/ReserveTimePicker";
-import { addNewPush, addRoomInfoReserved } from "store/slices/usersSlice";
 
 const removeDetailTime = (date: Date) => {
   return date.toString().split(' ').slice(0, 4).join(' ')

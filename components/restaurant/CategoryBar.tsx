@@ -10,30 +10,13 @@ import { setCategoryFilter, setDivisionFilter } from "store/slices/restaurantsSl
 const divisions: DivisionType[] = [ "전체 지역", "제주시", "애월", "한경/한림", "대정/안덕", "서귀포", "남원", "표선/성산", "구좌", "조천" ]
 type RestaurantCategories = "전체" | "한식/분식" | "양식" | "일식/중식" | "카페"
 
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean;
-}
-
-const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
-  position: 'absolute',
-  top: 0, right: 0,
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
-
 const CategoryBar: FC = () => {
   const [divisionSelect, setDivisionSelect] = useState<DivisionType>("전체 지역")
   const [restaurantCategory, setRestaurantCategory] = useState<RestaurantCategories>('전체')
   const [expanded, setExpanded] = useState(true);
+
   const theme = useTheme()
   const downSm = useMediaQuery(theme.breakpoints.down('sm'))
-  
   const dispatch = useAppDispatch()
 
   const handleExpandClick = () => setExpanded(!expanded);
@@ -50,10 +33,8 @@ const CategoryBar: FC = () => {
   }
   
   useEffect(() => {
-    if (downSm) 
-      setExpanded(false)
-    else
-      setExpanded(true)
+    if (downSm) setExpanded(false)
+    else setExpanded(true)
   }, [downSm])
 
   return (
@@ -99,5 +80,20 @@ const CategoryBar: FC = () => {
     </>
   )
 }
+interface ExpandMoreProps extends IconButtonProps {
+  expand: boolean;
+}
+const ExpandMore = styled((props: ExpandMoreProps) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  position: 'absolute',
+  top: 0, right: 0,
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
 
 export default CategoryBar

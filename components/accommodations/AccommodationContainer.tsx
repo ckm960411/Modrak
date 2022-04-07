@@ -1,8 +1,8 @@
 import { FC, useRef } from "react";
+import styled from "@emotion/styled";
 import { Stack } from "@mui/material";
 import useLoadingAccommodations from "utils/hooks/useLoadingAccommodations";
 import AccommodationCard from "components/accommodations/AccommodationCard";
-import styled from "@emotion/styled";
 
 const AccommodationContainer: FC = () => {
   const targetRef = useRef<HTMLDivElement>(null)
@@ -12,7 +12,7 @@ const AccommodationContainer: FC = () => {
     <>
       <Stack spacing={2}>
         {accommodations.map(accommodation => (
-        <AccommodationCard key={accommodation.id} accommodation={accommodation} />
+          <AccommodationCard key={accommodation.id} accommodation={accommodation} />
         ))}
       </Stack>
       <TargetDiv ref={targetRef} />

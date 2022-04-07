@@ -1,21 +1,18 @@
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
 import { useRouter } from "next/router";
 import EditMenu from "components/parts/EditMenu"
 import defaultImg from "public/imgs/profileImg.png"
 import { Avatar, CardHeader, Stack, Typography } from "@mui/material";
 import FollowButton from "components/feeds/FollowButton";
 import styled from "@emotion/styled";
-import { format } from "date-fns";
-import formatDistanceToNowKo from "utils/functions/formatDistanceToNowKo";
 import { deleteDoc, updateDoc } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { deleteFeed } from "store/slices/feedsSlice";
 import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import { deleteFeedInfo } from "store/slices/usersSlice";
+import useSetTimeDistance from "utils/hooks/useSetTimeDistance";
 
 const FeedHeader: FC<FeedHeaderProps> = ({ feedData, setEditing }) => {
-  const [timeAgo, setTimeAgo] = useState<string>("0");
-  const [date, setDate] = useState<string>('')
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
   const router = useRouter()
@@ -23,16 +20,7 @@ const FeedHeader: FC<FeedHeaderProps> = ({ feedData, setEditing }) => {
   const myInfo = useAppSelector(state => state.users.myInfo)
 
   const { id, userUid, userRef, createdAt, modifiedAt, nickname, profileImg } = feedData
-  
-  useEffect(() => {
-    if (createdAt === modifiedAt) {
-      setTimeAgo(`${formatDistanceToNowKo(createdAt)} 전`);
-      setDate(format(createdAt, 'yyyy년 MM월 d일 H시 m분'))
-    } else {
-      setTimeAgo(`${formatDistanceToNowKo(modifiedAt)} 전 수정됨`);
-      setDate(format(modifiedAt, 'yyyy년 MM월 d일 H시 m분'))
-    }
-  }, [createdAt, modifiedAt, setTimeAgo]);
+  const { date, timeAgo } = useSetTimeDistance(createdAt, modifiedAt)
 
   const onMoveUserProfile = (userUid: string) => () => {
     router.push(`/user/${userUid}`)

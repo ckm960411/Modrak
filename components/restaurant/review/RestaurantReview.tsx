@@ -1,14 +1,13 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import Image from "next/image";
 import styled from "@emotion/styled";
 import { Avatar, Card, CardContent, CardHeader, Divider, Rating, Stack, Typography } from "@mui/material";
 import defaultImg from "public/imgs/profileImg.png"
-import { format } from "date-fns";
 import { updateDoc } from "firebase/firestore";
 import { useAppDispatch } from "store/hooks";
 import { deleteRestaurantReview } from "store/slices/restaurantsSlice";
-import formatDistanceToNowKo from "utils/functions/formatDistanceToNowKo";
 import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
+import useSetTimeDistance from "utils/hooks/useSetTimeDistance";
 import EditMenu from "components/parts/EditMenu";
 import RestaurantEditReviewForm from "components/restaurant/review/RestaurantEditReviewForm";
 
@@ -29,12 +28,11 @@ const NicknameTypo = styled(Typography)`
 
 const RestaurantReview: FC<{reviewData: RestaurantReviewWithUserInfo}> = ({ reviewData }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-  const [timeAgo, setTimeAgo] = useState<string>("0");
-  const [date, setDate] = useState<string>('')
   const [editing, setEditing] = useState(false)
   
   const dispatch = useAppDispatch()
   const { restaurantId, reviewId, reviewText, reviewImages, rating, createdAt, modifiedAt, userUid, nickname, profileImg } = reviewData
+  const { date, timeAgo } = useSetTimeDistance(createdAt, modifiedAt)
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () =>  setAnchorEl(null);
@@ -51,22 +49,10 @@ const RestaurantReview: FC<{reviewData: RestaurantReviewWithUserInfo}> = ({ revi
     const { searchedDocRef: reviewDocRef, searchedData: reviewData } = await searchFirestoreDoc(`reviews/${restaurantId}`)
     const reviewsArray = reviewData!.reviews
     const filteredReviews = reviewsArray.filter((review: RestaurantReviewType) => review.reviewId !== reviewId)
-
     await updateDoc(reviewDocRef, { reviews: filteredReviews })
     dispatch(deleteRestaurantReview({ reviewId }))
-
     handleClose()
   }
-
-  useEffect(() => {
-    if (createdAt === modifiedAt) {
-      setTimeAgo(`${formatDistanceToNowKo(createdAt)} 전`);
-      setDate(format(createdAt, 'yyyy년 MM월 d일 H시 m분'))
-    } else {
-      setTimeAgo(`${formatDistanceToNowKo(modifiedAt)} 전 수정됨`);
-      setDate(format(modifiedAt, 'yyyy년 MM월 d일 H시 m분'))
-    }
-  }, [createdAt, modifiedAt, setTimeAgo]);
 
   return (
     <>

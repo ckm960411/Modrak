@@ -1,8 +1,8 @@
 import { FC } from "react";
-import AccommodationReview from "components/accommodations/review/AccommodationReview";
+import { Button } from "@mui/material";
 import { useAppSelector } from "store/hooks";
 import useLoadingRoomReviews from "utils/hooks/useLoadingRoomReviews";
-import { Button } from "@mui/material";
+import AccommodationReview from "components/accommodations/review/AccommodationReview";
 
 const AccommodationReviews: FC = () => {
   const roomData = useAppSelector(state => state.rooms.roomData)

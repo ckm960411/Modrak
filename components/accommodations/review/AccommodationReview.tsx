@@ -1,25 +1,23 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import Image from "next/image";
 import { Avatar, CardContent, CardHeader, Divider, Rating, Stack, Typography } from "@mui/material";
 import styled from "@emotion/styled";
-import { format } from "date-fns";
-import formatDistanceToNowKo from "utils/functions/formatDistanceToNowKo";
 import { updateDoc } from "firebase/firestore";
 import { useAppDispatch } from "store/hooks";
 import { deleteRoomReview } from "store/slices/roomsSlice";
+import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
+import useSetTimeDistance from "utils/hooks/useSetTimeDistance";
 import defaultImg from "public/imgs/profileImg.png"
 import EditMenu from "components/parts/EditMenu";
 import AccommodationEditReviewForm from "components/accommodations/review/AccommodationEditReviewForm";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 
 const AccommodationReview: FC<{reviewData: RoomReviewWithUserInfo}> = ({ reviewData }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-  const [timeAgo, setTimeAgo] = useState<string>("0");
-  const [date, setDate] = useState<string>('')
   const [editing, setEditing] = useState(false)
 
   const dispatch = useAppDispatch()
   const { accommodationId, reviewId, reviewText, reviewImages, rating, createdAt, modifiedAt, userUid, nickname, profileImg } = reviewData
+  const { date, timeAgo } = useSetTimeDistance(createdAt, modifiedAt)
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () =>  setAnchorEl(null);
@@ -32,31 +30,18 @@ const AccommodationReview: FC<{reviewData: RoomReviewWithUserInfo}> = ({ reviewD
   const onDeleteReview = async () => {
     const ok = window.confirm('이 리뷰를 정말 삭제하시겠습니까?')
     if (!ok) return handleClose()
-
     const { searchedDocRef: reviewDocRef, searchedData: reviewData } = await searchFirestoreDoc(`reviews/${accommodationId}`)
     const reviewsArray = reviewData!.reviews
     const filteredReviews = reviewsArray.filter((review: RoomReviewType) => review.reviewId !== reviewId)
-
     await updateDoc(reviewDocRef, { reviews: filteredReviews })
     dispatch(deleteRoomReview({ reviewId }))
-
     handleClose()
   }
-
-  useEffect(() => {
-    if (createdAt === modifiedAt) {
-      setTimeAgo(`${formatDistanceToNowKo(createdAt)} 전`);
-      setDate(format(createdAt, 'yyyy년 MM월 d일 H시 m분'))
-    } else {
-      setTimeAgo(`${formatDistanceToNowKo(modifiedAt)} 전 수정됨`);
-      setDate(format(modifiedAt, 'yyyy년 MM월 d일 H시 m분'))
-    }
-  }, [createdAt, modifiedAt, setTimeAgo]);
 
   return (
     <ReviewCard>
       {editing && <AccommodationEditReviewForm reviewData={reviewData} editing={editing} setEditing={setEditing} />}
-      <CardHeader 
+      <ReviewCardHeader 
         id="accommodation-review-header"
         avatar={<Avatar alt={nickname} src={profileImg ? profileImg : defaultImg.src} />}
         title={<NicknameTypo>{nickname}</NicknameTypo>}
@@ -71,7 +56,6 @@ const AccommodationReview: FC<{reviewData: RoomReviewWithUserInfo}> = ({ reviewD
             onDeleteContent={onDeleteReview}
           />
         }
-        sx={{ px: 0 }}
       />
       <CardContent sx={{ pt: 0, px: 0 }}>
         <Stack direction="row" spacing={1} sx={{ overflowX: 'scroll' }}>
@@ -97,6 +81,10 @@ const AccommodationReview: FC<{reviewData: RoomReviewWithUserInfo}> = ({ reviewD
 
 const ReviewCard = styled.div`
   margin-top: 8px;
+`
+const ReviewCardHeader = styled(CardHeader)`
+  padding-left: 0;
+  padding-right: 0;
 `
 const ImageWrapper = styled.div`
   height: 150px;
