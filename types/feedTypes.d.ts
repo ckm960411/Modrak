@@ -42,3 +42,13 @@ type UseLoadingFeedsType = (
   reference: RefObject<HTMLDivElement>,
   filter?: any[]
 ) => { feeds: FeedWithUserInfoType[] }
+
+// async function arguments type
+declare interface newFeedDataType {
+  uid: string
+  feedText: string
+  imgs: string[]
+  tags: string[]
+  nickname: string
+  profileImg: string | null
+}

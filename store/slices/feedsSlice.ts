@@ -1,12 +1,20 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import submitNewFeed from 'store/asyncFunctions/feed/submitNewFeed'
+
+export const onSubmitNewFeed = createAsyncThunk(
+  "SUBMIT_NEW_FEED_REQUEST",
+  async (data: newFeedDataType) => await submitNewFeed(data)
+)
 
 export interface FeedState {
   value: FeedWithUserInfoType[]
+  loading: boolean
   error: any | null
 }
 
 const initialState: FeedState = {
   value: [],
+  loading: true,
   error: null
 }
 
@@ -18,10 +26,6 @@ export const feedsSlice = createSlice({
     setFeeds: (state, action) => {
       if (state.value.findIndex(v => v.id === action.payload.id) !== -1) return
       state.value = [...state.value, action.payload ]
-    },
-    // 새로 작성한 피드를 전역 상태 value 맨앞에 저장 (action.payload 로 FeedWithUserInfoType 객체가 들어옴)
-    addFeeds: (state, action) => {
-      state.value = [action.payload, ...state.value]
     },
     // 새로 게시물을 로드하기 위해 기존 value 에 저장되어 있던 피드들을 지움
     clearFeeds: (state) => {
@@ -105,12 +109,24 @@ export const feedsSlice = createSlice({
       finded.comments = filteredComments
     },
   },
-  extraReducers: {},
+  extraReducers: {
+    // 새로 작성한 피드를 전역 상태 value 맨앞에 저장 (action.payload 로 FeedWithUserInfoType 객체가 들어옴)
+    [onSubmitNewFeed.pending.type]: (state, action) => {
+      state.loading = true
+    },
+    [onSubmitNewFeed.fulfilled.type]: (state, action) => {
+      state.loading = false
+      state.value = [action.payload, ...state.value]
+    },
+    [onSubmitNewFeed.rejected.type]: (state, action) => {
+      state.loading = false
+      state.error = "게시글 작성중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
+  },
 })
 
 export const { 
   setFeeds, 
-  addFeeds, 
   clearFeeds,
   updateFeed,
   deleteFeed,

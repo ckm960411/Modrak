@@ -1,12 +1,8 @@
 import { FC, useState } from "react";
-import { dbService } from "fireBaseApp/fBase";
-import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
 import { Card, CardContent } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { addFeeds } from "store/slices/feedsSlice";
+import { onSubmitNewFeed } from "store/slices/feedsSlice";
 import { addFeedInfo } from "store/slices/usersSlice";
-import uploadImagesDB from "utils/functions/uploadImagesDB";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import PreviewImagesTab from "components/feeds/PreviewImagesTab";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 import TextInput from "components/parts/TextInput";
@@ -22,55 +18,24 @@ const FeedForm: FC = () => {
   const dispatch = useAppDispatch()
   const myInfo = useAppSelector(state => state.users.myInfo)
 
-  const onChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFeedText(e.target.value)
   }
-
-  const onChangeTags = (e: React.SyntheticEvent<Element, Event>, value: string[]) => setTags(value)
+  const handleChangeTags = (e: React.SyntheticEvent<Element, Event>, value: string[]) => setTags(value)
 
   // 게시글 작성
-  const onSubmitFeed = async (e: React.FormEvent) => {
+  const handleSubmitFeed = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!myInfo) return alert('게시글 작성을 위해 먼저 로그인해주세요!')
     if (feedText.trim() === '') return alert('게시글 내용을 작성해주세요!')
     setSubmitLoading(true)
-    // 이미지배열을 스토리지에 저장하고 저장된 스토리지 경로를 배열로 리턴
-    const imagesURLs = await uploadImagesDB(feedImages, myInfo.uid).catch(err => console.log(err.resultMessage))
-    const feedData = {
-      userUid: myInfo.uid,
-      userRef: `users/${myInfo.uid}`,
-      feedText: feedText,
-      feedImages: imagesURLs,
-      createdAt: Date.now(),
-      modifiedAt: Date.now(),
-      likes: [],
-      likesCount: 0,
-      bookmarks: [],
-      bookmarksCount: 0,
-      tags: tags,
-      comments: [],
+    const newFeedData: newFeedDataType = {
+      feedText, tags, imgs: feedImages,
+      uid: myInfo.uid, nickname: myInfo.nickname, profileImg: myInfo.profileImg
     }
-    // 글을 게시하는 사용자(본인)의 정보를 찾음
-    const { searchedDocRef: userDocRef, searchedData: userData} = await searchFirestoreDoc(feedData.userRef)
-    // feeds 컬렉션에 피드를 추가하고, 사용자의 feeds 배열에 문서id 를 추가
-    await addDoc(collection(dbService, "feeds"), feedData)
-      .then(res => {
-        updateDoc(userDocRef, {
-          feeds: [...userData!.feeds, `feeds/${res.id}`] // res.id 는 추가된 피드의 문서 id
-        })
-        // 생성된 문서 ID 로 comments 컬렉션에 피드 id 로 된 문서 생성
-        const commentsCollectionRef = collection(dbService, "comments")
-        setDoc(doc(commentsCollectionRef, res.id), { comments: [] })
-        dispatch(addFeeds({
-          ...feedData,
-          id: res.id,
-          nickname: myInfo.nickname,
-          profileImg: myInfo.profileImg,
-        }))
-        dispatch(addFeedInfo(`feeds/${res.id}`))
-      })
-      .catch(err => console.log(err.resultMessage))
-      .finally(() => alert('게시글 작성이 완료됐습니다!'))
+    dispatch(onSubmitNewFeed(newFeedData)).then(res => {
+      dispatch(addFeedInfo(`feeds/${(res.payload as FeedWithIdType).id}`))
+    })
     setSubmitLoading(false)
     setTags([])
     setFeedText("")
@@ -82,14 +47,14 @@ const FeedForm: FC = () => {
       <CardContent>
         <TextInput
           value={feedText}
-          onChange={onChangeText}
+          onChange={handleChangeText}
           placeholder="당신의 제주에서의 하루는 어땠나요?" 
         />
-        <TagInput value={tags} onChange={onChangeTags} />
+        <TagInput value={tags} onChange={handleChangeTags} />
         <div>
           <InputFileForm label="input-file" images={feedImages} setImages={setFeedImages} />
           <SubmitFormButton
-            onClick={onSubmitFeed}
+            onClick={handleSubmitFeed}
             sx={{ float: 'right', mt: 1 }}
             loading={submitLoading}
           >
