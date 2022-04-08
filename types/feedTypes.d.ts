@@ -44,11 +44,18 @@ type UseLoadingFeedsType = (
 ) => { feeds: FeedWithUserInfoType[] }
 
 // async function arguments type
-declare interface newFeedDataType {
+declare interface NewFeedDataType {
   uid: string
   feedText: string
   imgs: string[]
   tags: string[]
   nickname: string
   profileImg: string | null
+}
+declare interface UpdateFeedDataType {
+  uid: string
+  feedId: string
+  editText: string
+  newImages: string[]
+  newTags: string[]
 }

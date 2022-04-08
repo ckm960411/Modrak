@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
 import { Card, CardContent } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { onSubmitNewFeed } from "store/slices/feedsSlice";
 import { addFeedInfo } from "store/slices/usersSlice";
+import { onSubmitNewFeed } from "store/asyncFunctions";
 import PreviewImagesTab from "components/feeds/PreviewImagesTab";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 import TextInput from "components/parts/TextInput";
@@ -29,7 +29,7 @@ const FeedForm: FC = () => {
     if (!myInfo) return alert('게시글 작성을 위해 먼저 로그인해주세요!')
     if (feedText.trim() === '') return alert('게시글 내용을 작성해주세요!')
     setSubmitLoading(true)
-    const newFeedData: newFeedDataType = {
+    const newFeedData: NewFeedDataType = {
       feedText, tags, imgs: feedImages,
       uid: myInfo.uid, nickname: myInfo.nickname, profileImg: myInfo.profileImg
     }

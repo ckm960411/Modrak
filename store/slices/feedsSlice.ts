@@ -1,11 +1,5 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import submitNewFeed from 'store/asyncFunctions/feed/submitNewFeed'
-
-export const onSubmitNewFeed = createAsyncThunk(
-  "SUBMIT_NEW_FEED_REQUEST",
-  async (data: newFeedDataType) => await submitNewFeed(data)
-)
-
+import { createSlice } from '@reduxjs/toolkit'
+import { onSubmitNewFeed, onUpdateFeed } from 'store/asyncFunctions'
 export interface FeedState {
   value: FeedWithUserInfoType[]
   loading: boolean
@@ -30,15 +24,6 @@ export const feedsSlice = createSlice({
     // 새로 게시물을 로드하기 위해 기존 value 에 저장되어 있던 피드들을 지움
     clearFeeds: (state) => {
       state.value = []
-    },
-    // 수정된 피드의 정보를 찾아서 수정 (action.payload 로 feedId 를 포함해 수정할 정보만 담긴 객체가 옴)
-    updateFeed: (state, action) => {
-      const finded = state.value.find(feed => feed.id === action.payload.feedId)
-      if (!finded) return
-      finded.feedText = action.payload.feedText,
-      finded.feedImages = action.payload.feedImages,
-      finded.tags = action.payload.tags,
-      finded.modifiedAt = action.payload.modifiedAt
     },
     // 삭제할 피드 id 를 찾아 value 에서 제거 (action.payload 로 삭제할 feedId 를 담은 객체가 옴)
     deleteFeed: (state, action) => {
@@ -122,13 +107,29 @@ export const feedsSlice = createSlice({
       state.loading = false
       state.error = "게시글 작성중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
     },
+    // 수정된 피드의 정보를 찾아서 수정 (action.payload 로 feedId 를 포함해 수정할 정보만 담긴 객체가 옴)
+    [onUpdateFeed.pending.type]: (state, action) => {
+      state.loading = true
+    },
+    [onUpdateFeed.fulfilled.type]: (state, action) => {
+      const finded = state.value.find(feed => feed.id === action.payload.feedId)
+      if (!finded) return
+      finded.feedText = action.payload.feedText,
+      finded.feedImages = action.payload.feedImages,
+      finded.tags = action.payload.tags,
+      finded.modifiedAt = action.payload.modifiedAt
+      state.loading = false
+    },
+    [onUpdateFeed.rejected.type]: (state, action) => {
+      state.loading = false
+      state.error = "게시글 수정중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
   },
 })
 
 export const { 
   setFeeds, 
   clearFeeds,
-  updateFeed,
   deleteFeed,
   addFeedLikeUserUid,
   removeFeedLikeUserUid,

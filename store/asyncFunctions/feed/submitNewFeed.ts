@@ -1,9 +1,18 @@
+import { createAsyncThunk } from "@reduxjs/toolkit"
 import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore"
 import { dbService } from "fireBaseApp/fBase"
 import searchFirestoreDoc from "utils/functions/searchFirestoreDoc"
 import uploadImagesDB from "utils/functions/uploadImagesDB"
 
-const submitNewFeed = async (newFeedData: newFeedDataType) => {
+export const onSubmitNewFeed = createAsyncThunk(
+  "SUBMIT_NEW_FEED_REQUEST",
+  async (data: NewFeedDataType) => {
+    const newFeedData = await submitNewFeed(data)
+    return newFeedData
+  }
+)
+
+const submitNewFeed = async (newFeedData: NewFeedDataType) => {
   const { imgs, feedText, uid, tags, nickname, profileImg } = newFeedData
   const imagesURLs = await uploadImagesDB(imgs, uid) // 이미지배열을 스토리지에 저장하고 저장된 스토리지 경로를 배열로 리턴
   const feedData = {

@@ -1,10 +1,7 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { Alert, CardContent, Dialog } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { doc, updateDoc } from "firebase/firestore";
-import { dbService } from "fireBaseApp/fBase";
-import { updateFeed } from "store/slices/feedsSlice";
-import uploadImagesDB from "utils/functions/uploadImagesDB";
+import { onUpdateFeed } from "store/asyncFunctions";
 import TextInput from "components/parts/TextInput";
 import InputFileForm from "components/parts/InputFileForm";
 import MainButton from "components/parts/MainButton";
@@ -35,18 +32,17 @@ const EditFeedModal: FC<EditFeedModalProps> = ({ feedData, editing, setEditing }
     setNewTags(tags)
   }, [feedText, feedImages, tags])
 
-  const onChangeEditText = (e: React.ChangeEvent<HTMLInputElement>) => setEditText(e.target.value)
+  const handleChangeEditText = (e: React.ChangeEvent<HTMLInputElement>) => setEditText(e.target.value)
+  const handleChangeNewTags = (e: React.SyntheticEvent<Element, Event>, value: string[]) => {
+    setNewTags(value.map(v => v.trim()))
+  }
 
-  const onCloseEditing = () => {
+  const handleCloseEditing = () => {
     setEditing(false)
     setNewImages(feedImages)
   }
 
-  const onChangeNewTags = (e: React.SyntheticEvent<Element, Event>, value: string[]) => {
-    setNewTags(value.map(v => v.trim()))
-  }
-
-  const onSubmit = async () => {
+  const handleSubmitEdit = async () => {
     if (editText.trim() === '') 
       return setEditFeedError("피드의 내용을 작성해주세요!")
     if (!myInfo) 
@@ -54,19 +50,13 @@ const EditFeedModal: FC<EditFeedModalProps> = ({ feedData, editing, setEditing }
     if (myInfo.uid !== userUid) 
       return alert("당신의 피드가 아닌 글은 수정할 수 없습니다!")
     setEditFeedLoading(true)
-    const shouldUpload = newImages.filter(img => img.startsWith('data:image'))
-    const shouldNotUpload = newImages.filter(img => !img.startsWith('data:image'))
-    const newImagesURLs = await uploadImagesDB(shouldUpload, myInfo.uid).catch(err => console.log(err))
-    const data = {
-      feedText: editText,
-      feedImages: [...shouldNotUpload, ...newImagesURLs!],
-      tags: newTags,
-      modifiedAt: Date.now(),
-    }
-
-    const feedDocRef = doc(dbService, "feeds", id)
-    await updateDoc(feedDocRef, data)
-    dispatch(updateFeed({...data, feedId: id}))
+    dispatch(onUpdateFeed({
+      uid: myInfo.uid,
+      feedId: id,
+      editText,
+      newImages,
+      newTags,
+    }))
     setEditFeedLoading(false)
     setEditing(false)
   }
@@ -74,21 +64,21 @@ const EditFeedModal: FC<EditFeedModalProps> = ({ feedData, editing, setEditing }
   return (
     <Dialog
       open={editing}
-      onClose={onCloseEditing}
+      onClose={handleCloseEditing}
       fullWidth
     >
       <CardContent>
         <TextInput 
           value={editText}
-          onChange={onChangeEditText}
+          onChange={handleChangeEditText}
         />
-        <TagInput value={newTags} onChange={onChangeNewTags} />
+        <TagInput value={newTags} onChange={handleChangeNewTags} />
         <div>
           <InputFileForm label="edit-input-file" images={newImages} setImages={setNewImages} />
-          <SubmitFormButton onClick={onSubmit} sx={{ float: 'right', mt: 1 }} loading={editFeedLoading}>
+          <SubmitFormButton onClick={handleSubmitEdit} sx={{ float: 'right', mt: 1 }} loading={editFeedLoading}>
             Edit Feed
           </SubmitFormButton>
-          <MainButton variant="outlined" sx={{ float: 'right', mt: 1, mr: 1 }} onClick={onCloseEditing}>
+          <MainButton variant="outlined" sx={{ float: 'right', mt: 1, mr: 1 }} onClick={handleCloseEditing}>
             cancel
           </MainButton>
         </div>
