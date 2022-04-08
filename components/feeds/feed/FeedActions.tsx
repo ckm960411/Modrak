@@ -8,12 +8,10 @@ import LikeFilledIcon from '@mui/icons-material/Favorite';
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import styled from "@emotion/styled";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { updateDoc } from "firebase/firestore";
 import { showAlert } from "store/slices/appSlice";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
-import { addFeedBookmarkUserUid, addFeedLikeUserUid, removeFeedBookmarkUserUid, removeFeedLikeUserUid } from "store/slices/feedsSlice";
 import { addBookmarkFeedRef, addLikeFeedRef, removeBookmarkFeedRef, removeLikeFeedRef } from "store/slices/usersSlice";
 import { mainColor } from "styles/GlobalStyles";
+import { onBookmarkFeed, onLikeFeed, onRemoveBookmarkFeed, onUnlikeFeed } from "store/asyncFunctions";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -51,52 +49,24 @@ const FeedActions: FC<FeedActionsProps> = ({ feedId, likes, bookmarks, expanded,
     } else return false
   }, [feedId, bookmarks, myInfo])
 
-  const onLikeFeed = async () => {
+  const handleLikeFeed = async () => {
     if (!myInfo) return dispatch(showAlert({ isShown: true, message: '먼저 로그인을 해주세요!', severity: 'warning' }))
-    const { searchedDocRef: feedDocRef, searchedData: feedData } = await searchFirestoreDoc(`feeds/${feedId}`)
-    const { searchedDocRef: userDocRef, searchedData: userData } = await searchFirestoreDoc(`users/${myInfo.uid}`)
     if (AmILiked) { // unlike
-      const removedFeedLikes = feedData!.likes.filter((userUid: string) => userUid !== myInfo.uid)
-      await updateDoc(feedDocRef, {
-        likes: removedFeedLikes,
-        likesCount: feedData!.likesCount -1
-      })
-      const removedLikeFeeds = userData!.likeFeeds.filter((feedRef: string) => feedRef !== `feeds/${feedId}`)
-      await updateDoc(userDocRef, { likeFeeds: removedLikeFeeds })
-      dispatch(removeFeedLikeUserUid({ feedId, userUid: userData!.uid }))
+      dispatch(onUnlikeFeed({ feedId, uid: myInfo.uid }))
       dispatch(removeLikeFeedRef({ feedRef: `feeds/${feedId}` }))
     } else { // like
-      await updateDoc(feedDocRef, {
-        likes: [...feedData!.likes, myInfo.uid ],
-        likesCount: feedData!.likesCount + 1,
-      })
-      await updateDoc(userDocRef, { likeFeeds: [ ...userData!.likeFeeds, `feeds/${feedId}` ] })
-      dispatch(addFeedLikeUserUid({ feedId, userUid: userData!.uid }))
+      dispatch(onLikeFeed({ feedId, uid: myInfo.uid }))
       dispatch(addLikeFeedRef({ feedRef: `feeds/${feedId}` }))
     }
   }
 
-  const onBookmarkFeed = async () => {
+  const handleBookmarkFeed = async () => {
     if (!myInfo) return dispatch(showAlert({ isShown: true, message: '먼저 로그인을 해주세요!', severity: 'warning' }))
-    const { searchedDocRef: feedDocRef, searchedData: feedData } = await searchFirestoreDoc(`feeds/${feedId}`)
-    const { searchedDocRef: userDocRef, searchedData: userData } = await searchFirestoreDoc(`users/${myInfo.uid}`)
     if (AmIMarked) { // unmark
-      const removedFeedBookmarks = feedData!.bookmarks.filter((userUid: string) => userUid !== myInfo.uid)
-      await updateDoc(feedDocRef, {
-        bookmarks: removedFeedBookmarks,
-        bookmarksCount: feedData!.bookmarksCount -1
-      })
-      const removedBookmarkFeeds = userData!.bookmarkFeeds.filter((feedRef: string) => feedRef !== `feeds/${feedId}`)
-      await updateDoc(userDocRef, { bookmarkFeeds: removedBookmarkFeeds })
-      dispatch(removeFeedBookmarkUserUid({ feedId, userUid: userData!.uid }))
+      dispatch(onRemoveBookmarkFeed({ feedId, uid: myInfo.uid }))
       dispatch(removeBookmarkFeedRef({ feedRef: `feeds/${feedId}` }))
     } else { // mark
-      await updateDoc(feedDocRef, {
-        bookmarks: [ ...feedData!.bookmarks, myInfo.uid],
-        bookmarksCount: feedData!.bookmarksCount +1
-      })
-      await updateDoc(userDocRef, { bookmarkFeeds: [ ...userData!.bookmarkFeeds, `feeds/${feedId}` ]  })
-      dispatch(addFeedBookmarkUserUid({ feedId, userUid: userData!.uid }))
+      dispatch(onBookmarkFeed({ feedId, uid: myInfo.uid }))
       dispatch(addBookmarkFeedRef({ feedRef: `feeds/${feedId}` }))
     }
   }
@@ -104,7 +74,7 @@ const FeedActions: FC<FeedActionsProps> = ({ feedId, likes, bookmarks, expanded,
   return (
     <CardActions disableSpacing sx={{ justifyContent: "space-between" }}>
       <div>
-        <IconButton aria-label="like" onClick={onLikeFeed}>
+        <IconButton aria-label="like" onClick={handleLikeFeed}>
           {AmILiked ? <LikeFilledIcon sx={{ color: '#ff0000' }} /> : <LikeIcon />}
         </IconButton>
         <Typography variant="subtitle2" component="span">
@@ -112,7 +82,7 @@ const FeedActions: FC<FeedActionsProps> = ({ feedId, likes, bookmarks, expanded,
         </Typography>
       </div>
       <div>
-        <IconButton aria-label="bookmark" onClick={onBookmarkFeed}>
+        <IconButton aria-label="bookmark" onClick={handleBookmarkFeed}>
           {AmIMarked ? <BookmarkFilledIcon sx={{ color: mainColor }} /> : <BookmarkIcon />}
         </IconButton>
         <ExpandMore

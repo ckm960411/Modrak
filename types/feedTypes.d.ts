@@ -59,3 +59,7 @@ declare interface UpdateFeedDataType {
   newImages: string[]
   newTags: string[]
 }
+declare interface LikeBookmarkFeedDataType {
+  feedId: string
+  uid: string
+}

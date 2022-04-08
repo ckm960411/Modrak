@@ -1,5 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { onDeleteFeed, onSubmitNewFeed, onUpdateFeed } from 'store/asyncFunctions'
+import { 
+  onBookmarkFeed,
+  onDeleteFeed,
+  onLikeFeed,
+  onRemoveBookmarkFeed,
+  onSubmitNewFeed,
+  onUnlikeFeed,
+  onUpdateFeed,
+} from 'store/asyncFunctions'
 
 export interface FeedState {
   value: FeedWithUserInfoType[]
@@ -23,34 +31,6 @@ export const feedsSlice = createSlice({
     // 새로 게시물을 로드하기 위해 기존 value 에 저장되어 있던 피드들을 지움
     clearFeeds: (state) => {
       state.value = []
-    },
-    // 피드를 좋아요/취소한 유저id 를 likes 배열에 저장/제거하고 피드의 likesCount 를 +1/-1 시킴 
-    // (action.payload 로 feedId, userUid 를 담은 객체가 옴)
-    addFeedLikeUserUid: (state, action) => {
-      const finded = state.value.find(feed => feed.id === action.payload.feedId)
-      if (!finded) return
-      finded.likesCount +1
-      finded.likes.push(action.payload.userUid)
-    },
-    removeFeedLikeUserUid: (state, action) => {
-      const finded = state.value.find(feed => feed.id === action.payload.feedId)
-      if (!finded) return
-      finded.likesCount -1
-      finded.likes = finded.likes.filter(userUid => userUid !== action.payload.userUid)
-    },
-    // 피드를 북마크/취소한 유저id 를 bookmarks 배열에 저장/제거하고 피드의 bookmarksCount 를 +1/-1 시킴
-    // (action.payload 로 feedId, userUid 를 담은 객체가 옴)
-    addFeedBookmarkUserUid: (state, action) => {
-      const finded = state.value.find(feed => feed.id === action.payload.feedId)
-      if (!finded) return
-      finded.bookmarksCount +1
-      finded.bookmarks.push(action.payload.userUid)
-    },
-    removeFeedBookmarkUserUid: (state, action) => {
-      const finded = state.value.find(feed => feed.id === action.payload.feedId)
-      if (!finded) return
-      finded.bookmarksCount -1
-      finded.bookmarks = finded.bookmarks.filter(userUid => userUid !== action.payload.userUid)
     },
     // 댓글 추가
     addComment: (state, action) => {
@@ -116,16 +96,52 @@ export const feedsSlice = createSlice({
     [onDeleteFeed.rejected.type]: (state, action) => {
       state.error = "게시글 삭제중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
     },
+    // 피드를 좋아요/취소한 유저id 를 likes 배열에 저장/제거하고 피드의 likesCount 를 +1/-1 시킴 
+    // (action.payload 로 feedId, userUid 를 담은 객체가 옴)
+    [onLikeFeed.fulfilled.type]: (state, action) => {
+      const finded = state.value.find(feed => feed.id === action.payload.feedId)
+      if (!finded) return
+      finded.likesCount +1
+      finded.likes.push(action.payload.uid)
+    },
+    [onLikeFeed.rejected.type]: (state, action) => {
+      state.error = "좋아요 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
+    [onUnlikeFeed.fulfilled.type]: (state, action) => {
+      const finded = state.value.find(feed => feed.id === action.payload.feedId)
+      if (!finded) return
+      finded.likesCount -1
+      finded.likes = finded.likes.filter(userUid => userUid !== action.payload.uid)
+    },
+    [onUnlikeFeed.rejected.type]: (state, action) => {
+      state.error = "좋아요 취소 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
+    // 피드를 북마크/취소한 유저id 를 bookmarks 배열에 저장/제거하고 피드의 bookmarksCount 를 +1/-1 시킴
+    // (action.payload 로 feedId, userUid 를 담은 객체가 옴)
+    [onBookmarkFeed.fulfilled.type]: (state, action) => {
+      const finded = state.value.find(feed => feed.id === action.payload.feedId)
+      if (!finded) return
+      finded.bookmarksCount +1
+      finded.bookmarks.push(action.payload.uid)
+    },
+    [onBookmarkFeed.rejected.type]: (state, action) => {
+      state.error = "북마크 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
+    [onRemoveBookmarkFeed.fulfilled.type]: (state, action) => {
+      const finded = state.value.find(feed => feed.id === action.payload.feedId)
+      if (!finded) return
+      finded.bookmarksCount -1
+      finded.bookmarks = finded.bookmarks.filter(userUid => userUid !== action.payload.uid)
+    },
+    [onRemoveBookmarkFeed.rejected.type]: (state, action) => {
+      state.error = "북마크 취소 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
   },
 })
 
 export const { 
   setFeeds, 
   clearFeeds,
-  addFeedLikeUserUid,
-  removeFeedLikeUserUid,
-  addFeedBookmarkUserUid,
-  removeFeedBookmarkUserUid,
   addComment,
   setComments,
   clearComments,
