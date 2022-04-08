@@ -46,3 +46,9 @@ declare type LoginFormValue = {
 
 // 회원가입 시 중복체크 타입
 declare type DuplicateCheck = "nickname" | "email"
+
+// async function arguments type
+declare interface FollowingDataType {
+  myUid: string
+  userUid: string
+}

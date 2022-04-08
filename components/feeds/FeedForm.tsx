@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import { Card, CardContent } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { addFeedInfo } from "store/slices/usersSlice";
-import { onSubmitNewFeed } from "store/asyncFunctions";
+import { onSubmitNewFeed } from "store/asyncFunctions/index";
 import { showAlert } from "store/slices/appSlice";
 import PreviewImagesTab from "components/feeds/PreviewImagesTab";
 import SubmitFormButton from "components/parts/SubmitFormButton";
@@ -34,9 +34,8 @@ const FeedForm: FC = () => {
       feedText, tags, imgs: feedImages,
       uid: myInfo.uid, nickname: myInfo.nickname, profileImg: myInfo.profileImg
     }
-    dispatch(onSubmitNewFeed(newFeedData)).then(res => {
-      dispatch(addFeedInfo(`feeds/${(res.payload as FeedWithIdType).id}`))
-    })
+    dispatch(onSubmitNewFeed(newFeedData))
+      .then((res: any) => dispatch(addFeedInfo(`feeds/${res.payload.id}`)))
     setSubmitLoading(false)
     setTags([])
     setFeedText("")

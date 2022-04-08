@@ -10,8 +10,8 @@ import styled from "@emotion/styled";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { showAlert } from "store/slices/appSlice";
 import { addBookmarkFeedRef, addLikeFeedRef, removeBookmarkFeedRef, removeLikeFeedRef } from "store/slices/usersSlice";
-import { mainColor } from "styles/GlobalStyles";
 import { onBookmarkFeed, onLikeFeed, onRemoveBookmarkFeed, onUnlikeFeed } from "store/asyncFunctions";
+import { mainColor } from "styles/GlobalStyles";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;

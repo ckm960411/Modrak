@@ -8,6 +8,8 @@ import { onRemoveBookmarkFeed } from "store/asyncFunctions/feed/removeBookmarkFe
 import { onAddComment } from "store/asyncFunctions/feed/addComment";
 import { onUpdateComment } from "store/asyncFunctions/feed/updateComment";
 import { onDeleteComment } from "store/asyncFunctions/feed/deleteComment";
+import { onAddFollowing } from "store/asyncFunctions/user/addfollowing";
+import { onRemoveFollowing } from "store/asyncFunctions/user/removeFollowing";
 
 export { 
   onSubmitNewFeed,
@@ -20,4 +22,6 @@ export {
   onAddComment,
   onUpdateComment,
   onDeleteComment,
+  onAddFollowing,
+  onRemoveFollowing,
 }

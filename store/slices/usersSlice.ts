@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { onAddFollowing, onRemoveFollowing } from 'store/asyncFunctions'
 
 export interface UserState {
   myInfo: UserType | null
@@ -47,16 +48,6 @@ export const usersSlice = createSlice({
     removeBookmarkFeedRef: (state, action) => {
       state.myInfo!.bookmarkFeeds = state.myInfo!.bookmarkFeeds.filter((feedRef: string) => feedRef !== action.payload.feedRef)
     },
-    // 상대방 팔로우: 내 팔로잉에 상대 id 를 추가하고 팔로잉수 +1 증가
-    addFollowings: (state, action) => {
-      state.myInfo!.followings.push(action.payload.userUid)
-      state.myInfo!.followingsCount = state.myInfo!.followingsCount +1
-    },
-    // 상대방 언팔로우: 내 팔로잉에 상대 id 를 제거하고 팔로잉수 -1 감소
-    removeFollowings: (state, action) => {
-      state.myInfo!.followings = state.myInfo!.followings.filter(followingId => followingId !== action.payload.userUid)
-      state.myInfo!.followingsCount = state.myInfo!.followingsCount -1
-    },
     // 맛집 추천 id 등록
     addRecommendRestaurant: (state, action) => {
       state.myInfo!.recommendRestaurants.push(action.payload.restaurantId)
@@ -103,7 +94,25 @@ export const usersSlice = createSlice({
       state.myInfo!.nickname = action.payload.newNickname
     },
   },
-  extraReducers: {},
+  extraReducers: {
+    // 상대방 팔로우: 내 팔로잉에 상대 id 를 추가하고 팔로잉수 +1 증가 (action.payload 로 상대 userUid 가 옴)
+    [onAddFollowing.fulfilled.type]: (state, action) => {
+      state.myInfo!.followings.push(action.payload)
+      state.myInfo!.followingsCount = state.myInfo!.followingsCount +1
+    },
+    [onAddFollowing.rejected.type]: (state, action) => {
+      state.error = "팔로잉 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
+    // 상대방 언팔로우: 내 팔로잉에 상대 id 를 제거하고 팔로잉수 -1 감소
+    [onRemoveFollowing.fulfilled.type]: (state, action) => {
+      state.myInfo!.followings = state.myInfo!.followings.filter(followingId => followingId !== action.payload)
+      state.myInfo!.followingsCount = state.myInfo!.followingsCount -1
+    },
+    [onRemoveFollowing.rejected.type]: (state, action) => {
+      state.error = "팔로잉 취소 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
+
+  },
 })
 
 export const { 
@@ -115,8 +124,6 @@ export const {
   removeLikeFeedRef,
   addBookmarkFeedRef,
   removeBookmarkFeedRef,
-  addFollowings,
-  removeFollowings,
   addRecommendRestaurant,
   removeRecommendRestaurant,
   addBookmarkRestaurant,
