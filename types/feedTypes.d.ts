@@ -63,3 +63,17 @@ declare interface LikeBookmarkFeedDataType {
   feedId: string
   uid: string
 }
+declare interface AddCommentDataType {
+  feedId: string
+  uid: string
+  comment: string
+}
+declare interface UpdateCommentDataType {
+  feedId: string
+  commentId: string
+  editText: string
+}
+declare interface DeleteCommentDataType {
+  feedId: string
+  commentId: string
+}

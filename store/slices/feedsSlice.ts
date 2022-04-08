@@ -1,11 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { 
+  onAddComment,
   onBookmarkFeed,
+  onDeleteComment,
   onDeleteFeed,
   onLikeFeed,
   onRemoveBookmarkFeed,
   onSubmitNewFeed,
   onUnlikeFeed,
+  onUpdateComment,
   onUpdateFeed,
 } from 'store/asyncFunctions'
 
@@ -32,12 +35,6 @@ export const feedsSlice = createSlice({
     clearFeeds: (state) => {
       state.value = []
     },
-    // 댓글 추가
-    addComment: (state, action) => {
-      const finded = state.value.find(feed => feed.id === action.payload.feedId)
-      if (!finded) return
-      finded.comments.unshift(action.payload)
-    },
     // 댓글창을 열 때 서버에서 가져온 댓글들을 저장
     setComments: (state, action) => {
       const finded = state.value.find(feed => feed.id === action.payload.feedId)
@@ -49,24 +46,6 @@ export const feedsSlice = createSlice({
       const finded = state.value.find(feed => feed.id === action.payload.feedId)
       if (!finded) return
       finded.comments = []
-    },
-    // 댓글을 수정하려는 피드id 를 찾아 해당 댓글을 수정함
-    // (action.payload 에는 feedId, commentId, editText, modifiedAt 이 객체로 들어옴)
-    updateComment: (state, action) => {
-      const finded = state.value.find(feed => feed.id === action.payload.feedId)
-      if (!finded) return
-      const findedComment = finded.comments.find(comment => comment.id === action.payload.commentId)
-      if (!findedComment) return
-      findedComment.commentText = action.payload.editText
-      findedComment.modifiedAt = action.payload.modifiedAt
-    },
-    // 댓글을 삭제하려는 피드id 를 찾아 해당 댓글을 삭제함
-    // (action.payload 에는 feedId, commentId 가 객체로 들어옴)
-    deleteComment: (state, action) => {
-      const finded = state.value.find(feed => feed.id === action.payload.feedId)
-      if (!finded) return
-      const filteredComments = finded.comments.filter(comment => comment.id !== action.payload.commentId)
-      finded.comments = filteredComments
     },
   },
   extraReducers: {
@@ -136,17 +115,47 @@ export const feedsSlice = createSlice({
     [onRemoveBookmarkFeed.rejected.type]: (state, action) => {
       state.error = "북마크 취소 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
     },
+    // 댓글 추가
+    [onAddComment.fulfilled.type]: (state, action) => {
+      const finded = state.value.find(feed => feed.id === action.payload.feedId)
+      if (!finded) return
+      finded.comments.unshift(action.payload)
+    },
+    [onAddComment.rejected.type]: (state, action) => {
+      state.error = "댓글 작성 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
+    // 댓글을 수정하려는 피드id 를 찾아 해당 댓글을 수정함
+    // (action.payload 에는 feedId, commentId, editText, modifiedAt 이 객체로 들어옴)
+    [onUpdateComment.fulfilled.type]: (state, action) => {
+      const finded = state.value.find(feed => feed.id === action.payload.feedId)
+      if (!finded) return
+      const findedComment = finded.comments.find(comment => comment.id === action.payload.commentId)
+      if (!findedComment) return
+      findedComment.commentText = action.payload.editText
+      findedComment.modifiedAt = action.payload.modifiedAt
+    },
+    [onUpdateComment.rejected.type]: (state, action) => {
+      state.error = "댓글 수정 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
+    // 댓글을 삭제하려는 피드id 를 찾아 해당 댓글을 삭제함
+    // (action.payload 에는 feedId, commentId 가 객체로 들어옴)
+    [onDeleteComment.fulfilled.type]: (state, action) => {
+      const finded = state.value.find(feed => feed.id === action.payload.feedId)
+      if (!finded) return
+      const filteredComments = finded.comments.filter(comment => comment.id !== action.payload.commentId)
+      finded.comments = filteredComments
+    },
+    [onDeleteComment.rejected.type]: (state, action) => {
+      state.error = "댓글 삭제 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
   },
 })
 
 export const { 
   setFeeds, 
   clearFeeds,
-  addComment,
   setComments,
   clearComments,
-  updateComment,
-  deleteComment,
 } = feedsSlice.actions
 
 

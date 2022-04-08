@@ -1,11 +1,8 @@
 import { FC, useState } from "react";
 import { Button, CardContent } from "@mui/material";
-import { v4 as uuid_v4 } from "uuid";
-import { updateDoc } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { addComment } from "store/slices/feedsSlice";
 import { showAlert } from "store/slices/appSlice";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
+import { onAddComment } from "store/asyncFunctions";
 import TextInput from "components/parts/TextInput";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 
@@ -23,24 +20,7 @@ const CommentForm: FC<{feedId: string}> = ({ feedId }) => {
     if (!myInfo) return dispatch(showAlert({ isShown: true, message: '로그인 이후에 댓글을 작성해주세요!', severity: 'error' }))
     if (comment.trim() === '') return dispatch(showAlert({ isShown: true, message: '댓글 내용을 작성해주세요!', severity: 'error' }))
     setLoading(true)
-    const commentData: CommentType = {
-      id: uuid_v4(),
-      userUid: myInfo.uid,
-      feedId: feedId,
-      commentText: comment,
-      createdAt: Date.now(),
-      modifiedAt: Date.now(),
-    }
-    // comments 컬렉션에 댓글을 다려는 피드id 로 된 문서에 해당 댓글 데이터를 저장
-    const { searchedDocRef, searchedData } = await searchFirestoreDoc(`comments/${feedId}`)
-    await updateDoc(searchedDocRef, {
-      comments: [ ...searchedData!.comments, commentData ]
-    })
-    dispatch(addComment({
-      ...commentData,
-      nickname: myInfo.nickname,
-      profileImg: myInfo.profileImg,
-    }))
+    dispatch(onAddComment({ feedId, comment, uid: myInfo.uid }))
     setComment('')
     setLoading(false)
   }
