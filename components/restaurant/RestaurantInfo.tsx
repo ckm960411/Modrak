@@ -9,20 +9,11 @@ import { doc, updateDoc } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { dbService } from "fireBaseApp/fBase";
 import { mainColor } from "styles/GlobalStyles";
-import { addBookmarkRestaurant, addRecommendRestaurant, removeBookmarkRestaurant, removeRecommendRestaurant } from "store/slices/usersSlice";
+import { addBookmarkRestaurant, removeBookmarkRestaurant } from "store/slices/usersSlice";
+import { onAddRecommendRestaurant } from "store/asyncFunctions/user/addRecommendRestaurant";
 import MyCarousel from "components/parts/MyCarousel";
 import Map from "components/parts/Map";
-
-const DescContainer = styled(Stack)`
-  margin-top: 8px;
-  margin-bottom: 16px;
-`
-const DescHeader = styled(Typography)`
-  font-weight: 600;
-`
-const Description = styled(Typography)`
-  font-size: 14px;
-`
+import { onRemoveRecommendRestaurant } from "store/asyncFunctions";
 
 const RestaurantInfo: FC<{data: RestaurantWithId}> = ({ data }) => {
   const { id, name, subtitle, images, division, detailDivision, address, description, menu, rating, phoneNumber, workHours, breaktime, holiday, recommend, bookmark, category, detailCategory, tags } = data
@@ -36,18 +27,12 @@ const RestaurantInfo: FC<{data: RestaurantWithId}> = ({ data }) => {
 
   const toggleRecommendRestaurants = async () => {
     if (!myInfo) return
-    const restaurantRef = doc(dbService, "restaurants", id)
-    const userRef = doc(dbService, "users", myInfo.uid)
     if (!isRecommended) { // 추천하기
-      await updateDoc(restaurantRef, { recommend: recommendCount +1 })
-      await updateDoc(userRef, { recommendRestaurants: [ ...myInfo.recommendRestaurants, id ] })
-      dispatch(addRecommendRestaurant({ restaurantId: id }))
+      dispatch(onAddRecommendRestaurant({ restaurantId: id, uid: myInfo.uid }))
       setRecommendCount(prev => prev +1)
       setIsRecommended(true)
     } else { // 추천 취소하기
-      await updateDoc(restaurantRef, { recommend: recommendCount -1 })
-      await updateDoc(userRef, { recommendRestaurants: myInfo.recommendRestaurants.filter(restId => restId !== id) })
-      dispatch(removeRecommendRestaurant({ restaurantId: id }))
+      dispatch(onRemoveRecommendRestaurant({ restaurantId: id, uid: myInfo.uid }))
       setRecommendCount(prev => prev -1)
       setIsRecommended(false)
     }
@@ -160,5 +145,16 @@ const RestaurantInfo: FC<{data: RestaurantWithId}> = ({ data }) => {
     </Card>
   )
 }
+
+const DescContainer = styled(Stack)`
+  margin-top: 8px;
+  margin-bottom: 16px;
+`
+const DescHeader = styled(Typography)`
+  font-weight: 600;
+`
+const Description = styled(Typography)`
+  font-size: 14px;
+`
 
 export default RestaurantInfo

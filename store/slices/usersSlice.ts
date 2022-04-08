@@ -1,5 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { onAddFollowing, onRemoveFollowing } from 'store/asyncFunctions'
+import { 
+  onAddFollowing,
+  onAddRecommendRestaurant,
+  onRemoveFollowing,
+  onRemoveRecommendRestaurant,
+} from 'store/asyncFunctions'
 
 export interface UserState {
   myInfo: UserType | null
@@ -47,14 +52,6 @@ export const usersSlice = createSlice({
     },
     removeBookmarkFeedRef: (state, action) => {
       state.myInfo!.bookmarkFeeds = state.myInfo!.bookmarkFeeds.filter((feedRef: string) => feedRef !== action.payload.feedRef)
-    },
-    // 맛집 추천 id 등록
-    addRecommendRestaurant: (state, action) => {
-      state.myInfo!.recommendRestaurants.push(action.payload.restaurantId)
-    },
-    // 맛집 추천 취소
-    removeRecommendRestaurant: (state, action) => {
-      state.myInfo!.recommendRestaurants = state.myInfo!.recommendRestaurants.filter(restId => restId !== action.payload.restaurantId)
     },
     // 맛집 찜(북마크) id 등록
     addBookmarkRestaurant: (state, action) => {
@@ -111,7 +108,20 @@ export const usersSlice = createSlice({
     [onRemoveFollowing.rejected.type]: (state, action) => {
       state.error = "팔로잉 취소 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
     },
-
+    // 맛집 추천 id 등록 (action.payload 로 restaurantId 가 옴)
+    [onAddRecommendRestaurant.fulfilled.type]: (state, action) => {
+      state.myInfo!.recommendRestaurants.push(action.payload)
+    },
+    [onAddRecommendRestaurant.rejected.type]: (state, action) => {
+      state.error = "맛집 추천 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
+    // 맛집 추천 취소 (action.payload 로 restaurantId 가 옴)
+    [onRemoveRecommendRestaurant.fulfilled.type]: (state, action) => {
+      state.myInfo!.recommendRestaurants = state.myInfo!.recommendRestaurants.filter(restId => restId !== action.payload)
+    },
+    [onRemoveRecommendRestaurant.rejected.type]: (state, action) => {
+      state.error = "맛집 추천 취소 중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
   },
 })
 
@@ -124,8 +134,6 @@ export const {
   removeLikeFeedRef,
   addBookmarkFeedRef,
   removeBookmarkFeedRef,
-  addRecommendRestaurant,
-  removeRecommendRestaurant,
   addBookmarkRestaurant,
   removeBookmarkRestaurant,
   addBookmarkAccommodation,

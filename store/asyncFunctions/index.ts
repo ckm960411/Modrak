@@ -10,6 +10,8 @@ import { onUpdateComment } from "store/asyncFunctions/feed/updateComment";
 import { onDeleteComment } from "store/asyncFunctions/feed/deleteComment";
 import { onAddFollowing } from "store/asyncFunctions/user/addfollowing";
 import { onRemoveFollowing } from "store/asyncFunctions/user/removeFollowing";
+import { onAddRecommendRestaurant } from "store/asyncFunctions/user/addRecommendRestaurant";
+import { onRemoveRecommendRestaurant } from "store/asyncFunctions/user/removeRecommendRestaurant";
 
 export { 
   onSubmitNewFeed,
@@ -24,4 +26,6 @@ export {
   onDeleteComment,
   onAddFollowing,
   onRemoveFollowing,
+  onAddRecommendRestaurant,
+  onRemoveRecommendRestaurant,
 }
