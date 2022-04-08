@@ -7,9 +7,10 @@ import { authService, dbService } from "fireBaseApp/fBase"
 import { Button, DialogActions, DialogContent, Stack } from "@mui/material";
 import styled from "@emotion/styled";
 import { red } from "@mui/material/colors";
+import { useAppDispatch } from "store/hooks";
+import { showAlert } from "store/slices/appSlice";
 import onCheckDuplicate from "utils/functions/onCheckDuplicate";
 import HookFormInput from "components/login/HookFormInput";
-import SideAlert from "components/parts/SideAlert";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 
 const ErrorParagraph = styled.span`
@@ -17,10 +18,10 @@ const ErrorParagraph = styled.span`
 `;
 
 const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
+  const dispatch = useAppDispatch()
   const router = useRouter()
   const [checkedNickname, setCheckedNickname] = useState('')
   const [checkedEmail, setCheckedEmail] = useState('')
-  const [alertOpened, setAlertOpened] = useState(false)
   const [signupLoading, setSignupLoading] = useState(false)
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<SignUpFormValue>()
@@ -32,28 +33,24 @@ const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
   
   const onCheckNicknameDuplicated = async () => { // 닉네임 중복 체크
     const duplicatedNickname = await onCheckDuplicate("nickname", nicknameRef.current!.value)
-    if (duplicatedNickname) return alert('중복된 닉네임입니다!')
-    setAlertOpened(true)
+    if (duplicatedNickname) return dispatch(showAlert({ isShown: true, message: "중복된 닉네임입니다!", severity: 'warning' }))
+    dispatch(showAlert({ isShown: true, message: "사용할 수 있는 닉네임입니다!" }))
     setCheckedNickname(nicknameRef.current!.value)
   }
   const onCheckEmailDuplicated = async () => { // 이메일 중복 체크
     const duplicatedEmail = await onCheckDuplicate("email", emailRef.current!.value.toLowerCase())
-    if (duplicatedEmail) return alert('중복된 이메일입니다!')
-    setAlertOpened(true)
+    if (duplicatedEmail) return dispatch(showAlert({ isShown: true, message: "중복된 이메일입니다!", severity: 'warning' }))
+    if(!(/^\S+@\S+$/i).test(watch("email"))) return dispatch(showAlert({ isShown: true, message: "이메일 형식이 맞지 않습니다!!", severity: 'warning' }))
+    dispatch(showAlert({ isShown: true, message: "사용할 수 있는 이메일입니다!" }))
     setCheckedEmail(emailRef.current!.value)
   }
-
-  const onCloseAlert = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') return;
-    setAlertOpened(false);
-  };
 
   const onSubmit: SubmitHandler<SignUpFormValue> = (data) => {
     const { email, name, nickname, password } = data
     if (!Boolean(checkedNickname) || checkedNickname !== nicknameRef.current!.value) 
-      return alert('닉네임 중복 체크를 완료해주세요!')
-    if (!Boolean(checkedEmail) || checkedEmail !== emailRef.current!.value) 
-      return alert('이메일 중복 체크를 완료해주세요!')
+      return dispatch(showAlert({ isShown: true, message: '닉네임 중복 체크를 완료해주세요!', severity: 'error' }))
+      if (!Boolean(checkedEmail) || checkedEmail !== emailRef.current!.value)
+      return dispatch(showAlert({ isShown: true, message: '이메일 중복 체크를 완료해주세요!', severity: 'error' }))
     // 신규 사용자 계정 생성
     setSignupLoading(true)
     createUserWithEmailAndPassword(authService, email, password)
@@ -82,7 +79,8 @@ const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
         await setDoc(doc(usersCollection, `${newUserObj.uid}`), newUserObj)
         // pushes 컬렉션에 사용자 uid 로 된 문서를 생성
         const pushesCollection = collection(dbService, "pushes")
-        await setDoc(doc(pushesCollection, `${newUserObj.uid}`), { pushes: [] }).then(() => alert('회원가입이 완료됐습니다!'))
+        await setDoc(doc(pushesCollection, `${newUserObj.uid}`), { pushes: [] })
+          .then(() => dispatch(showAlert({ isShown: true, message: '회원가입이 완료됐습니다!' })))
       })
       .catch(err => console.log(err.resultMessage))
       .finally(() => {
@@ -123,11 +121,6 @@ const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
             {errors.nickname && errors.nickname.type === "maxLength" && (
               <ErrorParagraph>Your input exceed maximum length.</ErrorParagraph>
             )}
-            {checkedNickname && (
-              <SideAlert open={alertOpened} onClose={onCloseAlert}>
-                사용할 수 있는 닉네임입니다!
-              </SideAlert>
-            )}
           </HookFormInput>
           <HookFormInput // 이메일
             type="email"
@@ -142,11 +135,6 @@ const SignupForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
             )}
             {errors.email && errors.email.type === "pattern" && (
               <ErrorParagraph>This is an invalid email format.</ErrorParagraph>
-            )}
-            {checkedEmail && (
-              <SideAlert open={alertOpened} onClose={onCloseAlert}>
-                사용할 수 있는 이메일입니다!
-              </SideAlert>
             )}
           </HookFormInput>
           <HookFormInput // 비밀번호

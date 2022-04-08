@@ -9,6 +9,7 @@ import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import styled from "@emotion/styled";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { updateDoc } from "firebase/firestore";
+import { showAlert } from "store/slices/appSlice";
 import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import { addFeedBookmarkUserUid, addFeedLikeUserUid, removeFeedBookmarkUserUid, removeFeedLikeUserUid } from "store/slices/feedsSlice";
 import { addBookmarkFeedRef, addLikeFeedRef, removeBookmarkFeedRef, removeLikeFeedRef } from "store/slices/usersSlice";
@@ -51,7 +52,7 @@ const FeedActions: FC<FeedActionsProps> = ({ feedId, likes, bookmarks, expanded,
   }, [feedId, bookmarks, myInfo])
 
   const onLikeFeed = async () => {
-    if (!myInfo) return alert('먼저 로그인을 해주세요!')
+    if (!myInfo) return dispatch(showAlert({ isShown: true, message: '먼저 로그인을 해주세요!', severity: 'warning' }))
     const { searchedDocRef: feedDocRef, searchedData: feedData } = await searchFirestoreDoc(`feeds/${feedId}`)
     const { searchedDocRef: userDocRef, searchedData: userData } = await searchFirestoreDoc(`users/${myInfo.uid}`)
     if (AmILiked) { // unlike
@@ -76,7 +77,7 @@ const FeedActions: FC<FeedActionsProps> = ({ feedId, likes, bookmarks, expanded,
   }
 
   const onBookmarkFeed = async () => {
-    if (!myInfo) return alert('먼저 로그인을 해주세요!')
+    if (!myInfo) return dispatch(showAlert({ isShown: true, message: '먼저 로그인을 해주세요!', severity: 'warning' }))
     const { searchedDocRef: feedDocRef, searchedData: feedData } = await searchFirestoreDoc(`feeds/${feedId}`)
     const { searchedDocRef: userDocRef, searchedData: userData } = await searchFirestoreDoc(`users/${myInfo.uid}`)
     if (AmIMarked) { // unmark

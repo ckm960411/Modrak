@@ -3,6 +3,7 @@ import { Card, CardContent } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { addFeedInfo } from "store/slices/usersSlice";
 import { onSubmitNewFeed } from "store/asyncFunctions";
+import { showAlert } from "store/slices/appSlice";
 import PreviewImagesTab from "components/feeds/PreviewImagesTab";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 import TextInput from "components/parts/TextInput";
@@ -26,8 +27,8 @@ const FeedForm: FC = () => {
   // 게시글 작성
   const handleSubmitFeed = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!myInfo) return alert('게시글 작성을 위해 먼저 로그인해주세요!')
-    if (feedText.trim() === '') return alert('게시글 내용을 작성해주세요!')
+    if (!myInfo) return dispatch(showAlert({ isShown: true, message: '피드 작성을 위해 먼저 로그인해주세요!', severity: 'error' }))
+    if (feedText.trim() === '') return dispatch(showAlert({ isShown: true, message: '피드 내용을 작성해주세요!', severity: 'warning' }))
     setSubmitLoading(true)
     const newFeedData: NewFeedDataType = {
       feedText, tags, imgs: feedImages,
@@ -40,6 +41,7 @@ const FeedForm: FC = () => {
     setTags([])
     setFeedText("")
     setFeedImages([])
+    dispatch(showAlert({ isShown: true, message: "피드 작성이 완료됐습니다!" }))
   }
 
   return (

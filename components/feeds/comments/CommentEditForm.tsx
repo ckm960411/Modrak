@@ -3,6 +3,7 @@ import { Button, CardContent } from "@mui/material";
 import { updateDoc } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { updateComment } from "store/slices/feedsSlice";
+import { showAlert } from "store/slices/appSlice";
 import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import TextInput from "components/parts/TextInput";
 import SubmitFormButton from "components/parts/SubmitFormButton";
@@ -34,11 +35,11 @@ const CommentEditForm: FC<CommentEditFormProps> = ({ setEditing, comment }) => {
 
   const onSubmitEdit = async () => {
     if (!myInfo)
-      return alert('로그인 이후에 댓글을 수정해주세요.')
+      return dispatch(showAlert({ isShown: true, message: '로그인 이후에 댓글을 수정해주세요.', seveiry: 'warning' }))
     if (myInfo.uid !== userUid)
-      return alert('당신의 댓글이 아니면 수정할 수 없습니다!')
+      return dispatch(showAlert({ isShown: true, message: '당신의 댓글이 아니면 수정할 수 없습니다!', severity: 'error' }))
     if (editText.trim() === '')
-      return alert('댓글의 내용을 작성해주세요!')
+      return dispatch(showAlert({ isShown: true, message: '댓글의 내용을 작성해주세요!', severity: 'warning' }))
     setEditCommentLoading(true)
 
     const editData = {

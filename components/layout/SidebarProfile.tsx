@@ -4,8 +4,9 @@ import styled from "@emotion/styled";
 import { Avatar, Card, CardContent, CardHeader, Divider, IconButton, Menu, MenuItem, Stack, Typography } from "@mui/material";
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { authService } from "fireBaseApp/fBase";
-import { removeMyInfoData } from "store/slices/usersSlice";
 import { useAppDispatch } from "store/hooks";
+import { removeMyInfoData } from "store/slices/usersSlice";
+import { showAlert } from "store/slices/appSlice";
 import FollowList from "components/layout/FollowList";
 import defaultImg from "public/imgs/profileImg.png"
 
@@ -29,7 +30,7 @@ const SidebarProfile: FC<{myInfo: UserType}> = ({ myInfo }) => {
     const ok = confirm('정말 로그아웃 하시겠습니까?')
     if (!ok) return
     authService.signOut()
-    alert('로그아웃이 완료됐습니다!')
+    dispatch(showAlert({ isShown: true, message: '로그아웃이 완료됐습니다!' }))
     dispatch(removeMyInfoData())
   }
 

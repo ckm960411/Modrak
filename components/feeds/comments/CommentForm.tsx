@@ -4,6 +4,7 @@ import { v4 as uuid_v4 } from "uuid";
 import { updateDoc } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { addComment } from "store/slices/feedsSlice";
+import { showAlert } from "store/slices/appSlice";
 import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import TextInput from "components/parts/TextInput";
 import SubmitFormButton from "components/parts/SubmitFormButton";
@@ -19,8 +20,8 @@ const CommentForm: FC<{feedId: string}> = ({ feedId }) => {
   }
 
   const onSubmitComment = async () => {
-    if (!myInfo) return alert('로그인 이후에 댓글을 작성해주세요!')
-    if (comment.trim() === '') return alert('댓글 내용을 작성해주세요!')
+    if (!myInfo) return dispatch(showAlert({ isShown: true, message: '로그인 이후에 댓글을 작성해주세요!', severity: 'error' }))
+    if (comment.trim() === '') return dispatch(showAlert({ isShown: true, message: '댓글 내용을 작성해주세요!', severity: 'error' }))
     setLoading(true)
     const commentData: CommentType = {
       id: uuid_v4(),

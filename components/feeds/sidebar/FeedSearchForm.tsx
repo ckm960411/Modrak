@@ -8,6 +8,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { dbService } from "fireBaseApp/fBase";
 import { useAppDispatch } from "store/hooks";
 import { setSearchByUidFilter, setSearchTagFilter } from "store/slices/feedFilterSlice";
+import { showAlert } from "store/slices/appSlice";
 
 type SearchFilterType = "nickname" | "tag"
 
@@ -32,7 +33,7 @@ const FeedSearchForm: FC = () => {
       const queryInstance = query(usersCollectionRef, where("nickname", "==", keyword))
       await getDocs(queryInstance).then(res => {
         if (!res.docs[0]) {
-          return alert('해당하는 닉네임의 사용자가 없습니다!')
+          return dispatch(showAlert({ isShown: true, message: '해당하는 닉네임의 사용자가 없습니다!', severity: 'error' }))
         } else {
           const userData = res.docs[0].data()
           dispatch(setSearchByUidFilter({ userUid: userData.uid! }))

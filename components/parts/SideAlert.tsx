@@ -1,26 +1,31 @@
-import { forwardRef, SyntheticEvent } from "react";
+import { forwardRef } from "react";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import { Snackbar } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { showAlert } from "store/slices/appSlice";
 
-interface SideAlertProps extends AlertProps {
-  open: boolean
-  onClose: (event?: Event | SyntheticEvent<Element, Event> | undefined, reason?: string | undefined) => void
-}
+const SideAlert = forwardRef<HTMLDivElement, AlertProps>(({ children, ...props }, ref) => {
+  const dispatch = useAppDispatch()
+  const { isShown, message, severity } = useAppSelector(state => state.app)
 
-const SideAlert = forwardRef<HTMLDivElement, SideAlertProps>(({
-  open, onClose, children, ...props
-}, ref) => {
+  const onClose = () => {
+    dispatch(showAlert({
+      isShown: false,
+      message: null,
+    }))
+  }
+
   return (
-    <Snackbar open={open} autoHideDuration={2000} onClose={onClose}>
+    <Snackbar open={isShown} autoHideDuration={3000} onClose={onClose}>
       <MuiAlert 
         elevation={6} 
         ref={ref} 
         variant="filled"
-        severity="success"
+        severity={severity}
         sx={{ width: '100%' }}
         {...props} 
       >
-        {children}
+        {message}
       </MuiAlert>
     </Snackbar>
   );

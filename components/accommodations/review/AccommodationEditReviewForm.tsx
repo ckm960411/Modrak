@@ -3,6 +3,7 @@ import { Alert, CardContent, Dialog, Rating, Stack } from "@mui/material";
 import { updateDoc } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { updateRoomReview } from "store/slices/roomsSlice";
+import { showAlert } from "store/slices/appSlice";
 import uploadImagesDB from "utils/functions/uploadImagesDB";
 import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import TextInput from "components/parts/TextInput";
@@ -43,12 +44,12 @@ const AccommodationEditReviewForm: FC<AccommodationEditReviewFormProps> = ({ rev
 
   const onSubmit = async () => {
     if (editText.trim() === '') 
-      return setEditReviewError("피드의 내용을 작성해주세요!")
+      return dispatch(showAlert({ isShown: true, message: "리뷰 내용을 작성해주세요!", severity: 'warning' }))
     if (!myInfo) 
-      return alert("로그인한 이후에 피드를 수정해주세요.")
-    if (myInfo.uid !== userUid) 
-      return alert("당신의 피드가 아닌 글은 수정할 수 없습니다!")
-    setEditReviewLoading(true)
+      return dispatch(showAlert({ isShown: true, message: "로그인한 이후에 리뷰를 수정해주세요!", severity: 'error' }))
+      if (myInfo.uid !== userUid) 
+      return dispatch(showAlert({ isShown: true, message: "당신의 리뷰가 아닌 글은 수정할 수 없습니다!", severity: 'error' }))
+      setEditReviewLoading(true)
     const shouldUpload = newImages.filter(img => img.startsWith('data:image'))
     const shouldNotUpload = newImages.filter(img => !img.startsWith('data:image'))
     const newImagesURLs = await uploadImagesDB(shouldUpload, myInfo.uid).catch(err => console.log(err))
@@ -69,7 +70,7 @@ const AccommodationEditReviewForm: FC<AccommodationEditReviewFormProps> = ({ rev
 
     await updateDoc(reviewDocRef, { reviews: reviewsArray })
     dispatch(updateRoomReview(data))
-    alert('리뷰 수정이 완료되었습니다!')
+    dispatch(showAlert({ isShown: true, message: "리뷰 수정이 완료됐습니다!" }))
     setEditReviewLoading(false)
     setEditing(false)
   }

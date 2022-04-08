@@ -7,6 +7,7 @@ import { addDays, differenceInDays, format } from "date-fns";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { addRoomReservation } from "store/slices/roomsSlice";
 import { addNewPush, addRoomInfoReserved } from "store/slices/usersSlice";
+import { showAlert } from "store/slices/appSlice";
 import searchFirestoreDoc from "utils/functions/searchFirestoreDoc"
 import ReserveTimePicker from "@reservation/ReserveTimePicker";
 
@@ -54,11 +55,14 @@ const ReserveModal: FC<ReserveModalProps> = ({ open, setIsReserving, cardId }) =
   const { roomName, reservedDates, roomId } = data
 
   const onReserveRoom = async () => {
-    if (!myInfo) return alert('로그인 이후에 예약할 수 있습니다!')
+    if (!myInfo) return dispatch(showAlert({ isShown: true, message: '로그인 이후에 예약할 수 있습니다!', severity: 'error' }))
     const { startDate, endDate } = date
-    if (startDate.toString() === endDate.toString()) return alert('체크인 날짜와 체크아웃 날짜를 확인해주세요!')
-    if (reservedDates.includes(removeDetailTime(startDate))) return alert('예약할 수 없는 날짜입니다!')
-    if (reservedDates.includes(removeDetailTime(endDate))) return alert('예약할 수 없는 날짜입니다!')
+    if (startDate.toString() === endDate.toString())
+      return dispatch(showAlert({ isShown: true, message: '체크인 날짜와 체크아웃 날짜를 확인해주세요!', severity: 'warning' }))
+    if (reservedDates.includes(removeDetailTime(startDate)))
+      return dispatch(showAlert({ isShown: true, message: '예약할 수 없는 날짜입니다!', severity: 'error' }))
+    if (reservedDates.includes(removeDetailTime(endDate)))
+      return dispatch(showAlert({ isShown: true, message: '예약할 수 없는 날짜입니다!', severity: 'error' }))
     const ok = window.confirm('이 날짜로 예약하시겠습니까?')
     if (!ok) return
     const diffDays = differenceInDays(endDate, startDate) // 두 날짜간의 차이를 계산

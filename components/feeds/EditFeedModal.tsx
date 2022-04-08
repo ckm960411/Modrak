@@ -2,6 +2,7 @@ import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { Alert, CardContent, Dialog } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { onUpdateFeed } from "store/asyncFunctions";
+import { showAlert } from "store/slices/appSlice";
 import TextInput from "components/parts/TextInput";
 import InputFileForm from "components/parts/InputFileForm";
 import MainButton from "components/parts/MainButton";
@@ -44,12 +45,12 @@ const EditFeedModal: FC<EditFeedModalProps> = ({ feedData, editing, setEditing }
 
   const handleSubmitEdit = async () => {
     if (editText.trim() === '') 
-      return setEditFeedError("피드의 내용을 작성해주세요!")
+      return dispatch(showAlert({ isShown: true, message: "피드의 내용을 작성해주세요!", severity: "error" }))
     if (!myInfo) 
-      return alert("로그인한 이후에 피드를 수정해주세요.")
-    if (myInfo.uid !== userUid) 
-      return alert("당신의 피드가 아닌 글은 수정할 수 없습니다!")
-    setEditFeedLoading(true)
+      return dispatch(showAlert({ isShown: true, message: "로그인한 이후에 피드를 수정해주세요.", severity: "error" }))
+      if (myInfo.uid !== userUid) 
+      return dispatch(showAlert({ isShown: true, message: "당신의 피드가 아닌 글은 수정할 수 없습니다!", severity: "error" }))
+      setEditFeedLoading(true)
     dispatch(onUpdateFeed({
       uid: myInfo.uid,
       feedId: id,
@@ -59,6 +60,7 @@ const EditFeedModal: FC<EditFeedModalProps> = ({ feedData, editing, setEditing }
     }))
     setEditFeedLoading(false)
     setEditing(false)
+    return dispatch(showAlert({ isShown: true, message: "수정이 완료됐습니다!" }))
   }
 
   return (

@@ -1,6 +1,7 @@
 import { AnyAction, CombinedState, combineReducers } from "@reduxjs/toolkit";
 import { HYDRATE } from 'next-redux-wrapper'
 
+import appReducer, { AppState } from "store/slices/appSlice"
 import userReducer, { UserState } from "store/slices//usersSlice";
 import feedReducer, { FeedState } from "store/slices/feedsSlice";
 import feedFilterReducer, { FeedFilterState } from "store/slices/feedFilterSlice";
@@ -9,6 +10,7 @@ import roomsReducer, { RoomState } from "store/slices/roomsSlice";
 import profileReducer, { UserDataState } from "store/slices/profileSlice"
 
 export interface IState {
+  app: AppState,
   users: UserState,
   feeds: FeedState,
   feedFilter: FeedFilterState
@@ -23,6 +25,7 @@ const rootReducer = (state: IState, action: AnyAction): CombinedState<IState> =>
       return action.payload
     default: {
       const combinedReducer = combineReducers({
+        app: appReducer,
         users: userReducer,
         feeds: feedReducer,
         feedFilter: feedFilterReducer,

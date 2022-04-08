@@ -4,6 +4,7 @@ import { Badge, Button, IconButton, Stack } from "@mui/material";
 import { authService } from "fireBaseApp/fBase";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { removeMyInfoData } from "store/slices/usersSlice";
+import { showAlert } from "store/slices/appSlice";
 import CertificationModal from "components/login/CertificationModal";
 import PushMenu from "components/layout/PushMenu";
 
@@ -34,7 +35,7 @@ const NavbarBtns: FC = () => {
     const ok = confirm('정말 로그아웃 하시겠습니까?')
     if (!ok) return
     authService.signOut()
-    alert('로그아웃이 완료됐습니다!')
+    dispatch(showAlert({ isShown: true, message: '로그아우이 완료됐습니다!' }))
     dispatch(removeMyInfoData())
   }
 

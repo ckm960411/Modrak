@@ -7,6 +7,7 @@ import { updateDoc } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { updateNickname, updateProfileImg } from "store/slices/usersSlice";
 import { updateUserNickname, updateUserProfileImg } from "store/slices/profileSlice";
+import { showAlert } from "store/slices/appSlice";
 import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import uploadImagesDB from "utils/functions/uploadImagesDB";
 import onCheckDuplicate from "utils/functions/onCheckDuplicate";
@@ -54,8 +55,8 @@ const EditProfile: FC<EditProfileProps> = ({ editing, setEditing }) => {
   // 닉네임 중복 체크
   const onCheckNicknameDuplicate = async () => {
     const duplicatedNickname = await onCheckDuplicate("nickname", newNickname.trim())
-    if (duplicatedNickname) return alert('중복된 닉네임입니다!')
-    alert('사용할 수 있는 닉네임입니다!')
+    if (duplicatedNickname) return dispatch(showAlert({ isShown: true, message: '중복된 닉네임입니다!', severity: 'warning' }))
+    dispatch(showAlert({ isShown: true, message: '사용할 수 있는 닉네임입니다!' }))
     setCheckedNickname(newNickname.trim())
   }
 
@@ -66,7 +67,7 @@ const EditProfile: FC<EditProfileProps> = ({ editing, setEditing }) => {
     // 닉네임 변경
     if (nickname !== newNickname.trim()) {
       if (!Boolean(checkedNickname) || checkedNickname !== newNickname.trim()) 
-        return alert('닉네임 중복 체크를 완료해주세요!')
+        return dispatch(showAlert({ isShown: true, message: '닉네임 중복 체크를 완료해주세요!', severity: 'error' }))
       const ok = window.confirm('프로필 수정을 완료하시겠습니까?')
       if (!ok) return
       await updateDoc(userRef, { nickname: checkedNickname })

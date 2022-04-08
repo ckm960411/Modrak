@@ -5,6 +5,8 @@ import { authService } from "fireBaseApp/fBase";
 import { Button, DialogActions, DialogContent, Stack } from "@mui/material";
 import styled from "@emotion/styled";
 import { red } from "@mui/material/colors";
+import { useAppDispatch } from "store/hooks";
+import { showAlert } from "store/slices/appSlice";
 import HookFormInput from "components/login/HookFormInput";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 
@@ -14,6 +16,7 @@ const ErrorParagraph = styled.span`
 
 const LoginForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
   const [loginLoading, setLoginLoading] = useState(false)
+  const dispatch = useAppDispatch()
 
   const { register, formState: { errors }, handleSubmit } = useForm<LoginFormValue>();
 
@@ -22,10 +25,10 @@ const LoginForm: FC<{handleClose: () => void}> = ({ handleClose }) => {
     setLoginLoading(true)
     signInWithEmailAndPassword(authService, email, password)
       .then(() => {
-        alert("로그인 성공!")
+        dispatch(showAlert({ isShown: true, message: '로그인 성공!' }))
         handleClose()
       })
-      .catch(() => alert('로그인에 실패했습니다! 다시 시도해주세요!'))
+      .catch(() => dispatch(showAlert({ isShown: true, message: '로그인에 실패했습니다! 다시 시도해주세요.', severity: 'error' })))
       .finally(() => setLoginLoading(false))
   };
 

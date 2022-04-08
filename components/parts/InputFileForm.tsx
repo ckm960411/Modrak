@@ -1,6 +1,8 @@
 import { Dispatch, FC, SetStateAction } from "react";
 import { Button, styled } from "@mui/material";
 import { PhotoCamera } from "@mui/icons-material";
+import { useAppDispatch } from "store/hooks";
+import { showAlert } from "store/slices/appSlice";
 
 interface InputFileFormProps {
   images: string[];
@@ -8,12 +10,13 @@ interface InputFileFormProps {
   label: string;
 }
 const InputFileForm: FC<InputFileFormProps> = ({ label, images, setImages }) => {
+  const dispatch = useAppDispatch()
   
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files!
     if (!files[0]) return
     if ((images.length + files.length) > 10) {
-      return alert('최대 10개 사진만 첨부할 수 있습니다.')
+      return dispatch(showAlert({ isShown: true, message: '최대 10개 사진만 첨부할 수 있습니다.', severity: 'warning' }))
     }
     const readAndPreview = (file: any) => {
       if (/\.(jpe?g|png|gif)$/i.test(file.name)) {

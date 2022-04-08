@@ -5,6 +5,7 @@ import styled from "@emotion/styled";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { deleteFeedInfo } from "store/slices/usersSlice";
 import { onDeleteFeed } from "store/asyncFunctions";
+import { showAlert } from "store/slices/appSlice";
 import useSetTimeDistance from "utils/hooks/useSetTimeDistance";
 import FollowButton from "components/feeds/FollowButton";
 import EditMenu from "components/parts/EditMenu"
@@ -35,7 +36,7 @@ const FeedHeader: FC<FeedHeaderProps> = ({ feedData, setEditing }) => {
     handleClose()
     dispatch(onDeleteFeed(feedData as FeedWithUserInfoType))
     dispatch(deleteFeedInfo(`feeds/${id}`))
-    alert('피드가 정상적으로 삭제되었습니다!')
+    dispatch(showAlert({ isShown: true, message: "삭제가 완료되었습니다!" }))
   }
 
   return (

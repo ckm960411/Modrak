@@ -1,9 +1,11 @@
 import type { AppProps } from 'next/app'
+import Script from 'next/script';
 import { createTheme, ThemeProvider } from '@mui/material';
 import GlobalStyles, { mainColor } from 'styles/GlobalStyles';
 import wrapper from "store/configureStore";
+import { useAppSelector } from 'store/hooks';
 import AppLayout from 'components/layout/AppLayout'
-import Script from 'next/script';
+import SideAlert from 'components/parts/SideAlert';
 
 const themeOptions = createTheme({
   palette: {
@@ -14,6 +16,8 @@ const themeOptions = createTheme({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const { isShown } = useAppSelector(state => state.app)
+
   return (
     <>
       <Script 
@@ -26,6 +30,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </AppLayout>
       </ThemeProvider>
+      {isShown && <SideAlert />}
     </>
   )
 }

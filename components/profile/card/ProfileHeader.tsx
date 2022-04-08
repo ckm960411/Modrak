@@ -2,13 +2,15 @@ import { FC, useMemo, useState } from "react";
 import styled from "@emotion/styled";
 import { IconButton, Typography } from "@mui/material";
 import SettingsIcon from '@mui/icons-material/Settings';
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { showAlert } from "store/slices/appSlice";
 import FollowButton from "components/feeds/FollowButton";
-import { useAppSelector } from "store/hooks";
 import EditProfile from "components/profile/card/EditProfile";
 
 const ProfileHeader: FC = () => {
   const [editingProfile, setEditingProfile] = useState(false)
 
+  const dispatch = useAppDispatch()
   const myInfo = useAppSelector(state => state.users.myInfo)
   const { userData } = useAppSelector(state => state.profile)
   const { uid, email, name, nickname } = userData!
@@ -19,7 +21,7 @@ const ProfileHeader: FC = () => {
   }, [myInfo, uid])
 
   const handleEditProfile = () => { 
-    if (!isMyProfile) return alert('회원님의 계정이 아니면 수정할 수 없습니다!')
+    if (!isMyProfile) dispatch(showAlert({ isShown: true, message: '회원님의 계정이 아니면 수정할 수 없습니다!', severity: 'error' }))
     setEditingProfile(true)
   }
 
