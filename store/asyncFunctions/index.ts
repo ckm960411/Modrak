@@ -1,14 +1,9 @@
 import { onSubmitNewFeed } from "store/asyncFunctions/feed/submitNewFeed";
 import { onUpdateFeed } from "store/asyncFunctions/feed/updateFeed";
-
-const asyncThunk = {
-  onSubmitNewFeed,
-  onUpdateFeed,
-}
+import { onDeleteFeed } from "store/asyncFunctions/feed/deleteFeed";
 
 export { 
   onSubmitNewFeed,
   onUpdateFeed,
+  onDeleteFeed,
 }
-
-export default asyncThunk

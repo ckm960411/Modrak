@@ -37,11 +37,11 @@ const EditMenu: FC<EditMenuProps> = ({
           <div>
             <MenuItem onClick={onEditContent} disableRipple>
               <EditIcon />
-              Edit
+              수정하기
             </MenuItem>
             <MenuItem onClick={onDeleteContent} disableRipple>
               <DeleteIcon />
-              Delete
+              삭제하기
             </MenuItem>
           </div>
         ) : (

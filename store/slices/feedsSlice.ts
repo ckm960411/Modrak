@@ -1,14 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { onSubmitNewFeed, onUpdateFeed } from 'store/asyncFunctions'
+import { onDeleteFeed, onSubmitNewFeed, onUpdateFeed } from 'store/asyncFunctions'
+
 export interface FeedState {
   value: FeedWithUserInfoType[]
-  loading: boolean
   error: any | null
 }
 
 const initialState: FeedState = {
   value: [],
-  loading: true,
   error: null
 }
 
@@ -24,10 +23,6 @@ export const feedsSlice = createSlice({
     // 새로 게시물을 로드하기 위해 기존 value 에 저장되어 있던 피드들을 지움
     clearFeeds: (state) => {
       state.value = []
-    },
-    // 삭제할 피드 id 를 찾아 value 에서 제거 (action.payload 로 삭제할 feedId 를 담은 객체가 옴)
-    deleteFeed: (state, action) => {
-      state.value = state.value.filter(feed => feed.id !== action.payload.feedId)
     },
     // 피드를 좋아요/취소한 유저id 를 likes 배열에 저장/제거하고 피드의 likesCount 를 +1/-1 시킴 
     // (action.payload 로 feedId, userUid 를 담은 객체가 옴)
@@ -96,21 +91,13 @@ export const feedsSlice = createSlice({
   },
   extraReducers: {
     // 새로 작성한 피드를 전역 상태 value 맨앞에 저장 (action.payload 로 FeedWithUserInfoType 객체가 들어옴)
-    [onSubmitNewFeed.pending.type]: (state, action) => {
-      state.loading = true
-    },
     [onSubmitNewFeed.fulfilled.type]: (state, action) => {
-      state.loading = false
       state.value = [action.payload, ...state.value]
     },
     [onSubmitNewFeed.rejected.type]: (state, action) => {
-      state.loading = false
       state.error = "게시글 작성중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
     },
     // 수정된 피드의 정보를 찾아서 수정 (action.payload 로 feedId 를 포함해 수정할 정보만 담긴 객체가 옴)
-    [onUpdateFeed.pending.type]: (state, action) => {
-      state.loading = true
-    },
     [onUpdateFeed.fulfilled.type]: (state, action) => {
       const finded = state.value.find(feed => feed.id === action.payload.feedId)
       if (!finded) return
@@ -118,11 +105,16 @@ export const feedsSlice = createSlice({
       finded.feedImages = action.payload.feedImages,
       finded.tags = action.payload.tags,
       finded.modifiedAt = action.payload.modifiedAt
-      state.loading = false
     },
     [onUpdateFeed.rejected.type]: (state, action) => {
-      state.loading = false
       state.error = "게시글 수정중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
+    // 삭제할 피드 id 를 찾아 value 에서 제거 (action.payload 로 feedId 가 옴)
+    [onDeleteFeed.fulfilled.type]: (state, action) => {
+      state.value = state.value.filter(feed => feed.id !== action.payload)
+    },
+    [onDeleteFeed.rejected.type]: (state, action) => {
+      state.error = "게시글 삭제중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
     },
   },
 })
@@ -130,7 +122,6 @@ export const feedsSlice = createSlice({
 export const { 
   setFeeds, 
   clearFeeds,
-  deleteFeed,
   addFeedLikeUserUid,
   removeFeedLikeUserUid,
   addFeedBookmarkUserUid,
