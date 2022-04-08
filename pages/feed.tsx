@@ -14,11 +14,8 @@ const Feed: NextPage = () => {
   const downLg = useMediaQuery(theme.breakpoints.down("lg"))
   const [filterOpened, setFilterOpened] = useState(false)
 
-  const onCloseFilter = () => setFilterOpened(false)
-
-  const onScrollToTop = () => {
-    window.scrollTo(0, 0)
-  }
+  const handleCloseFilter = () => setFilterOpened(false)
+  const handleScrollToTop = () => window.scrollTo(0, 0)
 
   useEffect(() => {
     if (!downLg) setFilterOpened(false)
@@ -56,10 +53,10 @@ const Feed: NextPage = () => {
         icon={<SpeedDialIcon />}
       >
         {downLg && <SpeedDialAction icon={<SortIcon />} tooltipTitle="정렬 필터" onClick={() => setFilterOpened(true)} />}
-        <SpeedDialAction icon={<ArrowUpwardIcon />} tooltipTitle="위로 가기" onClick={onScrollToTop} />
+        <SpeedDialAction icon={<ArrowUpwardIcon />} tooltipTitle="위로 가기" onClick={handleScrollToTop} />
       </SpeedDial>
-      <Dialog open={filterOpened} onClose={onCloseFilter} maxWidth="xs" fullWidth>
-        <FeedFilterSidebar filterOpened={filterOpened} onClose={onCloseFilter} />
+      <Dialog open={filterOpened} onClose={handleCloseFilter} maxWidth="xs" fullWidth>
+        <FeedFilterSidebar filterOpened={filterOpened} onClose={handleCloseFilter} />
       </Dialog>
     </>
   )

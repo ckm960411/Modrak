@@ -1,13 +1,20 @@
-import { FC, useRef } from "react";
+import { FC, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Card, CardContent, CardMedia, Stack, Typography } from "@mui/material";
 import styled from "@emotion/styled";
+import { useAppDispatch } from "store/hooks";
+import { initializeFilter } from "store/slices/feedFilterSlice";
 import useLoadingFeeds from "utils/hooks/useLoadingFeeds";
 import Feed from "components/feeds/feed/Feed";
 
 const FeedContainer: FC = () => {
   const targetRef = useRef<HTMLDivElement>(null)
   const { feeds } = useLoadingFeeds(targetRef)
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(initializeFilter())
+  }, [dispatch])
 
   return (
     <Stack direction="column" spacing={2}>
