@@ -1,7 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { 
+  onAddBookmarkAccommodation,
+  onAddBookmarkRestaurant,
   onAddFollowing,
   onAddRecommendRestaurant,
+  onRemoveBookmarkAccommodation,
+  onRemoveBookmarkRestaurant,
   onRemoveFollowing,
   onRemoveRecommendRestaurant,
 } from 'store/asyncFunctions'
@@ -52,22 +56,6 @@ export const usersSlice = createSlice({
     },
     removeBookmarkFeedRef: (state, action) => {
       state.myInfo!.bookmarkFeeds = state.myInfo!.bookmarkFeeds.filter((feedRef: string) => feedRef !== action.payload.feedRef)
-    },
-    // 맛집 찜(북마크) id 등록
-    addBookmarkRestaurant: (state, action) => {
-      state.myInfo!.bookmarkRestaurants.push(action.payload.restaurantId)
-    },
-    // 맛집 찜(북마크) 취소
-    removeBookmarkRestaurant: (state, action) => {
-      state.myInfo!.bookmarkRestaurants = state.myInfo!.bookmarkRestaurants.filter(restId => restId !== action.payload.restaurantId)
-    },
-    // 숙소 찜(북마크) id 등록
-    addBookmarkAccommodation: (state, action) => {
-      state.myInfo!.bookmarkAccommodations.push(action.payload.accommodationId)
-    },
-    // 숙소 찜(북마크) id 취소
-    removeBookmarkAccommodation: (state, action) => {
-      state.myInfo!.bookmarkAccommodations = state.myInfo!.bookmarkAccommodations.filter(accId => accId !== action.payload.accommodationId)
     },
     // 예약한 객실 데이터를 유저 정보에 저장
     // action.payload 로 { accommodationId, roomId, reservedDates } 가 옴
@@ -122,6 +110,34 @@ export const usersSlice = createSlice({
     [onRemoveRecommendRestaurant.rejected.type]: (state, action) => {
       state.error = "맛집 추천 취소 중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
     },
+    // 맛집 찜(북마크) id 등록 (action.payload 로 restaurantId 가 옴)
+    [onAddBookmarkRestaurant.fulfilled.type]: (state, action) => {
+      state.myInfo!.bookmarkRestaurants.push(action.payload)
+    },
+    [onAddBookmarkRestaurant.rejected.type]: (state, action) => {
+      state.error = "맛집 찜 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
+    // 맛집 찜(북마크) 취소 (action.payload 로 restaurantId 가 옴)
+    [onRemoveBookmarkRestaurant.fulfilled.type]: (state, action) => {
+      state.myInfo!.bookmarkRestaurants = state.myInfo!.bookmarkRestaurants.filter(restId => restId !== action.payload)
+    },
+    [onRemoveBookmarkRestaurant.rejected.type]: (state, action) => {
+      state.error = "맛집 찜 취소 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
+    // 숙소 찜(북마크) id 등록 (action.payload 로 accommodationId 가 옴)
+    [onAddBookmarkAccommodation.fulfilled.type]: (state, action) => {
+      state.myInfo!.bookmarkAccommodations.push(action.payload)
+    },
+    [onAddBookmarkAccommodation.rejected.type]: (state, action) => {
+      state.error = "숙소 찜 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
+    // 숙소 찜(북마크) id 취소 (action.payload 로 accommodationId 가 옴)
+    [onRemoveBookmarkAccommodation.fulfilled.type]: (state, action) => {
+      state.myInfo!.bookmarkAccommodations = state.myInfo!.bookmarkAccommodations.filter(accId => accId !== action.payload)
+    },
+    [onRemoveBookmarkAccommodation.rejected.type]: (state, action) => {
+      state.error = "숙소 찜 취소 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
   },
 })
 
@@ -134,10 +150,6 @@ export const {
   removeLikeFeedRef,
   addBookmarkFeedRef,
   removeBookmarkFeedRef,
-  addBookmarkRestaurant,
-  removeBookmarkRestaurant,
-  addBookmarkAccommodation,
-  removeBookmarkAccommodation,
   addRoomInfoReserved,
   addNewPush,
   removeCheckedPush,

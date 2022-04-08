@@ -4,11 +4,9 @@ import { Box, Chip, IconButton, Rating, Stack, Typography, useMediaQuery, useThe
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
-import { updateDoc } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { addBookmarkAccommodation, removeBookmarkAccommodation } from "store/slices/usersSlice";
+import { onAddBookmarkAccommodation, onRemoveBookmarkAccommodation } from "store/asyncFunctions";
 import { mainColor } from "styles/GlobalStyles";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
 import MyCarousel from "components/parts/MyCarousel";
 
 const RoomInfoHeader: FC = () => {
@@ -18,21 +16,18 @@ const RoomInfoHeader: FC = () => {
   const myInfo = useAppSelector(state => state.users.myInfo)
   const roomData: AccommodationWithId = useAppSelector(state => state.rooms.roomData!)
 
-  const { id, name, tags, rating, address, images } = roomData
+  const { id: accommodationId, name, tags, rating, address, images } = roomData
 
   const isBookmarked = useMemo(() => {
-    return myInfo && myInfo.bookmarkAccommodations.includes(id)
-  }, [myInfo, id])
+    return myInfo && myInfo.bookmarkAccommodations.includes(accommodationId)
+  }, [myInfo, accommodationId])
 
   const toggleBookmarkAccommodation = async () => {
     if (!myInfo) return
-    const { searchedDocRef: userRef } = await searchFirestoreDoc(`users/${myInfo.uid}`)
     if (!isBookmarked) { // 찜(북마크)하기
-      await updateDoc(userRef, { bookmarkAccommodations: [ ...myInfo.bookmarkAccommodations, id ] })
-      dispatch(addBookmarkAccommodation({ accommodationId: id }))
+      dispatch(onAddBookmarkAccommodation({ accommodationId, uid: myInfo.uid }))
     } else { // 찜(북마크) 취소하기
-      await updateDoc(userRef, { bookmarkAccommodations: myInfo.bookmarkAccommodations.filter(accId => accId !== id) })
-      dispatch(removeBookmarkAccommodation({ accommodationId: id }))
+      dispatch(onRemoveBookmarkAccommodation({ accommodationId, uid: myInfo.uid }))
     }
   }
 

@@ -12,6 +12,10 @@ import { onAddFollowing } from "store/asyncFunctions/user/addfollowing";
 import { onRemoveFollowing } from "store/asyncFunctions/user/removeFollowing";
 import { onAddRecommendRestaurant } from "store/asyncFunctions/user/addRecommendRestaurant";
 import { onRemoveRecommendRestaurant } from "store/asyncFunctions/user/removeRecommendRestaurant";
+import { onAddBookmarkRestaurant } from "store/asyncFunctions/user/addBookmarkRestaurant";
+import { onRemoveBookmarkRestaurant } from "store/asyncFunctions/user/removeBookmarkRestaurant";
+import { onAddBookmarkAccommodation } from "store/asyncFunctions/user/addBookmarkAccommodation";
+import { onRemoveBookmarkAccommodation } from "store/asyncFunctions/user/removeBookmarkAccommodation";
 
 export { 
   onSubmitNewFeed,
@@ -28,4 +32,8 @@ export {
   onRemoveFollowing,
   onAddRecommendRestaurant,
   onRemoveRecommendRestaurant,
+  onAddBookmarkRestaurant,
+  onRemoveBookmarkRestaurant,
+  onAddBookmarkAccommodation,
+  onRemoveBookmarkAccommodation,
 }

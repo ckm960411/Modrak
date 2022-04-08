@@ -5,18 +5,15 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
-import { doc, updateDoc } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { dbService } from "fireBaseApp/fBase";
 import { mainColor } from "styles/GlobalStyles";
-import { addBookmarkRestaurant, removeBookmarkRestaurant } from "store/slices/usersSlice";
 import { onAddRecommendRestaurant } from "store/asyncFunctions/user/addRecommendRestaurant";
+import { onAddBookmarkRestaurant, onRemoveBookmarkRestaurant, onRemoveRecommendRestaurant } from "store/asyncFunctions";
 import MyCarousel from "components/parts/MyCarousel";
 import Map from "components/parts/Map";
-import { onRemoveRecommendRestaurant } from "store/asyncFunctions";
 
 const RestaurantInfo: FC<{data: RestaurantWithId}> = ({ data }) => {
-  const { id, name, subtitle, images, division, detailDivision, address, description, menu, rating, phoneNumber, workHours, breaktime, holiday, recommend, bookmark, category, detailCategory, tags } = data
+  const { id: restaurantId, name, subtitle, images, division, detailDivision, address, description, menu, rating, phoneNumber, workHours, breaktime, holiday, recommend, bookmark, category, detailCategory, tags } = data
   const [recommendCount, setRecommendCount] = useState(recommend)
   const [isRecommended, setIsRecommended] = useState(false)
   const [bookmarkCount, setBookmarkCount] = useState(bookmark)
@@ -28,11 +25,11 @@ const RestaurantInfo: FC<{data: RestaurantWithId}> = ({ data }) => {
   const toggleRecommendRestaurants = async () => {
     if (!myInfo) return
     if (!isRecommended) { // 추천하기
-      dispatch(onAddRecommendRestaurant({ restaurantId: id, uid: myInfo.uid }))
+      dispatch(onAddRecommendRestaurant({ restaurantId, uid: myInfo.uid }))
       setRecommendCount(prev => prev +1)
       setIsRecommended(true)
     } else { // 추천 취소하기
-      dispatch(onRemoveRecommendRestaurant({ restaurantId: id, uid: myInfo.uid }))
+      dispatch(onRemoveRecommendRestaurant({ restaurantId, uid: myInfo.uid }))
       setRecommendCount(prev => prev -1)
       setIsRecommended(false)
     }
@@ -40,18 +37,12 @@ const RestaurantInfo: FC<{data: RestaurantWithId}> = ({ data }) => {
 
   const toggleBookmarkRestaurants = async () => {
     if (!myInfo) return
-    const restaurantRef = doc(dbService, "restaurants", id)
-    const userRef = doc(dbService, "users", myInfo.uid)
     if (!isBookmarked) { // 찜(북마크) 하기
-      await updateDoc(restaurantRef, { bookmark: bookmarkCount +1 })
-      await updateDoc(userRef, { bookmarkRestaurants: [ ...myInfo.bookmarkRestaurants, id ] })
-      dispatch(addBookmarkRestaurant({ restaurantId: id }))
+      dispatch(onAddBookmarkRestaurant({ restaurantId, uid: myInfo.uid }))
       setBookmarkCount(prev => prev +1)
       setIsBookmarked(true)
     } else { // 찜(북마크) 취소하기
-      await updateDoc(restaurantRef, { bookmark: bookmarkCount -1 })
-      await updateDoc(userRef, { bookmarkRestaurants: myInfo.bookmarkRestaurants.filter(restId => restId !== id) })
-      dispatch(removeBookmarkRestaurant({ restaurantId: id }))
+      dispatch(onRemoveBookmarkRestaurant({ restaurantId, uid: myInfo.uid }))
       setBookmarkCount(prev => prev -1)
       setIsBookmarked(false)
     }
@@ -59,17 +50,17 @@ const RestaurantInfo: FC<{data: RestaurantWithId}> = ({ data }) => {
 
   useEffect(() => {
     if (!myInfo) return
-    if (myInfo.recommendRestaurants.includes(id)) {
+    if (myInfo.recommendRestaurants.includes(restaurantId)) {
       setIsRecommended(true)
     } else {
       setIsRecommended(false)
     }
-    if (myInfo.bookmarkRestaurants.includes(id)) {
+    if (myInfo.bookmarkRestaurants.includes(restaurantId)) {
       setIsBookmarked(true)
     } else {
       setIsBookmarked(false)
     }
-  }, [myInfo, id])
+  }, [myInfo, restaurantId])
 
   return (
     <Card raised>

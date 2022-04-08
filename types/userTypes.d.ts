@@ -52,7 +52,11 @@ declare interface FollowingDataType {
   myUid: string
   userUid: string
 }
-declare interface RecommendRestaurantDataType {
+declare interface RestaurantDataType {
   restaurantId: string
   uid: string
+}
+declare interface AccommodationDataType {
+  uid: string
+  accommodationId: string
 }
