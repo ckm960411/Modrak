@@ -3,9 +3,9 @@ import Image from "next/image";
 import { Card, CardContent, CardMedia, Stack, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import { useAppDispatch } from "store/hooks";
-import { initializeFilter } from "store/slices/feedFilterSlice";
 import useLoadingFeeds from "utils/hooks/useLoadingFeeds";
 import Feed from "components/feeds/feed/Feed";
+import { clearFeeds } from "store/slices/feedsSlice";
 
 const FeedContainer: FC = () => {
   const targetRef = useRef<HTMLDivElement>(null)
@@ -13,7 +13,9 @@ const FeedContainer: FC = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(initializeFilter())
+    return () => {
+      dispatch(clearFeeds())
+    }
   }, [dispatch])
 
   return (

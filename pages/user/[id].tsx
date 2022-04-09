@@ -8,6 +8,7 @@ import getUserInfoById from "utils/SSRFunctions/getUserInfoById";
 import useLoadingUserInfo from "utils/hooks/useLoadingUserInfo";
 import ProfileCard from "components/profile/ProfileCard";
 import ProfileTabs from "components/profile/ProfileTabs";
+import { clearFeeds } from "store/slices/feedsSlice";
 
 const Profile: FC<{userData: UserType}> = ({ userData }) => {
   const dispatch = useAppDispatch()
@@ -15,6 +16,9 @@ const Profile: FC<{userData: UserType}> = ({ userData }) => {
 
   useEffect(() => {
     dispatch(setUserData(userData))
+    return () => {
+      dispatch(clearFeeds())
+    }
   }, [dispatch, userData])
 
   return (
