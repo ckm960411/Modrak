@@ -5,6 +5,7 @@ import {
   onAddFollowing,
   onAddRecommendRestaurant,
   onAddRoomInfoAndPush,
+  onCheckPush,
   onRemoveBookmarkAccommodation,
   onRemoveBookmarkRestaurant,
   onRemoveCheckedPush,
@@ -136,6 +137,13 @@ export const usersSlice = createSlice({
       state.myInfo!.pushUnchecked = state.myInfo!.pushUnchecked.filter(push => push.pushId !== action.payload)
     },
     [onRemoveCheckedPush.rejected.type]: (state, action) => {
+      state.error = "예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
+    // 전체 알림 목록에서 확인 안 된 알림 클릭시 확인됨으로 처리 (action.payload 로 pushId 가 옴)
+    [onCheckPush.fulfilled.type]: (state, action) => {
+      state.myInfo!.pushUnchecked = state.myInfo!.pushUnchecked.filter(push => push.pushId !== action.payload)
+    },
+    [onCheckPush.rejected.type]: (state, action) => {
       state.error = "예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
     },
     // 프로필 이미지 변경 (action.payload 로 newProfileImg 가 옴)

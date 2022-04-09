@@ -1,27 +1,17 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { Card, CardHeader, Typography } from "@mui/material";
 import { format } from "date-fns";
-import { updateDoc } from "firebase/firestore";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc"
-import { useAppDispatch } from "store/hooks";
-import { removeCheckedPush } from "store/slices/usersSlice";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { onCheckPush } from "store/asyncFunctions";
 
 const PushCard: FC<{push: PushType, userUid: string}> = ({ push, userUid }) => {
   const dispatch = useAppDispatch()
+  const myInfo = useAppSelector(state => state.users.myInfo!)
 
   const { pushId, isChecked, message, createdAt } = push
 
-  const onCheckPush = async () => {
-    // 전체 알림 목록에서 확인안 된 알림 클릭시 확인됨으로 처리
-    const { searchedDocRef: pushDocRef, searchedData: pushData } = await searchFirestoreDoc(`pushes/${userUid}`)
-    const pushFinded = pushData!.pushes.find((push: PushType) => push.pushId === pushId)
-    pushFinded.isChecked = true
-    await updateDoc(pushDocRef, { pushes: pushData!.pushes })
-    // 알림 클릭시 확인안된 알림에서 제거
-    const { searchedDocRef: userRef, searchedData: userData } = await searchFirestoreDoc(`users/${userUid}`)
-    const removedPushes = userData!.pushUnchecked.filter((push: PushType) => push.pushId !== pushId)
-    await updateDoc(userRef, { pushUnchecked: removedPushes })
-    dispatch(removeCheckedPush({ pushId }))
+  const handleCheckPush = async () => {
+    dispatch(onCheckPush({ uid: myInfo.uid, pushId }))
   }
 
   return (
@@ -33,7 +23,7 @@ const PushCard: FC<{push: PushType, userUid: string}> = ({ push, userUid }) => {
           </Typography>
         }
         subheader={<Typography variant="caption">{format(createdAt, "yyyy년 MM월 dd일")}</Typography>}
-        onClick={onCheckPush}
+        onClick={handleCheckPush}
         sx={{ cursor: "pointer" }}
       />
     </Card>

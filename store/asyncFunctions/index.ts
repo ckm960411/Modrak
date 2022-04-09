@@ -27,6 +27,7 @@ import { onDeleteRestaurantReview } from "store/asyncFunctions/restaurant/delete
 import { onAddRoomReview } from "store/asyncFunctions/room/addRoomReview";
 import { onUpdateRoomReview } from "store/asyncFunctions/room/updateRoomReview";
 import { onDeleteRoomReview } from "store/asyncFunctions/room/deleteRoomReview";
+import { onCheckPush } from "store/asyncFunctions/user/checkPush";
 
 export { 
   onSubmitNewFeed,
@@ -58,4 +59,5 @@ export {
   onAddRoomReview,
   onUpdateRoomReview,
   onDeleteRoomReview,
+  onCheckPush,
 }
