@@ -21,6 +21,9 @@ import { onAddRoomInfoAndPush } from "store/asyncFunctions/user/addRoomInfoAndPu
 import { onRemoveCheckedPush } from "store/asyncFunctions/user/removeCheckedPush";
 import { onUpdateProfileImg } from "store/asyncFunctions/user/updateProfileImg";
 import { onUpdateNickname } from "store/asyncFunctions/user/updateNickname";
+import { onAddRestaurantReview } from "store/asyncFunctions/restaurant/addRestaurantReview";
+import { onUpdateRestaurantReview } from "store/asyncFunctions/restaurant/updateRestaurantReview";
+import { onDeleteRestaurantReview } from "store/asyncFunctions/restaurant/deleteRestaurantReview";
 
 export { 
   onSubmitNewFeed,
@@ -46,4 +49,7 @@ export {
   onRemoveCheckedPush,
   onUpdateProfileImg,
   onUpdateNickname,
+  onAddRestaurantReview,
+  onUpdateRestaurantReview,
+  onDeleteRestaurantReview,
 }

@@ -1,18 +1,15 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { Alert, CardContent, Dialog, Rating, Stack } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { updateDoc } from "firebase/firestore";
-import { updateRestaurantReview } from "store/slices/restaurantsSlice";
 import { showAlert } from "store/slices/appSlice";
-import uploadImagesDB from "utils/functions/uploadImagesDB";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
+import { onUpdateRestaurantReview } from "store/asyncFunctions";
 import TextInput from "components/parts/TextInput";
 import InputFileForm from "components/parts/InputFileForm";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 import MainButton from "components/parts/MainButton";
 import PreviewImagesTab from "components/feeds/PreviewImagesTab";
 
-type RestaurantEditReviewFormProps = {
+interface RestaurantEditReviewFormProps {
   reviewData: RestaurantReviewWithUserInfo
   editing: boolean
   setEditing: Dispatch<SetStateAction<boolean>>
@@ -35,14 +32,14 @@ const RestaurantEditReviewForm: FC<RestaurantEditReviewFormProps> = ({ reviewDat
     setNewRating(rating)
   }, [reviewText, reviewImages, rating])
 
-  const onChangeEditText = (e: React.ChangeEvent<HTMLInputElement>) => setEditText(e.target.value)
+  const handleChangeEditText = (e: React.ChangeEvent<HTMLInputElement>) => setEditText(e.target.value)
 
-  const onCloseEditing = () => {
+  const handleCloseEditing = () => {
     setEditing(false)
     setNewImages(reviewImages)
   }
 
-  const onSubmit = async () => {
+  const handleSubmit = async () => {
     if (editText.trim() === '') 
       return setEditReviewError("리뷰의 내용을 작성해주세요!")
     if (!myInfo) 
@@ -50,26 +47,9 @@ const RestaurantEditReviewForm: FC<RestaurantEditReviewFormProps> = ({ reviewDat
     if (myInfo.uid !== userUid) 
       return dispatch(showAlert({ isShown: true, message: '당신의 리뷰가 아니면 수정할 수 없습니다!', severity: 'error' }))
     setEditReviewLoading(true)
-    const shouldUpload = newImages.filter(img => img.startsWith('data:image'))
-    const shouldNotUpload = newImages.filter(img => !img.startsWith('data:image'))
-    const newImagesURLs = await uploadImagesDB(shouldUpload, myInfo.uid).catch(err => console.log(err))
-    const data = {
-      reviewText: editText,
-      reviewImages: [...shouldNotUpload, ...newImagesURLs!],
-      rating: newRating,
-      reviewId,
-      modifiedAt: Date.now(),
-    }
-    const { searchedDocRef: reviewDocRef, searchedData: reviewData } = await searchFirestoreDoc(`reviews/${restaurantId}`)
-    const reviewsArray = reviewData!.reviews
-    const reviewIndex = reviewsArray.findIndex((review: RestaurantReviewType) => review.reviewId === reviewId)
-    reviewsArray[reviewIndex].reviewText = data.reviewText
-    reviewsArray[reviewIndex].modifiedAt = data.modifiedAt
-    reviewsArray[reviewIndex].reviewImages = data.reviewImages
-    reviewsArray[reviewIndex].rating = data.rating
-
-    await updateDoc(reviewDocRef, { reviews: reviewsArray })
-    dispatch(updateRestaurantReview(data))
+    dispatch(onUpdateRestaurantReview({ 
+      uid: myInfo.uid, images: newImages, reviewText: editText, rating: newRating!, restaurantId, reviewId,
+    }))
     dispatch(showAlert({ isShown: true, message: '리뷰 수정이 완료됐습니다!' }))
     setEditReviewLoading(false)
     setEditing(false)
@@ -78,7 +58,7 @@ const RestaurantEditReviewForm: FC<RestaurantEditReviewFormProps> = ({ reviewDat
   return (
     <Dialog
       open={editing}
-      onClose={onCloseEditing}
+      onClose={handleCloseEditing}
       fullWidth
     >
       <CardContent>
@@ -86,25 +66,18 @@ const RestaurantEditReviewForm: FC<RestaurantEditReviewFormProps> = ({ reviewDat
           <Rating size="large" precision={0.1} value={newRating} onChange={(e, v) => setNewRating(v)} />
           <span>({newRating})</span>
         </Stack>
-        <TextInput 
-          value={editText}
-          onChange={onChangeEditText}
-        />
+        <TextInput value={editText} onChange={handleChangeEditText} />
         <div>
           <InputFileForm label="edit-review-file" images={newImages} setImages={setNewImages} />
-          <SubmitFormButton onClick={onSubmit} sx={{ float: 'right', mt: 1 }} loading={editReviewLoading}>
+          <SubmitFormButton onClick={handleSubmit} sx={{ float: 'right', mt: 1 }} loading={editReviewLoading}>
             Edit Feed
           </SubmitFormButton>
-          <MainButton variant="outlined" sx={{ float: 'right', mt: 1, mr: 1 }} onClick={onCloseEditing}>
+          <MainButton variant="outlined" sx={{ float: 'right', mt: 1, mr: 1 }} onClick={handleCloseEditing}>
             cancel
           </MainButton>
         </div>
         { editReviewError !== '' && (
-          <Alert
-            severity="warning" 
-            onClose={() => setEditReviewError('')}
-            sx={{ marginTop: 2 }}
-          >
+          <Alert severity="warning" onClose={() => setEditReviewError('')} sx={{ mt: 2 }}>
             <>리뷰의 내용을 작성해주세요!</>
           </Alert>
         )}

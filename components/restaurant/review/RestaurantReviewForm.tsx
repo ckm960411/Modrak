@@ -1,16 +1,12 @@
 import { FC, useState } from "react";
 import { CardContent, CardHeader, Divider, Input, Rating, Stack, Typography } from "@mui/material";
-import { v4 as uuid_v4 } from "uuid";
-import { updateDoc } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { addRestaurantReview } from "store/slices/restaurantsSlice";
 import { showAlert } from "store/slices/appSlice";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
-import uploadImagesDB from "utils/functions/uploadImagesDB";
 import TextInput from "components/parts/TextInput";
 import InputFileForm from "components/parts/InputFileForm";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 import PreviewImagesTab from "components/feeds/PreviewImagesTab";
+import { onAddRestaurantReview } from "store/asyncFunctions";
 
 const RestaurantReviewForm: FC<{restaurantId: string}> = ({ restaurantId }) => {
   const [reviewText, setReviewText] = useState('')
@@ -21,37 +17,20 @@ const RestaurantReviewForm: FC<{restaurantId: string}> = ({ restaurantId }) => {
   const dispatch = useAppDispatch()
   const myInfo = useAppSelector(state => state.users.myInfo)
 
-  const onChangeReview = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeReview = (e: React.ChangeEvent<HTMLInputElement>) => {
     setReviewText(e.target.value)
   }
 
-  const onSubmitReview = async () => {
+  const handleSubmitReview = async () => {
     if (!myInfo) return dispatch(showAlert({ isShown: true, message: '로그인한 이후에 리뷰를 작성해주세요!', severity: 'error' }))
     if (reviewText.trim() === '') return dispatch(showAlert({ isShown: true, message: '리뷰 내용을 작성해주세요!', severity: 'error' }))
     if (rating === null) return dispatch(showAlert({ isShown: true, message: '평점을 매겨주세요!', severity: 'warning' }))
     setSubmitReviewLoading(true)
-    // 이미지배열을 스토리지에 저장하고 저장된 스토리지 경로를 배열로 리턴
-    const imagesURLs = await uploadImagesDB(reviewImages, myInfo.uid).catch(err => console.log(err.resultMessage))
-    const myReviewData = {
-      reviewId: uuid_v4(),
-      userUid: myInfo.uid,
-      restaurantId,
-      reviewText,
-      reviewImages: imagesURLs,
-      rating,
-      createdAt: Date.now(),
-      modifiedAt: Date.now(),
-    }
-    // review 컬렉션에 리뷰를 다려는 맛집id 로 된 문서에 해당 리뷰 데이터를 저장
-    const { searchedDocRef: reviewDocRef, searchedData: reviewData } = await searchFirestoreDoc(`reviews/${restaurantId}`)
-    await updateDoc(reviewDocRef, {
-      reviews: [ ...reviewData!.reviews, myReviewData ]
-    }).then(() => dispatch(showAlert({ isShown: true, message: '리뷰 작성이 완료됐습니다!' })))
-    dispatch(addRestaurantReview({
-      ...myReviewData,
-      nickname: myInfo.nickname,
-      profileImg: myInfo.profileImg,
+    dispatch(onAddRestaurantReview({ 
+      uid: myInfo.uid, images: reviewImages,
+      restaurantId, reviewText, rating
     }))
+    dispatch(showAlert({ isShown: true, message: '리뷰 작성이 완료됐습니다!' }))
     setReviewText('')
     setReviewImages([])
     setRating(null)
@@ -68,11 +47,11 @@ const RestaurantReviewForm: FC<{restaurantId: string}> = ({ restaurantId }) => {
           <Rating size="large" precision={0.1} value={rating} onChange={(e, v) => setRating(v)} />
           {rating && <span>({rating})</span>}
         </Stack>
-        <TextInput value={reviewText} onChange={onChangeReview} />
+        <TextInput value={reviewText} onChange={handleChangeReview} />
         <div>
           <InputFileForm label="input-review-image" images={reviewImages} setImages={setReviewImages} />
           <SubmitFormButton
-            onClick={onSubmitReview}
+            onClick={handleSubmitReview}
             sx={{ float: 'right', mt: 1 }}
             loading={submitReviewLoading}
           >

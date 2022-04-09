@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { QueryConstraint, where } from "firebase/firestore";
+import { onAddRestaurantReview, onDeleteRestaurantReview, onUpdateRestaurantReview } from "store/asyncFunctions";
 
 export interface RestaurantState {
   value: RestaurantWithId[]
@@ -40,10 +41,6 @@ export const restaurantsSlice = createSlice({
     clearRestaurantsData: (state) => {
       state.value = []
     },
-    // 리뷰 작성시 기존 리뷰 제일 위에 추가 (action.payload 로 리뷰객체가 1개씩 들어옴)
-    addRestaurantReview: (state, action) => {
-      state.reviews.unshift(action.payload)
-    },
     // 서버에서 가져온 리뷰들을 저장 (action.payload 로 리뷰객체가 1개씩 들어옴)
     setRestaurantReviews: (state, action) => {
       state.reviews = [ ...state.reviews, action.payload ]
@@ -51,21 +48,6 @@ export const restaurantsSlice = createSlice({
     // 모든 리뷰 상태들을 지움
     clearRestaurantReviews: (state) => {
       state.reviews = []
-    },
-    // 수정하려는 리뷰를 찾아 해당 리뷰를 수정함
-    // (action.payload 에는 reviewId, reviewText, reviewImages, modifiedAt 이 객체로 들어옴)
-    updateRestaurantReview: (state, action) => {
-      const finded = state.reviews.find(review => review.reviewId === action.payload.reviewId)
-      if (!finded) return
-      finded.reviewText = action.payload.reviewText
-      finded.reviewImages = action.payload.reviewImages
-      finded.modifiedAt = action.payload.modifiedAt
-      finded.rating = action.payload.rating
-    },
-    // 삭제하려는 리뷰를 찾아 해당 리뷰를 삭제함
-    // (action.payload 에는 reviewId 를 담은 객체가 들어옴)
-    deleteRestaurantReview: (state, action) => {
-      state.reviews = state.reviews.filter(review => review.reviewId !== action.payload.reviewId)
     },
     // 위치별 맛집 필터 적용
     setDivisionFilter: (state, action) => {
@@ -158,18 +140,43 @@ export const restaurantsSlice = createSlice({
       }
     },
   },
-  extraReducers: {}
+  extraReducers: {
+    // 리뷰 작성시 기존 리뷰 제일 위에 추가 (action.payload 로 리뷰객체가 1개씩 들어옴)
+    [onAddRestaurantReview.fulfilled.type]: (state, action) => {
+      state.reviews.unshift(action.payload)
+    },
+    [onAddRestaurantReview.rejected.type]: (state, action) => {
+      state.error = "리뷰 작성 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
+    // 수정하려는 리뷰를 찾아 해당 리뷰를 수정함
+    // (action.payload 에는 reviewId, reviewText, reviewImages, modifiedAt 이 객체로 들어옴)
+    [onUpdateRestaurantReview.fulfilled.type]: (state, action) => {
+      const finded = state.reviews.find(review => review.reviewId === action.payload.reviewId)
+      if (!finded) return
+      finded.reviewText = action.payload.reviewText
+      finded.reviewImages = action.payload.reviewImages
+      finded.modifiedAt = action.payload.modifiedAt
+      finded.rating = action.payload.rating
+    },
+    [onUpdateRestaurantReview.rejected.type]: (state, action) => {
+      state.error = "리뷰 수정 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
+    // 삭제하려는 리뷰를 찾아 해당 리뷰를 삭제함 (action.payload 에는 reviewId 가 옴)
+    [onDeleteRestaurantReview.fulfilled.type]: (state, action) => {
+      state.reviews = state.reviews.filter(review => review.reviewId !== action.payload)
+    },
+    [onDeleteRestaurantReview.rejected.type]: (state, action) => {
+      state.error = "리뷰 삭제 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
+  }
 })
 
 export const { 
   setIsInitialLoad,
   setRestaurantsData,
   clearRestaurantsData,
-  addRestaurantReview,
   setRestaurantReviews, 
   clearRestaurantReviews,
-  updateRestaurantReview,
-  deleteRestaurantReview,
   setDivisionFilter,
   setCategoryFilter,
   setTagFilter,

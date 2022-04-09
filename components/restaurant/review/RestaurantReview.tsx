@@ -3,28 +3,11 @@ import Image from "next/image";
 import styled from "@emotion/styled";
 import { Avatar, Card, CardContent, CardHeader, Divider, Rating, Stack, Typography } from "@mui/material";
 import defaultImg from "public/imgs/profileImg.png"
-import { updateDoc } from "firebase/firestore";
 import { useAppDispatch } from "store/hooks";
-import { deleteRestaurantReview } from "store/slices/restaurantsSlice";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
+import { onDeleteRestaurantReview } from "store/asyncFunctions";
 import useSetTimeDistance from "utils/hooks/useSetTimeDistance";
 import EditMenu from "components/parts/EditMenu";
 import RestaurantEditReviewForm from "components/restaurant/review/RestaurantEditReviewForm";
-
-const ImageWrapper = styled.div`
-  height: 150px;
-  width: 150px;
-  background-color: #e9e9e9;
-  & span {
-    height: inherit !important;
-    width: inherit !important;
-    position: relative !important;
-  }
-`
-const NicknameTypo = styled(Typography)`
-  font-family: 'Katuri';
-  color: #353535;
-`
 
 const RestaurantReview: FC<{reviewData: RestaurantReviewWithUserInfo}> = ({ reviewData }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
@@ -37,20 +20,15 @@ const RestaurantReview: FC<{reviewData: RestaurantReviewWithUserInfo}> = ({ revi
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () =>  setAnchorEl(null);
 
-  const onEditReview = () => {
+  const handleEditReview = () => {
     setEditing(true)
     handleClose()
   }
 
-  const onDeleteReview = async () => {
+  const handleDeleteReview = async () => {
     const ok = window.confirm('이 리뷰를 정말 삭제하시겠습니까?')
     if (!ok) return handleClose()
-
-    const { searchedDocRef: reviewDocRef, searchedData: reviewData } = await searchFirestoreDoc(`reviews/${restaurantId}`)
-    const reviewsArray = reviewData!.reviews
-    const filteredReviews = reviewsArray.filter((review: RestaurantReviewType) => review.reviewId !== reviewId)
-    await updateDoc(reviewDocRef, { reviews: filteredReviews })
-    dispatch(deleteRestaurantReview({ reviewId }))
+    dispatch(onDeleteRestaurantReview({ restaurantId, reviewId }))
     handleClose()
   }
 
@@ -69,8 +47,8 @@ const RestaurantReview: FC<{reviewData: RestaurantReviewWithUserInfo}> = ({ revi
               anchorEl={anchorEl}
               handleClick={handleClick}
               handleClose={handleClose}
-              onEditContent={onEditReview}
-              onDeleteContent={onDeleteReview}
+              onEditContent={handleEditReview}
+              onDeleteContent={handleDeleteReview}
             />
           }
         />
@@ -96,5 +74,20 @@ const RestaurantReview: FC<{reviewData: RestaurantReviewWithUserInfo}> = ({ revi
     </>
   )
 }
+
+const ImageWrapper = styled.div`
+  height: 150px;
+  width: 150px;
+  background-color: #e9e9e9;
+  & span {
+    height: inherit !important;
+    width: inherit !important;
+    position: relative !important;
+  }
+`
+const NicknameTypo = styled(Typography)`
+  font-family: 'Katuri';
+  color: #353535;
+`
 
 export default RestaurantReview

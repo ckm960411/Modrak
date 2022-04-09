@@ -42,3 +42,19 @@ declare interface RestaurantReviewWithUserInfo extends RestaurantReviewType {
   nickname: string
   profileImg: string
 }
+
+// async function arguments type
+declare interface RestaurantReviewData {
+  uid: string
+  restaurantId: string
+  images: string[]
+  reviewText: string
+  rating: number
+}
+declare interface UpdateRestaurantReview extends RestaurantReviewData {
+  reviewId: string
+}
+declare interface DeleteRestaurantReview {
+  restaurantId: string
+  reviewId: string
+}
