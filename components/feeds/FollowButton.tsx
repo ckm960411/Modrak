@@ -14,11 +14,10 @@ const FollowButton: FC<{userUid: string, [key: string]: any}> = ({ userUid, ...p
     const { uid: myUid, followings } = myInfo
     setFollowLoading(true)
     if (followings.includes(userUid)) { // 언팔로우
-      dispatch(onRemoveFollowing({ myUid, userUid }))
+      dispatch(onRemoveFollowing({ myUid, userUid })).then(() => setFollowLoading(false))
     } else { // 팔로우
-      dispatch(onAddFollowing({ myUid, userUid }))
+      dispatch(onAddFollowing({ myUid, userUid })).then(() => setFollowLoading(false))
     }
-    setFollowLoading(false)
   }
 
   return (

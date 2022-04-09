@@ -35,12 +35,14 @@ const FeedForm: FC = () => {
       uid: myInfo.uid, nickname: myInfo.nickname, profileImg: myInfo.profileImg
     }
     dispatch(onSubmitNewFeed(newFeedData))
-      .then((res: any) => dispatch(addFeedInfo(`feeds/${res.payload.id}`)))
-    setSubmitLoading(false)
+      .then((res: any) => {
+        dispatch(addFeedInfo(`feeds/${res.payload.id}`))
+        dispatch(showAlert({ isShown: true, message: "피드 작성이 완료됐습니다!" }))
+        setSubmitLoading(false)
+      })
     setTags([])
     setFeedText("")
     setFeedImages([])
-    dispatch(showAlert({ isShown: true, message: "피드 작성이 완료됐습니다!" }))
   }
 
   return (

@@ -49,10 +49,11 @@ const RestaurantEditReviewForm: FC<RestaurantEditReviewFormProps> = ({ reviewDat
     setEditReviewLoading(true)
     dispatch(onUpdateRestaurantReview({ 
       uid: myInfo.uid, images: newImages, reviewText: editText, rating: newRating!, restaurantId, reviewId,
-    }))
-    dispatch(showAlert({ isShown: true, message: '리뷰 수정이 완료됐습니다!' }))
-    setEditReviewLoading(false)
-    setEditing(false)
+    })).then(() => {
+      dispatch(showAlert({ isShown: true, message: '리뷰 수정이 완료됐습니다!' }))
+      setEditReviewLoading(false)
+      setEditing(false)
+    })
   }
 
   return (

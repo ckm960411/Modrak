@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Avatar, CardContent, CardHeader, Divider, Rating, Stack, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import { useAppDispatch } from "store/hooks";
+import { showAlert } from "store/slices/appSlice";
 import { onDeleteRoomReview } from "store/asyncFunctions";
 import useSetTimeDistance from "utils/hooks/useSetTimeDistance";
 import defaultImg from "public/imgs/profileImg.png"
@@ -29,6 +30,7 @@ const AccommodationReview: FC<{reviewData: RoomReviewWithUserInfo}> = ({ reviewD
     const ok = window.confirm('이 리뷰를 정말 삭제하시겠습니까?')
     if (!ok) return handleClose()
     dispatch(onDeleteRoomReview({ accommodationId, reviewId }))
+      .then(() => dispatch(showAlert({ isShown: true, message: "리뷰가 정상적으로 삭제되었습니다!" })))
     handleClose()
   }
 

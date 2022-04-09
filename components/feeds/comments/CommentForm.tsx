@@ -20,9 +20,11 @@ const CommentForm: FC<{feedId: string}> = ({ feedId }) => {
     if (!myInfo) return dispatch(showAlert({ isShown: true, message: '로그인 이후에 댓글을 작성해주세요!', severity: 'error' }))
     if (comment.trim() === '') return dispatch(showAlert({ isShown: true, message: '댓글 내용을 작성해주세요!', severity: 'error' }))
     setLoading(true)
-    dispatch(onAddComment({ feedId, comment, uid: myInfo.uid }))
-    setComment('')
-    setLoading(false)
+    dispatch(onAddComment({ feedId, comment, uid: myInfo.uid })).then(() => {
+      dispatch(showAlert({ isShown: true, message: "댓글이 작성되었습니다!" }))
+      setComment('')
+      setLoading(false)
+    })
   }
 
   return (

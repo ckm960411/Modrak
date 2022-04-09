@@ -5,6 +5,7 @@ import { Avatar, Card, CardContent, CardHeader, Divider, Rating, Stack, Typograp
 import defaultImg from "public/imgs/profileImg.png"
 import { useAppDispatch } from "store/hooks";
 import { onDeleteRestaurantReview } from "store/asyncFunctions";
+import { showAlert } from "store/slices/appSlice";
 import useSetTimeDistance from "utils/hooks/useSetTimeDistance";
 import EditMenu from "components/parts/EditMenu";
 import RestaurantEditReviewForm from "components/restaurant/review/RestaurantEditReviewForm";
@@ -29,6 +30,7 @@ const RestaurantReview: FC<{reviewData: RestaurantReviewWithUserInfo}> = ({ revi
     const ok = window.confirm('이 리뷰를 정말 삭제하시겠습니까?')
     if (!ok) return handleClose()
     dispatch(onDeleteRestaurantReview({ restaurantId, reviewId }))
+      .then(() => dispatch(showAlert({ isShown: true, message: '리뷰가 정상적으로 삭제되었습니다!' })))
     handleClose()
   }
 

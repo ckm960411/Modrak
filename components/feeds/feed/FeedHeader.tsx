@@ -34,9 +34,10 @@ const FeedHeader: FC<FeedHeaderProps> = ({ feedData, setEditing }) => {
     const ok = window.confirm('이 피드를 정말 삭제하시겠습니까?')
     if (!ok) return
     handleClose()
-    dispatch(onDeleteFeed(feedData as FeedWithUserInfoType))
-    dispatch(deleteFeedInfo(`feeds/${id}`))
-    dispatch(showAlert({ isShown: true, message: "삭제가 완료되었습니다!" }))
+    dispatch(onDeleteFeed(feedData as FeedWithUserInfoType)).then(() => {
+      dispatch(deleteFeedInfo(`feeds/${id}`))
+      dispatch(showAlert({ isShown: true, message: "삭제가 완료되었습니다!" }))
+    })
   }
 
   return (

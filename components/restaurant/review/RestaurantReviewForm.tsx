@@ -29,12 +29,13 @@ const RestaurantReviewForm: FC<{restaurantId: string}> = ({ restaurantId }) => {
     dispatch(onAddRestaurantReview({ 
       uid: myInfo.uid, images: reviewImages,
       restaurantId, reviewText, rating
-    }))
-    dispatch(showAlert({ isShown: true, message: '리뷰 작성이 완료됐습니다!' }))
-    setReviewText('')
-    setReviewImages([])
-    setRating(null)
-    setSubmitReviewLoading(false)
+    })).then(() => {
+      dispatch(showAlert({ isShown: true, message: '리뷰 작성이 완료됐습니다!' }))
+      setReviewText('')
+      setReviewImages([])
+      setRating(null)
+      setSubmitReviewLoading(false)
+    })
   }
 
   return (

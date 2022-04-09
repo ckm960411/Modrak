@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { Avatar, Card, CardHeader, Divider, Typography } from "@mui/material";
 import { useAppDispatch } from "store/hooks";
 import { onDeleteComment } from "store/asyncFunctions";
+import { showAlert } from "store/slices/appSlice";
 import useSetTimeDistance from "utils/hooks/useSetTimeDistance";
 import defaultImg from "public/imgs/profileImg.png"
 import EditMenu from "components/parts/EditMenu";
@@ -27,7 +28,9 @@ const Comment: FC<{comment: CommentWithUserInfoType}> = ({ comment }) => {
   const handleDeleteComment = async () => {
     const ok = window.confirm('이 댓글을 정말 삭제하시겠습니까?')
     if (!ok) return handleClose()
-    dispatch(onDeleteComment({ feedId, commentId }))
+    dispatch(onDeleteComment({ feedId, commentId })).then(() => {
+      dispatch(showAlert({ isShown: true, message: "댓글 삭제가 완료되었습니다!" }))
+    })
     handleClose()
   }
 

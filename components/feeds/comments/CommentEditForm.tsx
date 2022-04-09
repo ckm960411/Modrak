@@ -34,9 +34,11 @@ const CommentEditForm: FC<CommentEditFormProps> = ({ setEditing, comment }) => {
     if (editText.trim() === '')
       return dispatch(showAlert({ isShown: true, message: '댓글의 내용을 작성해주세요!', severity: 'warning' }))
     setEditCommentLoading(true)
-    dispatch(onUpdateComment({ editText, feedId, commentId }))
-    setEditCommentLoading(false)
-    setEditing(false)
+    dispatch(onUpdateComment({ editText, feedId, commentId })).then(() => {
+      dispatch(showAlert({ isShown: true, message: '댓글 수정이 완료되었습니다!' }))
+      setEditCommentLoading(false)
+      setEditing(false)
+    })
   }
 
   return (

@@ -51,16 +51,12 @@ const EditFeedModal: FC<EditFeedModalProps> = ({ feedData, editing, setEditing }
       if (myInfo.uid !== userUid) 
       return dispatch(showAlert({ isShown: true, message: "당신의 피드가 아닌 글은 수정할 수 없습니다!", severity: "error" }))
       setEditFeedLoading(true)
-    dispatch(onUpdateFeed({
-      uid: myInfo.uid,
-      feedId: id,
-      editText,
-      newImages,
-      newTags,
-    }))
-    setEditFeedLoading(false)
-    setEditing(false)
-    return dispatch(showAlert({ isShown: true, message: "수정이 완료됐습니다!" }))
+    dispatch(onUpdateFeed({ uid: myInfo.uid, feedId: id, editText, newImages, newTags }))
+      .then(() => {
+        dispatch(showAlert({ isShown: true, message: "수정이 완료됐습니다!" }))
+        setEditFeedLoading(false)
+        setEditing(false)
+      })
   }
 
   return (

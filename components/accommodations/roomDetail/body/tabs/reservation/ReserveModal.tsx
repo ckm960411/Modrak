@@ -77,6 +77,7 @@ const ReserveModal: FC<ReserveModalProps> = ({ open, setIsReserving, cardId }) =
       message: `${name} ${roomName} 객실 예약이 완료되었습니다! 체크인은 ${format(new Date(startDate), 'yyyy년 MM월 dd일')} ${checkin} 입니다.`
     }
     dispatch(onAddRoomInfoAndPush({ accommodationId, roomId, uid: myInfo.uid, datesArray, newPush }))
+      .then(() => dispatch(showAlert({ isShown: true, message: '객실 예약이 성공적으로 완료되었습니다!' })))
     handleClose()
   }
 
