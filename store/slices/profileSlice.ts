@@ -15,9 +15,9 @@ export const profileSlice = createSlice({
     setUserData: (state, action) => {
       state.userData = action.payload
     },
-    // 프로필 이미지 변경
+    // 프로필 이미지 변경 (action.payload 로 newProfileImg 가 옴)
     updateUserProfileImg: (state, action) => {
-      state.userData!.profileImg = action.payload.newProfileImg
+      state.userData!.profileImg = action.payload
     },
     // 프로필 닉네임 변경
     updateUserNickname: (state, action) => {

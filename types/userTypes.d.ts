@@ -72,3 +72,15 @@ declare interface AddRoomInfoDataType {
     message: string
   }
 }
+declare interface RemoveCheckedPushType {
+  uid: string
+  pushId: string
+}
+declare interface UpdateProfileImgData {
+  uid: string
+  newProfileImg: string | null
+}
+declare interface UpdateNicknameData {
+  uid: string
+  nickname: string
+}

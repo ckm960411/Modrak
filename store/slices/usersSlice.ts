@@ -7,8 +7,11 @@ import {
   onAddRoomInfoAndPush,
   onRemoveBookmarkAccommodation,
   onRemoveBookmarkRestaurant,
+  onRemoveCheckedPush,
   onRemoveFollowing,
   onRemoveRecommendRestaurant,
+  onUpdateNickname,
+  onUpdateProfileImg,
 } from 'store/asyncFunctions'
 
 export interface UserState {
@@ -57,18 +60,6 @@ export const usersSlice = createSlice({
     },
     removeBookmarkFeedRef: (state, action) => {
       state.myInfo!.bookmarkFeeds = state.myInfo!.bookmarkFeeds.filter((feedRef: string) => feedRef !== action.payload.feedRef)
-    },
-    // 상단 네비바에서 알림 확인시 myInfo.pushUnchecked 에서 제거
-    removeCheckedPush: (state, action) => {
-      state.myInfo!.pushUnchecked = state.myInfo!.pushUnchecked.filter(push => push.pushId !== action.payload.pushId)
-    },
-    // 프로필 이미지 변경
-    updateProfileImg: (state, action) => {
-      state.myInfo!.profileImg = action.payload.newProfileImg
-    },
-    // 프로필 닉네임 변경
-    updateNickname: (state, action) => {
-      state.myInfo!.nickname = action.payload.newNickname
     },
   },
   extraReducers: {
@@ -140,6 +131,27 @@ export const usersSlice = createSlice({
     [onAddRoomInfoAndPush.rejected.type]: (state, action) => {
       state.error = "객실 예약 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
     },
+    // 상단 네비바에서 알림 확인시 myInfo.pushUnchecked 에서 제거 (action.payload 로 pushId 가 옴)
+    [onRemoveCheckedPush.fulfilled.type]: (state, action) => {
+      state.myInfo!.pushUnchecked = state.myInfo!.pushUnchecked.filter(push => push.pushId !== action.payload)
+    },
+    [onRemoveCheckedPush.rejected.type]: (state, action) => {
+      state.error = "예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
+    // 프로필 이미지 변경 (action.payload 로 newProfileImg 가 옴)
+    [onUpdateProfileImg.fulfilled.type]: (state, action) => {
+      state.myInfo!.profileImg = action.payload
+    },
+    [onUpdateProfileImg.rejected.type]: (state, action) => {
+      state.error = "프로필 사진 변경 중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
+    // 프로필 닉네임 변경 (action.payload 로 nickname 이 옴)
+    [onUpdateNickname.fulfilled.type]: (state, action) => {
+      state.myInfo!.nickname = action.payload
+    },
+    [onUpdateNickname.rejected.type]: (state, action) => {
+      state.error = "닉네임 변경 중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
   },
 })
 
@@ -152,9 +164,6 @@ export const {
   removeLikeFeedRef,
   addBookmarkFeedRef,
   removeBookmarkFeedRef,
-  removeCheckedPush,
-  updateProfileImg,
-  updateNickname,
 } = usersSlice.actions
 
 

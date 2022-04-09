@@ -3,13 +3,10 @@ import styled from "@emotion/styled";
 import { Avatar, Button, CardContent, CardHeader, Dialog, IconButton, TextField, Typography } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
-import { updateDoc } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { updateNickname, updateProfileImg } from "store/slices/usersSlice";
 import { updateUserNickname, updateUserProfileImg } from "store/slices/profileSlice";
 import { showAlert } from "store/slices/appSlice";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
-import uploadImagesDB from "utils/functions/uploadImagesDB";
+import { onUpdateNickname, onUpdateProfileImg } from "store/asyncFunctions";
 import onCheckDuplicate from "utils/functions/onCheckDuplicate";
 import defaultImg from "public/imgs/profileImg.png"
 
@@ -42,7 +39,7 @@ const EditProfile: FC<EditProfileProps> = ({ editing, setEditing }) => {
     }
   }
   // 프로필 사진 삭제
-  const onDeleteImg = () => setNewProfileImg('')
+  const handleDeleteImg = () => setNewProfileImg('')
 
   // 닉네임 변경
   const handleChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,10 +47,10 @@ const EditProfile: FC<EditProfileProps> = ({ editing, setEditing }) => {
   }
 
   // 프로필 수정 수정 취소
-  const onCloseEditing = () => setEditing(false)
+  const handleCloseEditing = () => setEditing(false)
 
   // 닉네임 중복 체크
-  const onCheckNicknameDuplicate = async () => {
+  const handleCheckNicknameDuplicate = async () => {
     const duplicatedNickname = await onCheckDuplicate("nickname", newNickname.trim())
     if (duplicatedNickname) return dispatch(showAlert({ isShown: true, message: '중복된 닉네임입니다!', severity: 'warning' }))
     dispatch(showAlert({ isShown: true, message: '사용할 수 있는 닉네임입니다!' }))
@@ -61,39 +58,29 @@ const EditProfile: FC<EditProfileProps> = ({ editing, setEditing }) => {
   }
 
   // 프로필 수정 제출
-  const onSubmitEditingProfile = async () => {
-    if (profileImg === newProfileImg && nickname === newNickname.trim()) return onCloseEditing()
-    const { searchedDocRef: userRef } = await searchFirestoreDoc(`users/${myInfo.uid}`)
+  const handleSubmitEditingProfile = async () => {
+    if (profileImg === newProfileImg && nickname === newNickname.trim()) return handleCloseEditing()
     // 닉네임 변경
     if (nickname !== newNickname.trim()) {
       if (!Boolean(checkedNickname) || checkedNickname !== newNickname.trim()) 
         return dispatch(showAlert({ isShown: true, message: '닉네임 중복 체크를 완료해주세요!', severity: 'error' }))
       const ok = window.confirm('프로필 수정을 완료하시겠습니까?')
       if (!ok) return
-      await updateDoc(userRef, { nickname: checkedNickname })
-      dispatch(updateNickname({ newNickname: checkedNickname }))
+      dispatch(onUpdateNickname({ uid: myInfo.uid, nickname: checkedNickname }))
       dispatch(updateUserNickname({ newNickname: checkedNickname }))
     }
     // 프로필 사진 변경
     if (profileImg !== newProfileImg) {
-      if (newProfileImg === '') { // 프로필 사진을 지웠을 시
-        await updateDoc(userRef, { profileImg: null })
-        dispatch(updateProfileImg({ newProfileImg: null }))
-        dispatch(updateUserProfileImg({ newProfileImg: null }))
-      } else { // 새 프로필 사진 첨부시
-        const profileImgUrl = await uploadImagesDB([ newProfileImg ], myInfo.uid)
-        await updateDoc(userRef, { profileImg: profileImgUrl[0] })
-        dispatch(updateProfileImg({ newProfileImg: profileImgUrl }))
-        dispatch(updateUserProfileImg({ newProfileImg: profileImgUrl }))
-      }
+      dispatch(onUpdateProfileImg({ uid: myInfo.uid, newProfileImg }))
+        .then(res => dispatch(updateUserProfileImg(res.payload)))
     }
-    onCloseEditing()
+    handleCloseEditing()
   }
 
   return (
     <Dialog
       open={editing}
-      onClose={onCloseEditing}
+      onClose={handleCloseEditing}
       fullWidth
     >
       <CardHeader title={<Typography sx={{ fontFamily: 'Katuri' }}>프로필 수정하기</Typography>} />
@@ -104,7 +91,7 @@ const EditProfile: FC<EditProfileProps> = ({ editing, setEditing }) => {
             src={newProfileImg ? newProfileImg : defaultImg.src}
             sx={{ width: 160, height: 160, m: '0 auto' }}
           />
-          <CloseBtn size="small" onClick={onDeleteImg}>
+          <CloseBtn size="small" onClick={handleDeleteImg}>
             <CloseIcon />
           </CloseBtn>
         </ProfileImgWrapper>
@@ -121,16 +108,16 @@ const EditProfile: FC<EditProfileProps> = ({ editing, setEditing }) => {
             value={newNickname}
             onChange={handleChangeNickname}
           />
-          <DuplicateBtn size="small" variant="outlined" onClick={onCheckNicknameDuplicate}>
+          <DuplicateBtn size="small" variant="outlined" onClick={handleCheckNicknameDuplicate}>
             중복 확인
           </DuplicateBtn>
         </TextForm>
       </CardContent>
       <BtnBox>
-        <Button size="small" onClick={onCloseEditing}>
+        <Button size="small" onClick={handleCloseEditing}>
           닫기
         </Button>
-        <Button variant="contained" size="small" onClick={onSubmitEditingProfile} >
+        <Button variant="contained" size="small" onClick={handleSubmitEditingProfile} >
           수정하기
         </Button>
       </BtnBox>
