@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { QueryConstraint, where } from "firebase/firestore";
-import { onAddRoomReservation } from "store/asyncFunctions";
+import { onAddRoomReservation, onAddRoomReview, onDeleteRoomReview, onUpdateRoomReview } from "store/asyncFunctions";
 
 export interface RoomState {
   value: AccommodationWithId[]
@@ -45,10 +45,6 @@ export const roomsSlice = createSlice({
     addRoomInfo: (state, action) => {
       state.roomData = action.payload
     },
-    // 리뷰 작성시 기존 리뷰 제일 위에 추가 (action.payload 로 리뷰객체가 1개씩 들어옴)
-    addRoomReview: (state, action) => {
-      state.reviews.unshift(action.payload)
-    },
     // 서버에서 가져온 리뷰들을 저장 (action.payload 로 리뷰객체가 1개씩 들어옴)
     setRoomReviews: (state, action) => {
       state.reviews = [ ...state.reviews, action.payload ]
@@ -56,21 +52,6 @@ export const roomsSlice = createSlice({
     // 모든 리뷰 상태들을 지움
     clearRoomReviews: (state) => {
       state.reviews = []
-    },
-    // 수정하려는 리뷰를 찾아 해당 리뷰를 수정함
-    // (action.payload 에는 reviewId, reviewText, reviewImages, modifiedAt 이 객체로 들어옴)
-    updateRoomReview: (state, action) => {
-      const finded = state.reviews.find(review => review.reviewId === action.payload.reviewId)
-      if (!finded) return
-      finded.reviewText = action.payload.reviewText
-      finded.reviewImages = action.payload.reviewImages
-      finded.modifiedAt = action.payload.modifiedAt
-      finded.rating = action.payload.rating
-    },
-    // 삭제하려는 리뷰를 찾아 해당 리뷰를 삭제함
-    // (action.payload 에는 reviewId 를 담은 객체가 들어옴)
-    deleteRoomReview: (state, action) => {
-      state.reviews = state.reviews.filter(review => review.reviewId !== action.payload.reviewId)
     },
     // 위치별 숙소 필터 적용
     setDivisionFilter: (state, action) => {
@@ -173,7 +154,34 @@ export const roomsSlice = createSlice({
     },
     [onAddRoomReservation.rejected.type]: (state, action) => {
       state.error = "객실 예약 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
-    }
+    },
+    // 리뷰 작성시 기존 리뷰 제일 위에 추가 (action.payload 로 리뷰객체가 1개씩 들어옴)
+    [onAddRoomReview.fulfilled.type]: (state, action) => {
+      state.reviews.unshift(action.payload)
+    },
+    [onAddRoomReview.rejected.type]: (state, action) => {
+      state.error = "리뷰 작성 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
+    // 수정하려는 리뷰를 찾아 해당 리뷰를 수정함
+    // (action.payload 에는 reviewId, reviewText, reviewImages, modifiedAt 이 객체로 들어옴)
+    [onUpdateRoomReview.fulfilled.type]: (state, action) => {
+      const finded = state.reviews.find(review => review.reviewId === action.payload.reviewId)
+      if (!finded) return
+      finded.reviewText = action.payload.reviewText
+      finded.reviewImages = action.payload.reviewImages
+      finded.modifiedAt = action.payload.modifiedAt
+      finded.rating = action.payload.rating
+    },
+    [onUpdateRoomReview.rejected.type]: (state, action) => {
+      state.error = "리뷰 수정 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
+    // 삭제하려는 리뷰를 찾아 해당 리뷰를 삭제함 (action.payload 로 reviewId 가 옴)
+    [onDeleteRoomReview.fulfilled.type]: (state, action) => {
+      state.reviews = state.reviews.filter(review => review.reviewId !== action.payload)
+    },
+    [onDeleteRoomReview.rejected.type]: (state, action) => {
+      state.error = "리뷰 삭제 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
   },
 })
 
@@ -182,11 +190,8 @@ export const {
   setAccommodationsData,
   clearAccommodationsData,
   addRoomInfo,
-  addRoomReview,
   setRoomReviews,
   clearRoomReviews,
-  updateRoomReview,
-  deleteRoomReview,
   setDivisionFilter,
   setCategoryFilter,
   setTagFilter,

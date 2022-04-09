@@ -2,10 +2,8 @@ import { FC, useState } from "react";
 import Image from "next/image";
 import { Avatar, CardContent, CardHeader, Divider, Rating, Stack, Typography } from "@mui/material";
 import styled from "@emotion/styled";
-import { updateDoc } from "firebase/firestore";
 import { useAppDispatch } from "store/hooks";
-import { deleteRoomReview } from "store/slices/roomsSlice";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
+import { onDeleteRoomReview } from "store/asyncFunctions";
 import useSetTimeDistance from "utils/hooks/useSetTimeDistance";
 import defaultImg from "public/imgs/profileImg.png"
 import EditMenu from "components/parts/EditMenu";
@@ -22,19 +20,15 @@ const AccommodationReview: FC<{reviewData: RoomReviewWithUserInfo}> = ({ reviewD
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () =>  setAnchorEl(null);
 
-  const onEditReview = () => {
+  const handleEditReview = () => {
     setEditing(true)
     handleClose()
   }
 
-  const onDeleteReview = async () => {
+  const handleDeleteReview = async () => {
     const ok = window.confirm('이 리뷰를 정말 삭제하시겠습니까?')
     if (!ok) return handleClose()
-    const { searchedDocRef: reviewDocRef, searchedData: reviewData } = await searchFirestoreDoc(`reviews/${accommodationId}`)
-    const reviewsArray = reviewData!.reviews
-    const filteredReviews = reviewsArray.filter((review: RoomReviewType) => review.reviewId !== reviewId)
-    await updateDoc(reviewDocRef, { reviews: filteredReviews })
-    dispatch(deleteRoomReview({ reviewId }))
+    dispatch(onDeleteRoomReview({ accommodationId, reviewId }))
     handleClose()
   }
 
@@ -52,8 +46,8 @@ const AccommodationReview: FC<{reviewData: RoomReviewWithUserInfo}> = ({ reviewD
             anchorEl={anchorEl}
             handleClick={handleClick}
             handleClose={handleClose}
-            onEditContent={onEditReview}
-            onDeleteContent={onDeleteReview}
+            onEditContent={handleEditReview}
+            onDeleteContent={handleDeleteReview}
           />
         }
       />

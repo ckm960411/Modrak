@@ -24,6 +24,9 @@ import { onUpdateNickname } from "store/asyncFunctions/user/updateNickname";
 import { onAddRestaurantReview } from "store/asyncFunctions/restaurant/addRestaurantReview";
 import { onUpdateRestaurantReview } from "store/asyncFunctions/restaurant/updateRestaurantReview";
 import { onDeleteRestaurantReview } from "store/asyncFunctions/restaurant/deleteRestaurantReview";
+import { onAddRoomReview } from "store/asyncFunctions/room/addRoomReview";
+import { onUpdateRoomReview } from "store/asyncFunctions/room/updateRoomReview";
+import { onDeleteRoomReview } from "store/asyncFunctions/room/deleteRoomReview";
 
 export { 
   onSubmitNewFeed,
@@ -52,4 +55,7 @@ export {
   onAddRestaurantReview,
   onUpdateRestaurantReview,
   onDeleteRestaurantReview,
+  onAddRoomReview,
+  onUpdateRoomReview,
+  onDeleteRoomReview,
 }

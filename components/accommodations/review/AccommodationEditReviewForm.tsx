@@ -1,11 +1,8 @@
 import { FC, Dispatch, SetStateAction, useState, useEffect } from "react";
 import { Alert, CardContent, Dialog, Rating, Stack } from "@mui/material";
-import { updateDoc } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { updateRoomReview } from "store/slices/roomsSlice";
 import { showAlert } from "store/slices/appSlice";
-import uploadImagesDB from "utils/functions/uploadImagesDB";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
+import { onUpdateRoomReview } from "store/asyncFunctions";
 import TextInput from "components/parts/TextInput";
 import InputFileForm from "components/parts/InputFileForm";
 import SubmitFormButton from "components/parts/SubmitFormButton";
@@ -35,14 +32,14 @@ const AccommodationEditReviewForm: FC<AccommodationEditReviewFormProps> = ({ rev
     setNewRating(rating)
   }, [reviewText, reviewImages, rating])
 
-  const onChangeEditText = (e: React.ChangeEvent<HTMLInputElement>) => setEditText(e.target.value)
+  const handleChangeEditText = (e: React.ChangeEvent<HTMLInputElement>) => setEditText(e.target.value)
 
-  const onCloseEditing = () => {
+  const handleCloseEditing = () => {
     setEditing(false)
     setNewImages(reviewImages)
   }
 
-  const onSubmit = async () => {
+  const handleSubmitEditReview = async () => {
     if (editText.trim() === '') 
       return dispatch(showAlert({ isShown: true, message: "리뷰 내용을 작성해주세요!", severity: 'warning' }))
     if (!myInfo) 
@@ -50,35 +47,19 @@ const AccommodationEditReviewForm: FC<AccommodationEditReviewFormProps> = ({ rev
       if (myInfo.uid !== userUid) 
       return dispatch(showAlert({ isShown: true, message: "당신의 리뷰가 아닌 글은 수정할 수 없습니다!", severity: 'error' }))
       setEditReviewLoading(true)
-    const shouldUpload = newImages.filter(img => img.startsWith('data:image'))
-    const shouldNotUpload = newImages.filter(img => !img.startsWith('data:image'))
-    const newImagesURLs = await uploadImagesDB(shouldUpload, myInfo.uid).catch(err => console.log(err))
-    const data = {
-      reviewText: editText,
-      reviewImages: [...shouldNotUpload, ...newImagesURLs!],
-      rating: newRating,
-      reviewId,
-      modifiedAt: Date.now(),
-    }
-    const { searchedDocRef: reviewDocRef, searchedData: reviewData } = await searchFirestoreDoc(`reviews/${accommodationId}`)
-    const reviewsArray = reviewData!.reviews
-    const reviewIndex = reviewsArray.findIndex((review: RoomReviewType) => review.reviewId === reviewId)
-    reviewsArray[reviewIndex].reviewText = data.reviewText
-    reviewsArray[reviewIndex].modifiedAt = data.modifiedAt
-    reviewsArray[reviewIndex].reviewImages = data.reviewImages
-    reviewsArray[reviewIndex].rating = data.rating
-
-    await updateDoc(reviewDocRef, { reviews: reviewsArray })
-    dispatch(updateRoomReview(data))
-    dispatch(showAlert({ isShown: true, message: "리뷰 수정이 완료됐습니다!" }))
-    setEditReviewLoading(false)
-    setEditing(false)
+    dispatch(onUpdateRoomReview({
+      uid: myInfo.uid, accommodationId, reviewId, reviewText: editText, images: newImages, rating: newRating!
+    })).then(() => {
+      dispatch(showAlert({ isShown: true, message: "리뷰 수정이 완료됐습니다!" }))
+      setEditReviewLoading(false)
+      setEditing(false)
+    })
   }
 
   return (
     <Dialog
       open={editing}
-      onClose={onCloseEditing}
+      onClose={handleCloseEditing}
       fullWidth
     >
       <CardContent>
@@ -88,14 +69,14 @@ const AccommodationEditReviewForm: FC<AccommodationEditReviewFormProps> = ({ rev
         </Stack>
         <TextInput 
           value={editText}
-          onChange={onChangeEditText}
+          onChange={handleChangeEditText}
         />
         <div>
           <InputFileForm label="edit-room-review-file" images={newImages} setImages={setNewImages} />
-          <SubmitFormButton onClick={onSubmit} sx={{ float: 'right', mt: 1 }} loading={editReviewLoading}>
+          <SubmitFormButton onClick={handleSubmitEditReview} sx={{ float: 'right', mt: 1 }} loading={editReviewLoading}>
             Edit Feed
           </SubmitFormButton>
-          <MainButton variant="outlined" sx={{ float: 'right', mt: 1, mr: 1 }} onClick={onCloseEditing}>
+          <MainButton variant="outlined" sx={{ float: 'right', mt: 1, mr: 1 }} onClick={handleCloseEditing}>
             cancel
           </MainButton>
         </div>

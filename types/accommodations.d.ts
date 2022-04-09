@@ -55,3 +55,17 @@ declare interface RoomReservationType {
   roomId: string
   datesArray: string[]
 }
+declare interface RoomReviewData {
+  uid: string
+  accommodationId: string
+  reviewText: string
+  images: string[]
+  rating: number
+}
+declare interface UpdateRoomReview extends RoomReviewData {
+  reviewId: string
+}
+declare interface DeleteRoomReview {
+  accommodationId: string
+  reviewId: string
+}

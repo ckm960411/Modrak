@@ -1,13 +1,9 @@
 import { FC, useState } from "react";
 import styled from "@emotion/styled";
-import { v4 as uuid_v4 } from "uuid";
 import { Rating, Stack, Typography } from "@mui/material";
-import { updateDoc } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { addRoomReview } from "store/slices/roomsSlice";
 import { showAlert } from "store/slices/appSlice";
-import uploadImagesDB from "utils/functions/uploadImagesDB";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc";
+import { onAddRoomReview } from "store/asyncFunctions";
 import InputFileForm from "components/parts/InputFileForm";
 import SubmitFormButton from "components/parts/SubmitFormButton";
 import TextInput from "components/parts/TextInput";
@@ -26,41 +22,22 @@ const AccommodationReviewForm: FC = () => {
   if (!roomData) return <div>Loading...</div>
   const { id: accommodationId } = roomData
 
-  const onChangeReview = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setReviewText(e.target.value)
-  }
+  const handleChangeReview = (e: React.ChangeEvent<HTMLInputElement>) => setReviewText(e.target.value)
 
-  const onSubmitReview = async () => {
+  const handleSubmitReview = async () => {
     if (!myInfo) return dispatch(showAlert({ isShown: true, message: '로그인 이후에 리뷰를 작성해주세요!', severity: 'error' }))
     if (reviewText.trim() === '') return dispatch(showAlert({ isShown: true, message: '리뷰 내용을 작성해주세요!', severity: 'error' }))
     if (rating === null) return dispatch(showAlert({ isShown: true, message: '평점을 매겨주세요!', severity: 'error' }))
     setSubmitReviewLoading(true)
-    // 이미지배열을 스토리지에 저장하고 저장된 스토리지 경로를 배열로 리턴
-    const imagesURLs = await uploadImagesDB(reviewImages, myInfo.uid).catch(err => console.log(err.resultMessage))
-    const myReviewData = {
-      reviewId: uuid_v4(),
-      userUid: myInfo.uid,
-      accommodationId,
-      reviewText,
-      reviewImages: imagesURLs,
-      rating,
-      createdAt: Date.now(),
-      modifiedAt: Date.now(),
-    }
-    // review 컬렉션에 리뷰를 다려는 숙소id 로 된 문서에 해당 리뷰 데이터를 저장
-    const { searchedDocRef: reviewDocRef, searchedData: reviewData } = await searchFirestoreDoc(`reviews/${accommodationId}`)
-    await updateDoc(reviewDocRef, {
-      reviews: [ ...reviewData!.reviews, myReviewData ]
-    }).then(() => dispatch(showAlert({ isShown: true, message: "리뷰 작성이 완료됐습니다!" })))
-    dispatch(addRoomReview({
-      ...myReviewData,
-      nickname: myInfo.nickname,
-      profileImg: myInfo.profileImg,
-    }))
-    setReviewText('')
-    setReviewImages([])
-    setRating(null)
-    setSubmitReviewLoading(false)
+    dispatch(onAddRoomReview({
+      uid: myInfo.uid, accommodationId, reviewText, images: reviewImages, rating
+    })).then(() => {
+      dispatch(showAlert({ isShown: true, message: "리뷰 작성이 완료됐습니다!" }))
+      setReviewText('')
+      setReviewImages([])
+      setRating(null)
+      setSubmitReviewLoading(false)
+    })
   }
 
   return (
@@ -71,11 +48,11 @@ const AccommodationReviewForm: FC = () => {
           <Rating size="large" precision={0.1} value={rating} onChange={(e, v) => setRating(v)} />
           {rating && <span>({rating})</span>}
         </Stack>
-        <TextInput value={reviewText} onChange={onChangeReview} />
+        <TextInput value={reviewText} onChange={handleChangeReview} />
         <div>
           <InputFileForm label="input-room-review-image" images={reviewImages} setImages={setReviewImages} />
           <SubmitFormButton
-            onClick={onSubmitReview}
+            onClick={handleSubmitReview}
             sx={{ float: 'right', mt: 1 }}
             loading={submitReviewLoading}
           >
