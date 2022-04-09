@@ -2,13 +2,10 @@ import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { Button, Card, CardContent, CardHeader, Dialog, IconButton, Stack, Typography } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import { v4 as uuid_v4 } from "uuid";
-import { updateDoc } from "firebase/firestore";
 import { addDays, differenceInDays, format } from "date-fns";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { addRoomReservation } from "store/slices/roomsSlice";
-import { addNewPush, addRoomInfoReserved } from "store/slices/usersSlice";
 import { showAlert } from "store/slices/appSlice";
-import searchFirestoreDoc from "utils/functions/searchFirestoreDoc"
+import { onAddRoomInfoAndPush, onAddRoomReservation } from "store/asyncFunctions";
 import ReserveTimePicker from "@reservation/ReserveTimePicker";
 
 const removeDetailTime = (date: Date) => {
@@ -42,9 +39,7 @@ const ReserveModal: FC<ReserveModalProps> = ({ open, setIsReserving, cardId }) =
     setData(findedData!)
   }, [rooms, cardId])
 
-  const onClose = () => {
-    setIsReserving(false)
-  }
+  const handleClose = () => setIsReserving(false)
 
   if (!data) return (
     <Dialog open={open}>
@@ -54,7 +49,7 @@ const ReserveModal: FC<ReserveModalProps> = ({ open, setIsReserving, cardId }) =
 
   const { roomName, reservedDates, roomId } = data
 
-  const onReserveRoom = async () => {
+  const handleReserveRoom = async () => {
     if (!myInfo) return dispatch(showAlert({ isShown: true, message: '로그인 이후에 예약할 수 있습니다!', severity: 'error' }))
     const { startDate, endDate } = date
     if (startDate.toString() === endDate.toString())
@@ -73,38 +68,24 @@ const ReserveModal: FC<ReserveModalProps> = ({ open, setIsReserving, cardId }) =
       datesArray = newArray
     }
     // 해당 숙소 DB 의 객실에 예약 날짜들을 추가
-    const { searchedDocRef: accDocRef, searchedData: accData } = await searchFirestoreDoc(`accommodations/${accommodationId}`)
-    const findedRoom = accData!.rooms.find((room: RoomType) => room.roomId === roomId)
-    findedRoom.reservedDates = [ ...findedRoom.reservedDates, ...datesArray]
-    await updateDoc(accDocRef, { rooms: accData!.rooms })
-    dispatch(addRoomReservation({ roomId, newReservedDates: datesArray }))
+    dispatch(onAddRoomReservation({ roomId, accommodationId, datesArray }))
     // 예약한 정보를 유저정보에 저장하고, 알림을 보냄
-    const newRoomInfoReserved = { accommodationId, roomId, reservedDates: datesArray }
-    const { searchedDocRef: userDocRef, searchedData: userData } = await searchFirestoreDoc(`users/${myInfo.uid}`)
-    await updateDoc(userDocRef, { roomReserved: [ ...userData!.roomReserved, newRoomInfoReserved ] })
-    dispatch(addRoomInfoReserved(newRoomInfoReserved))
-    // 예약시 사용자에게 알림 보냄
     const newPush = {
       pushId: uuid_v4(),
       isChecked: false,
       createdAt: Date.now(),
       message: `${name} ${roomName} 객실 예약이 완료되었습니다! 체크인은 ${format(new Date(startDate), 'yyyy년 MM월 dd일')} ${checkin} 입니다.`
     }
-    await updateDoc(userDocRef, { pushUnchecked: [ ...userData!.pushUnchecked, newPush ] })
-    dispatch(addNewPush(newPush))
-    // pushes 컬렉션의 사용자 uid 로 된 push 문서에도 알림을 저장 (전체 알림)
-    const { searchedDocRef: pushDocRef, searchedData: pushData } = await searchFirestoreDoc(`pushes/${myInfo.uid}`)
-    await updateDoc(pushDocRef, { pushes: [ ...pushData!.pushes, newPush ] })
-
-    onClose()
+    dispatch(onAddRoomInfoAndPush({ accommodationId, roomId, uid: myInfo.uid, datesArray, newPush }))
+    handleClose()
   }
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={handleClose}>
       <Card>
         <CardHeader
           title={<Typography sx={{ fontSize: '18px', fontWeight: 600 }}>{roomName} 방 예약하기</Typography>}
-          action={<IconButton onClick={onClose}><CloseIcon /></IconButton>}
+          action={<IconButton onClick={handleClose}><CloseIcon /></IconButton>}
         />
         <CardContent>
           <ReserveTimePicker 
@@ -114,8 +95,8 @@ const ReserveModal: FC<ReserveModalProps> = ({ open, setIsReserving, cardId }) =
           />
         </CardContent>
         <Stack direction="row" spacing={1} sx={{ px: 2, pb: 2, justifyContent: 'flex-end' }}>
-          <Button variant="outlined" onClick={onClose}>취소</Button>
-          <Button variant="contained" onClick={onReserveRoom}>예약하기</Button>
+          <Button variant="outlined" onClick={handleClose}>취소</Button>
+          <Button variant="contained" onClick={handleReserveRoom}>예약하기</Button>
         </Stack>
       </Card>
     </Dialog>

@@ -48,3 +48,10 @@ declare interface RoomReviewWithUserInfo extends RoomReviewType {
   nickname: string
   profileImg: string
 }
+
+// async function arguments type
+declare interface RoomReservationType {
+  accommodationId: string
+  roomId: string
+  datesArray: string[]
+}

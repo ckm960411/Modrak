@@ -16,6 +16,8 @@ import { onAddBookmarkRestaurant } from "store/asyncFunctions/user/addBookmarkRe
 import { onRemoveBookmarkRestaurant } from "store/asyncFunctions/user/removeBookmarkRestaurant";
 import { onAddBookmarkAccommodation } from "store/asyncFunctions/user/addBookmarkAccommodation";
 import { onRemoveBookmarkAccommodation } from "store/asyncFunctions/user/removeBookmarkAccommodation";
+import { onAddRoomReservation } from "store/asyncFunctions/room/addRoomReservation";
+import { onAddRoomInfoAndPush } from "store/asyncFunctions/user/addRoomInfoAndPush";
 
 export { 
   onSubmitNewFeed,
@@ -36,4 +38,6 @@ export {
   onRemoveBookmarkRestaurant,
   onAddBookmarkAccommodation,
   onRemoveBookmarkAccommodation,
+  onAddRoomReservation,
+  onAddRoomInfoAndPush,
 }

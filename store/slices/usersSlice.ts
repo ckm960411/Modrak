@@ -4,6 +4,7 @@ import {
   onAddBookmarkRestaurant,
   onAddFollowing,
   onAddRecommendRestaurant,
+  onAddRoomInfoAndPush,
   onRemoveBookmarkAccommodation,
   onRemoveBookmarkRestaurant,
   onRemoveFollowing,
@@ -56,15 +57,6 @@ export const usersSlice = createSlice({
     },
     removeBookmarkFeedRef: (state, action) => {
       state.myInfo!.bookmarkFeeds = state.myInfo!.bookmarkFeeds.filter((feedRef: string) => feedRef !== action.payload.feedRef)
-    },
-    // 예약한 객실 데이터를 유저 정보에 저장
-    // action.payload 로 { accommodationId, roomId, reservedDates } 가 옴
-    addRoomInfoReserved: (state, action) => {
-      state.myInfo!.roomReserved.push(action.payload)
-    },
-    // 객실을 예약하면 알림을 저장함 (확인안한 알람) (action.payload 로 알림객체가 옴)
-    addNewPush: (state, action) => {
-      state.myInfo!.pushUnchecked.push(action.payload)
     },
     // 상단 네비바에서 알림 확인시 myInfo.pushUnchecked 에서 제거
     removeCheckedPush: (state, action) => {
@@ -138,6 +130,16 @@ export const usersSlice = createSlice({
     [onRemoveBookmarkAccommodation.rejected.type]: (state, action) => {
       state.error = "숙소 찜 취소 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
     },
+    // 예약한 객실 데이터를 유저 정보에 저장하고 알림을 보냄
+    // action.payload 로 { accommodationId, roomId, reservedDates, newPush } 가 옴
+    [onAddRoomInfoAndPush.fulfilled.type]: (state, action) => {
+      const { accommodationId, roomId, reservedDates, newPush } = action.payload
+      state.myInfo!.roomReserved.push({ accommodationId, roomId, reservedDates })
+      state.myInfo!.pushUnchecked.push(newPush)
+    },
+    [onAddRoomInfoAndPush.rejected.type]: (state, action) => {
+      state.error = "객실 예약 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    },
   },
 })
 
@@ -150,8 +152,6 @@ export const {
   removeLikeFeedRef,
   addBookmarkFeedRef,
   removeBookmarkFeedRef,
-  addRoomInfoReserved,
-  addNewPush,
   removeCheckedPush,
   updateProfileImg,
   updateNickname,

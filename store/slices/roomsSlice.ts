@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { QueryConstraint, where } from "firebase/firestore";
+import { onAddRoomReservation } from "store/asyncFunctions";
 
 export interface RoomState {
   value: AccommodationWithId[]
@@ -9,6 +10,7 @@ export interface RoomState {
   categoryFilter: QueryConstraint[]
   tagFilter: QueryConstraint[]
   reviews: RoomReviewWithUserInfo[]
+  error: any | null
 }
 const initialState: RoomState = {
   value: [],
@@ -18,6 +20,7 @@ const initialState: RoomState = {
   categoryFilter: [],
   tagFilter: [],
   reviews: [],
+  error: null,
 }
 
 export const roomsSlice = createSlice({
@@ -41,13 +44,6 @@ export const roomsSlice = createSlice({
     // 숙소 상세페이지 접속시 숙소 정보를 roomData 에 저장
     addRoomInfo: (state, action) => {
       state.roomData = action.payload
-    },
-    // 숙소 예약시 예약된 날짜를 저장해 예약이 안 되도록 막음
-    // action.payload 로 예약할 객실의 id 인 roomId 와 예약한 날짜들이 담긴 newReservedDates 배열이 옴
-    addRoomReservation: (state, action) => {
-      const findedRoom = state.roomData?.rooms.find(room => room.roomId === action.payload.roomId)
-      if (!findedRoom) return
-      findedRoom.reservedDates = [ ...findedRoom.reservedDates, ...action.payload.newReservedDates ]
     },
     // 리뷰 작성시 기존 리뷰 제일 위에 추가 (action.payload 로 리뷰객체가 1개씩 들어옴)
     addRoomReview: (state, action) => {
@@ -167,7 +163,18 @@ export const roomsSlice = createSlice({
       }
     },
   },
-  extraReducers: {},
+  extraReducers: {
+    // 숙소 예약시 예약된 날짜를 저장해 예약이 안 되도록 막음
+    // action.payload 로 예약할 객실의 id 인 roomId 와 예약한 날짜들이 담긴 newReservedDates 배열이 옴
+    [onAddRoomReservation.fulfilled.type]: (state, action) => {
+      const findedRoom = state.roomData?.rooms.find(room => room.roomId === action.payload.roomId)
+      if (!findedRoom) return
+      findedRoom.reservedDates = [ ...findedRoom.reservedDates, ...action.payload.newReservedDates ]
+    },
+    [onAddRoomReservation.rejected.type]: (state, action) => {
+      state.error = "객실 예약 도중 예상 못한 에러가 발생했습니다. 다시 시도해주세요!"
+    }
+  },
 })
 
 export const {
@@ -175,7 +182,6 @@ export const {
   setAccommodationsData,
   clearAccommodationsData,
   addRoomInfo,
-  addRoomReservation,
   addRoomReview,
   setRoomReviews,
   clearRoomReviews,

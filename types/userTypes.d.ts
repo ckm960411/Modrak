@@ -60,3 +60,15 @@ declare interface AccommodationDataType {
   uid: string
   accommodationId: string
 }
+declare interface AddRoomInfoDataType {
+  accommodationId: string
+  roomId: string
+  uid: string
+  datesArray: string[]
+  newPush: {
+    pushId: string
+    isChecked: boolean
+    createdAt: number
+    message: string
+  }
+}
