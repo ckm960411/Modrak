@@ -122,7 +122,11 @@ const GlobalStyles = () => {
         'div#filter-tag.MuiChip-outlinedDefault': {
           border: `1px solid ${mainColor}`,
           color: mainColor,
-        }
+        },
+        // 객실 상세정보 모달창 스크롤 활성화
+        'div#room-reserve-card': {
+          overflow: 'auto',
+        },
       }}
     />
   );

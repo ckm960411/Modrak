@@ -33,7 +33,7 @@ const RoomCardDetail: FC<RoomCardDetailProps> = ({ open, setCardOpened, cardId }
       onClose={onClose}
       fullWidth
     >
-      <Card>
+      <Card id="room-reserve-card">
         <CardHeader 
           title={<Typography sx={{ fontSize: '18px', fontWeight: 600 }}>{roomName}</Typography>}
           action={

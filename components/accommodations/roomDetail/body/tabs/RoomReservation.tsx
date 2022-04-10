@@ -26,7 +26,7 @@ const RoomReservation: FC = () => {
 
   return (
     <>
-      <Stack spacing={2} sx={{ mt: 2 }}>
+      <Stack spacing={2} sx={{ mt: 2, mb: 10 }}>
         {rooms.map((room, i) => (
           <RoomCard 
             key={room.roomId} 
